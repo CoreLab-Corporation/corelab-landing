@@ -707,86 +707,219 @@ button { cursor:pointer; border:none; background:none; font-family:inherit; }
 
 </div>
 
-<script>
-/* THEME */
-let dark = true;
-document.getElementById('themeBtn').onclick = () => {
-  dark = !dark;
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('themeBtn').textContent = dark ? '🌙' : '☀️';
-};
+<script type="module">
+import { onAuthChange, logout } from './js/auth.js';
+import {
+  createPost,
+  subscribeToPosts,
+  toggleLikePost,
+  getUserProfile,
+  formatTimestamp
+} from './js/db.js';
 
-/* TABS */
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.onclick = () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-  };
+/* ====================================================
+   AUTH GUARD
+==================================================== */
+let currentUser = null;
+let currentProfile = null;
+let unsubscribePosts = null;
+
+onAuthChange(async (user) => {
+  currentUser = user;
+  if (!user) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  currentProfile = await getUserProfile(user.uid);
+  updateUserAvatar();
+
+  // Inicia listener de posts em tempo real
+  startPostsListener();
 });
 
-/* LIKE */
-function toggleLike(el) {
-  el.classList.toggle('liked');
-  const count = el.querySelector('span');
-  const cur = parseInt(count.textContent) || 0;
-  count.textContent = el.classList.contains('liked') ? cur + 1 : cur - 1;
-  const svg = el.querySelector('svg');
-  if (el.classList.contains('liked')) {
-    svg.setAttribute('fill', 'currentColor');
-  } else {
-    svg.setAttribute('fill', 'none');
+/* ====================================================
+   ATUALIZA AVATAR DO USUÁRIO
+==================================================== */
+function updateUserAvatar() {
+  if (!currentProfile) return;
+  const initials = (currentProfile.name || 'U')
+    .substring(0, 2).toUpperCase();
+  document.querySelectorAll('.user-av, .av-you').forEach(el => {
+    el.textContent = initials;
+  });
+}
+
+/* ====================================================
+   POSTS EM TEMPO REAL
+==================================================== */
+function startPostsListener() {
+  if (unsubscribePosts) unsubscribePosts();
+
+  unsubscribePosts = subscribeToPosts((posts) => {
+    if (posts.length > 0) renderPosts(posts);
+  }, 20);
+}
+
+function renderPosts(posts) {
+  const container = document.getElementById('posts-container');
+  if (!container) return;
+
+  // Mantém posts estáticos de demonstração e adiciona reais no topo
+  const realPosts = posts.map(post => buildPostHTML(post)).join('');
+
+  // Insere posts reais antes dos estáticos
+  const staticPosts = container.innerHTML;
+  container.innerHTML = realPosts + staticPosts;
+}
+
+function buildPostHTML(post) {
+  const initials = post.userInitials || 'U';
+  const time = formatTimestamp(post.createdAt);
+  const likesCount = post.likesCount || 0;
+  const isLiked = currentUser &&
+    post.likes?.includes(currentUser.uid);
+
+  return `
+    <div class="post" data-post-id="${post.id}">
+      <div class="post-header">
+        <div class="post-av av-you">${initials}</div>
+        <div class="post-meta">
+          <div class="post-name">${post.userName || 'Usuário'}</div>
+          <div class="post-time">${time}</div>
+        </div>
+      </div>
+      <div class="post-text">${escHtml(post.text)}</div>
+      <div class="post-actions">
+        <div class="post-action ${isLiked ? 'liked' : ''}"
+          onclick="handleLike(this, '${post.id}')">
+          <svg viewBox="0 0 24 24" fill="${isLiked ? 'currentColor' : 'none'}"
+            stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+              l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06
+              L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span>${likesCount}</span>
+        </div>
+        <div class="post-action">
+          <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5
+              a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>0</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function escHtml(t) {
+  return String(t)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/* ====================================================
+   CURTIR POST
+==================================================== */
+window.handleLike = async function(el, postId) {
+  if (!currentUser) {
+    alert('Faça login para curtir posts!');
+    return;
   }
-}
+  const liked = await toggleLikePost(postId, currentUser.uid);
+  el.classList.toggle('liked', liked);
+  const svg = el.querySelector('svg');
+  svg.setAttribute('fill', liked ? 'currentColor' : 'none');
+  const count = el.querySelector('span');
+  count.textContent = parseInt(count.textContent) + (liked ? 1 : -1);
+};
 
-/* FOLLOW */
-function toggleFollow(btn) {
-  const following = btn.classList.toggle('following');
-  btn.textContent = following ? 'Seguindo' : 'Seguir';
-}
+/* ====================================================
+   CRIAR POST
+==================================================== */
+window.createPost = async function() {
+  if (!currentUser) {
+    alert('Faça login para publicar!');
+    return;
+  }
 
-/* JOIN CHALLENGE */
-function toggleJoin(btn) {
-  const isJoined = btn.classList.contains('joined');
-  btn.classList.toggle('joined', !isJoined);
-  btn.textContent = isJoined ? 'Participar' : '✓ Participando';
-}
-
-/* CREATE POST */
-function createPost() {
   const input = document.getElementById('postInput');
   const text = input.value.trim();
   if (!text) return;
-  const container = document.getElementById('posts-container');
-  const post = document.createElement('div');
-  post.className = 'post';
-  post.innerHTML = `
-    <div class="post-header">
-      <div class="post-av av-you">LB</div>
-      <div class="post-meta">
-        <div class="post-name">Luis Beckman <span class="post-badge">VOCÊ</span></div>
-        <div class="post-time">agora mesmo</div>
-      </div>
-    </div>
-    <div class="post-text">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
-    <div class="post-actions">
-      <div class="post-action" onclick="toggleLike(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        <span>0</span>
-      </div>
-      <div class="post-action">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <span>0</span>
-      </div>
-    </div>`;
-  container.insertBefore(post, container.firstChild);
-  input.value = '';
-}
+
+  const btn = document.querySelector('.post-submit');
+  btn.textContent = '⏳ Publicando...';
+  btn.disabled = true;
+
+  try {
+    await createPost(currentUser.uid, { text, type: 'text' });
+    input.value = '';
+  } catch (err) {
+    alert('Erro ao publicar. Tente novamente.');
+    console.error(err);
+  } finally {
+    btn.textContent = 'Publicar';
+    btn.disabled = false;
+  }
+};
+
+/* ====================================================
+   THEME
+==================================================== */
+let dark = true;
+document.getElementById('themeBtn').onclick = () => {
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme',
+    dark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent =
+    dark ? '🌙' : '☀️';
+};
+
+/* ====================================================
+   TABS
+==================================================== */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll('.tab')
+      .forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content')
+      .forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab)
+      .classList.add('active');
+  };
+});
+
+/* ====================================================
+   LIKE POSTS ESTÁTICOS
+==================================================== */
+window.toggleLike = function(el) {
+  el.classList.toggle('liked');
+  const count = el.querySelector('span');
+  const cur = parseInt(count.textContent) || 0;
+  count.textContent = el.classList.contains('liked')
+    ? cur + 1
+    : cur - 1;
+  const svg = el.querySelector('svg');
+  svg.setAttribute('fill',
+    el.classList.contains('liked') ? 'currentColor' : 'none');
+};
+
+/* ====================================================
+   FOLLOW / JOIN / LIKE ESTÁTICOS
+==================================================== */
+window.toggleFollow = function(btn) {
+  const following = btn.classList.toggle('following');
+  btn.textContent = following ? 'Seguindo' : 'Seguir';
+};
+
+window.toggleJoin = function(btn) {
+  const isJoined = btn.classList.contains('joined');
+  btn.classList.toggle('joined', !isJoined);
+  btn.textContent = isJoined ? 'Participar' : '✓ Participando';
+};
 </script>
 </body>
 </html>

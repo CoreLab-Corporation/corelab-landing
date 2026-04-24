@@ -300,44 +300,141 @@ button { cursor:pointer; border:none; background:none; font-family:inherit; }
 
 </div>
 
-<script>
-/* THEME */
+<script type="module">
+import { onAuthChange, logout } from './js/auth.js';
+import {
+  getChatHistory,
+  saveChatMessage,
+  clearChatHistory,
+  getUserProfile
+} from './js/db.js';
+
+/* ====================================================
+   AUTH GUARD
+==================================================== */
+let currentUser = null;
+
+onAuthChange(async (user) => {
+  currentUser = user;
+  if (!user) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  // Carrega perfil
+  const profile = await getUserProfile(user.uid);
+  if (profile) {
+    document.getElementById('profileLevel').value =
+      profile.level || 'Intermediário';
+    document.getElementById('profileGoal').value =
+      profile.goal || 'Hipertrofia';
+    document.getElementById('profileDays').value =
+      profile.daysPerWeek || '4 dias';
+  }
+
+  // Carrega histórico do chat
+  await loadChatHistory(user.uid);
+
+  // Mostra saudação se histórico vazio
+  const msgs = document.getElementById('messages');
+  const hasMessages = msgs.querySelectorAll('.msg').length > 0;
+  if (!hasMessages) showGreeting(profile);
+});
+
+/* ====================================================
+   CARREGA HISTÓRICO DO CHAT
+==================================================== */
+async function loadChatHistory(userId) {
+  const savedHistory = await getChatHistory(userId, 30);
+  if (savedHistory.length === 0) return;
+
+  // Remove empty state
+  const empty = document.getElementById('emptyState');
+  if (empty) empty.remove();
+
+  // Restaura mensagens
+  savedHistory.forEach(msg => {
+    history.push({
+      role: msg.role === 'ai' ? 'assistant' : msg.role,
+      content: msg.content
+    });
+    addMsg(msg.role === 'assistant' ? 'ai' : 'user',
+      msg.role === 'assistant' ? formatAI(msg.content) : msg.content,
+      msg.role === 'assistant');
+  });
+}
+
+/* ====================================================
+   SAUDAÇÃO INICIAL
+==================================================== */
+function showGreeting(profile) {
+  const level = profile?.level || 'Intermediário';
+  const goal = profile?.goal || 'hipertrofia';
+  setTimeout(() => {
+    addMsg('ai', formatAI(
+      `👋 Olá **${profile?.name || 'atleta'}**! ` +
+      `Sou o **Coach IA do CoreLab**, seu personal trainer digital 24/7.\n\n` +
+      `Baseado no seu perfil (**${level}**, foco em **${goal.toLowerCase()}**), ` +
+      `estou pronto para criar treinos personalizados, responder dúvidas ` +
+      `sobre nutrição e muito mais.\n\nO que posso ajudar hoje? 💪`
+    ), true);
+  }, 500);
+}
+
+/* ====================================================
+   THEME
+==================================================== */
 let dark = true;
 document.getElementById('themeBtn').onclick = () => {
   dark = !dark;
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('themeBtn').textContent = dark ? '🌙' : '☀️';
+  document.documentElement.setAttribute('data-theme',
+    dark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent =
+    dark ? '🌙' : '☀️';
 };
 
-/* AUTO RESIZE TEXTAREA */
+/* ====================================================
+   AUTO RESIZE TEXTAREA
+==================================================== */
 const ta = document.getElementById('chatInput');
 ta.addEventListener('input', () => {
   ta.style.height = 'auto';
   ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
 });
 ta.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
 });
 
-/* CHAT STATE */
+/* ====================================================
+   CHAT STATE
+==================================================== */
 let history = [];
 let isLoading = false;
 
 function getTime() {
-  return new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+  return new Date().toLocaleTimeString('pt-BR',
+    { hour: '2-digit', minute: '2-digit' });
 }
 
 function escHtml(t) {
   return t
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\n/g,'<br>');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>');
 }
 
 function formatAI(text) {
   return '<p>' + text
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/`(.*?)`/g, '<code style="background:rgba(0,255,135,.1);padding:2px 6px;border-radius:4px;font-family:monospace;font-size:13px">$1</code>')
+    .replace(/`(.*?)`/g,
+      '<code style="background:rgba(0,255,135,.1);' +
+      'padding:2px 6px;border-radius:4px;' +
+      'font-family:monospace;font-size:13px">$1</code>')
     .replace(/\n\n/g, '</p><p style="margin-top:10px">')
     .replace(/\n- /g, '<br>• ')
     + '</p>';
@@ -346,13 +443,16 @@ function formatAI(text) {
 function addMsg(role, content, isHtml = false) {
   const empty = document.getElementById('emptyState');
   if (empty) empty.remove();
+
   const msgs = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = 'msg ' + role;
   div.innerHTML = `
     <div class="msg-av ${role}">${role === 'ai' ? 'CL' : '👤'}</div>
     <div>
-      <div class="msg-bubble ${role}">${isHtml ? content : escHtml(content)}</div>
+      <div class="msg-bubble ${role}">
+        ${isHtml ? content : escHtml(content)}
+      </div>
       <div class="msg-time">${getTime()}</div>
     </div>`;
   msgs.appendChild(div);
@@ -364,8 +464,13 @@ function showTyping() {
   if (empty) empty.remove();
   const msgs = document.getElementById('messages');
   const d = document.createElement('div');
-  d.className = 'msg ai'; d.id = 'typingMsg';
-  d.innerHTML = `<div class="msg-av ai">CL</div><div class="typing"><span></span><span></span><span></span></div>`;
+  d.className = 'msg ai';
+  d.id = 'typingMsg';
+  d.innerHTML = `
+    <div class="msg-av ai">CL</div>
+    <div class="typing">
+      <span></span><span></span><span></span>
+    </div>`;
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
 }
@@ -375,8 +480,12 @@ function removeTyping() {
   if (t) t.remove();
 }
 
+/* ====================================================
+   SEND MESSAGE
+==================================================== */
 async function sendMessage(overrideText) {
   if (isLoading) return;
+
   const input = document.getElementById('chatInput');
   const text = overrideText || input.value.trim();
   if (!text) return;
@@ -386,27 +495,35 @@ async function sendMessage(overrideText) {
   const days = document.getElementById('profileDays').value;
 
   addMsg('user', text);
-  if (!overrideText) { input.value = ''; input.style.height = 'auto'; }
-  history.push({ role: 'user', content: text });
+  if (!overrideText) {
+    input.value = '';
+    input.style.height = 'auto';
+  }
+
+  const userMsg = { role: 'user', content: text };
+  history.push(userMsg);
+
+  // Salva mensagem do usuário no Firestore
+  if (currentUser) {
+    await saveChatMessage(currentUser.uid, {
+      role: 'user',
+      content: text
+    });
+  }
 
   isLoading = true;
   document.getElementById('sendBtn').disabled = true;
   showTyping();
 
-  const systemPrompt = `Você é o Coach IA do CoreLab, um personal trainer digital especializado em fitness, musculação, nutrição esportiva, recuperação e bem-estar.
-
-Perfil do usuário:
-- Nível: ${level}
-- Objetivo principal: ${goal}
-- Disponibilidade: ${days}
-
-Instruções:
-- Responda sempre em português brasileiro
-- Seja prático, direto e baseado em evidências científicas
-- Ao sugerir treinos, inclua exercícios, séries, repetições e descanso
-- Use emojis moderadamente para tornar a resposta mais visual
-- Máximo de 350 palavras por resposta — seja conciso e útil
-- Adapte as recomendações ao nível e objetivo do usuário`;
+  const systemPrompt =
+    `Você é o Coach IA do CoreLab, personal trainer digital especializado ` +
+    `em fitness, musculação, nutrição esportiva, recuperação e bem-estar.\n\n` +
+    `Perfil do usuário:\n` +
+    `- Nível: ${level}\n` +
+    `- Objetivo: ${goal}\n` +
+    `- Disponibilidade: ${days}\n\n` +
+    `Responda em português brasileiro, seja prático e baseado em evidências. ` +
+    `Máximo 350 palavras por resposta.`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -422,20 +539,31 @@ Instruções:
 
     removeTyping();
 
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error?.message || 'Erro na API');
-    }
+    if (!response.ok) throw new Error('Erro na API');
 
     const data = await response.json();
-    const aiText = data.content?.[0]?.text || 'Desculpe, não consegui processar sua mensagem.';
+    const aiText = data.content?.[0]?.text ||
+      'Desculpe, não consegui processar sua mensagem.';
+
     history.push({ role: 'assistant', content: aiText });
     addMsg('ai', formatAI(aiText), true);
+
+    // Salva resposta da IA no Firestore
+    if (currentUser) {
+      await saveChatMessage(currentUser.uid, {
+        role: 'assistant',
+        content: aiText
+      });
+    }
 
   } catch (err) {
     removeTyping();
     addMsg('ai', formatAI(
-      `⚠️ **Modo demonstração ativo**\n\nPara ativar o Coach IA com respostas reais, configure a API Key da Anthropic no projeto.\n\nEnquanto isso, aqui vai uma dica para **${text.substring(0,40)}...**\n\nCom base no seu perfil (**${level}**, foco em **${goal.toLowerCase()}**, **${days}**):\n\n**Princípio fundamental:** Consistência supera perfeição. 80% de adesão ao plano por meses é infinitamente melhor que 100% por duas semanas.\n\n**Próximos passos:**\n- Defina horário fixo de treino\n- Registre cada sessão no app\n- Durma 7-9h por noite\n- Consuma proteína suficiente (1.6-2g/kg)\n\nConfigure a API para respostas personalizadas completas! 🚀`
+      `⚠️ **Modo demonstração**\n\n` +
+      `Configure a API Key da Anthropic para ativar o Coach IA completo.\n\n` +
+      `Dica para **${text.substring(0, 40)}**: ` +
+      `Consistência supera perfeição — 80% de adesão por meses é melhor que ` +
+      `100% por duas semanas. 🚀`
     ), true);
   }
 
@@ -443,19 +571,49 @@ Instruções:
   document.getElementById('sendBtn').disabled = false;
 }
 
-function askQuick(el) {
-  const text = el.textContent.trim().replace(/^[^\w]+/, '');
-  sendMessage(text);
+/* ====================================================
+   LIMPAR HISTÓRICO
+==================================================== */
+async function clearHistory() {
+  if (!currentUser) return;
+  if (!confirm('Limpar todo o histórico de conversa?')) return;
+
+  await clearChatHistory(currentUser.uid);
+  history = [];
+
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML = `
+    <div class="messages-empty" id="emptyState">
+      <div class="empty-icon">🤖</div>
+      <div class="empty-title">Histórico limpo!</div>
+      <div class="empty-sub">Comece uma nova conversa.</div>
+    </div>`;
 }
 
-/* GREETING */
-setTimeout(() => {
-  const level = document.getElementById('profileLevel').value;
-  const goal = document.getElementById('profileGoal').value;
-  addMsg('ai', formatAI(
-    `👋 Olá! Sou o **Coach IA do CoreLab**, seu personal trainer digital disponível 24/7.\n\nBaseado no seu perfil (**${level}**, foco em **${goal.toLowerCase()}**), estou pronto para criar treinos personalizados, responder dúvidas sobre nutrição, recuperação e muito mais.\n\nO que posso ajudar hoje? 💪`
-  ), true);
-}, 600);
+/* ====================================================
+   QUICK SUGGESTIONS
+==================================================== */
+window.askQuick = function(el) {
+  const text = el.textContent.trim().replace(/^[^\w]+/, '');
+  sendMessage(text);
+};
+
+/* ====================================================
+   EXPÕE sendMessage globalmente
+==================================================== */
+window.sendMessage = sendMessage;
+
+/* ====================================================
+   BOTÃO LIMPAR HISTÓRICO
+==================================================== */
+const clearBtn = document.createElement('button');
+clearBtn.textContent = '🗑️ Limpar histórico';
+clearBtn.className = 'topbar-btn';
+clearBtn.style.cssText =
+  'color:var(--red);border-color:rgba(255,59,92,.3);font-size:12px';
+clearBtn.onclick = clearHistory;
+document.querySelector('.topbar-space')
+  .insertAdjacentElement('afterend', clearBtn);
 </script>
 </body>
 </html>

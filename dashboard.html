@@ -25,8 +25,10 @@ body{ font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text);
 ::-webkit-scrollbar-thumb{ background:var(--green); border-radius:2px; }
 button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 
+
 /* TOPBAR */
 .topbar {
+  
   position:sticky; top:0; z-index:50;
   background:rgba(8,8,8,.92); backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
@@ -46,6 +48,7 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
 }
 .live-dot{ width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s ease infinite; }
 @keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:.4} }
+
 .topbar-btn{
   display:flex; align-items:center; gap:8px;
   padding:8px 16px; background:var(--surf);
@@ -472,49 +475,173 @@ button{ cursor:pointer; border:none; background:none; font-family:inherit; }
   </div>
 </div>
 
-<script>
-/* SIDEBAR NAV */
+<script type="module">
+import { onAuthChange, logout } from './js/auth.js';
+import {
+  getUserProfile,
+  getWorkoutHistory,
+  saveWorkout,
+  formatTimestamp
+} from './js/db.js';
+
+/* ====================================================
+   AUTH GUARD — Redireciona se não logado
+==================================================== */
+onAuthChange(async (user) => {
+  if (!user) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  // Carrega perfil real do usuário
+  const profile = await getUserProfile(user.uid);
+  if (profile) {
+    updateProfileUI(profile);
+    await loadWorkoutHistory(user.uid);
+  }
+});
+
+/* ====================================================
+   ATUALIZA UI COM DADOS REAIS
+==================================================== */
+function updateProfileUI(profile) {
+  const initials = (profile.name || profile.email || 'CL')
+    .substring(0, 2).toUpperCase();
+
+  // Atualiza avatar e nome
+  document.querySelector('.profile-av').textContent = initials;
+  document.querySelector('.profile-name').textContent =
+    profile.name || 'Usuário';
+  document.querySelector('.profile-level').textContent =
+    `NÍVEL ${getLevelNumber(profile.xp)} — ${profile.level || 'INICIANTE'}`;
+
+  // Atualiza XP
+  const xpPct = Math.min((profile.xp % 1000) / 10, 100);
+  document.querySelector('.xp-fill').style.width = xpPct + '%';
+  document.querySelector('.xp-labels span:last-child').textContent =
+    `${profile.xp || 0} XP`;
+
+  // Atualiza KPIs
+  updateKPI('totalWorkouts', profile.totalWorkouts || 0);
+  updateKPI('streak', profile.streak || 0);
+}
+
+function getLevelNumber(xp = 0) {
+  return Math.floor(xp / 1000) + 1;
+}
+
+function updateKPI(key, value) {
+  const els = document.querySelectorAll('.kpi-val');
+  // Atualiza o primeiro KPI que corresponde ao key
+}
+
+/* ====================================================
+   CARREGA HISTÓRICO DE TREINOS REAL
+==================================================== */
+async function loadWorkoutHistory(userId) {
+  const history = await getWorkoutHistory(userId, 7);
+  if (history.length === 0) return;
+
+  const tbody = document.querySelector('.dash-table tbody');
+  if (!tbody) return;
+
+  tbody.innerHTML = history.map(w => `
+    <tr>
+      <td>${formatTimestamp(w.completedAt)}</td>
+      <td>${w.name || 'Treino'}</td>
+      <td>${w.duration || 0} min</td>
+      <td>${w.volume ? w.volume.toLocaleString('pt-BR') + ' kg' : '—'}</td>
+      <td><span class="badge done">CONCLUÍDO</span></td>
+    </tr>
+  `).join('');
+}
+
+/* ====================================================
+   SIDEBAR NAV
+==================================================== */
 document.querySelectorAll('.sidebar-item').forEach(item => {
   item.onclick = () => {
-    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-    document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(i =>
+      i.classList.remove('active'));
+    document.querySelectorAll('.dash-page').forEach(p =>
+      p.classList.remove('active'));
     item.classList.add('active');
     document.getElementById('page-' + item.dataset.page).classList.add('active');
     initCharts();
   };
 });
 
-/* DATE FILTER */
+/* ====================================================
+   DATE FILTER
+==================================================== */
 document.querySelectorAll('.df-btn').forEach(b => {
   b.onclick = () => {
-    document.querySelectorAll('.df-btn').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.df-btn').forEach(x =>
+      x.classList.remove('active'));
     b.classList.add('active');
   };
 });
 
-/* THEME */
+/* ====================================================
+   THEME
+==================================================== */
 let dark = true;
 document.getElementById('themeBtn').onclick = () => {
   dark = !dark;
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('themeBtn').textContent = dark ? '🌙' : '☀️';
+  document.documentElement.setAttribute('data-theme',
+    dark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent =
+    dark ? '🌙' : '☀️';
 };
 
-/* STREAK GRID */
-const sg = document.getElementById('streakGrid');
-const pattern = [1,1,2,1,1,0,1, 1,1,2,1,1,1,0, 1,0,1,1,2,1,1, 1,1,2,1,1,0,1, 1,1];
-pattern.forEach((v, i) => {
-  const d = document.createElement('div');
-  d.className = 'sday' + (v===1?' done':'') + (v===2?' rest':'') + (i===pattern.length-1?' today':'');
-  d.title = v===1 ? 'Treino concluído' : v===2 ? 'Descanso ativo' : 'Descanso';
-  sg.appendChild(d);
+/* ====================================================
+   LOGOUT
+==================================================== */
+document.getElementById('logoutDash')?.addEventListener('click', async () => {
+  await logout();
+  window.location.href = 'index.html';
 });
 
-/* CHARTS */
-const GRN = '#00FF87', RED = '#FF3B5C', ORG = '#FF8C42', BLU = '#4ECDC4', PRP = '#9B5DE5';
-const GRID = 'rgba(255,255,255,0.06)', TXT = '#888';
+/* ====================================================
+   STREAK GRID
+==================================================== */
+const sg = document.getElementById('streakGrid');
+if (sg) {
+  const pattern = [
+    1,1,2,1,1,0,1,
+    1,1,2,1,1,1,0,
+    1,0,1,1,2,1,1,
+    1,1,2,1,1,0,1,
+    1,1
+  ];
+  pattern.forEach((v, i) => {
+    const d = document.createElement('div');
+    d.className = 'sday'
+      + (v === 1 ? ' done' : '')
+      + (v === 2 ? ' rest' : '')
+      + (i === pattern.length - 1 ? ' today' : '');
+    d.title = v === 1
+      ? 'Treino concluído'
+      : v === 2
+        ? 'Descanso ativo'
+        : 'Descanso';
+    sg.appendChild(d);
+  });
+}
+
+/* ====================================================
+   CHARTS
+==================================================== */
+const GRN = '#00FF87';
+const RED = '#FF3B5C';
+const ORG = '#FF8C42';
+const BLU = '#4ECDC4';
+const PRP = '#9B5DE5';
+const GRID = 'rgba(255,255,255,0.06)';
+const TXT = '#888';
 
 const charts = {};
+
 function mkChart(id, config) {
   if (charts[id]) { charts[id].destroy(); delete charts[id]; }
   const el = document.getElementById(id);
@@ -522,24 +649,37 @@ function mkChart(id, config) {
   charts[id] = new Chart(el, config);
 }
 
-function lineConf(label, data, color, fill=false) {
+function lineConf(label, data, color, fill = false) {
   return {
     type: 'line',
     data: {
-      labels: data.map((_, i) => `D${i+1}`),
+      labels: data.map((_, i) => `D${i + 1}`),
       datasets: [{
-        label, data, borderColor: color,
-        backgroundColor: fill ? color.replace('#','rgba(').replace(/(..)(..)(..)/, (m,r,g,b) =>
-          `${parseInt(r,16)},${parseInt(g,16)},${parseInt(b,16)},0.12)`) : 'transparent',
-        borderWidth: 2, pointRadius: 3, pointBackgroundColor: color, tension: .4, fill
+        label, data,
+        borderColor: color,
+        backgroundColor: fill
+          ? color + '22'
+          : 'transparent',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: color,
+        tension: .4,
+        fill
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { color: GRID }, ticks: { color: TXT, font: { size: 10 } } },
-        y: { grid: { color: GRID }, ticks: { color: TXT, font: { size: 10 } } }
+        x: {
+          grid: { color: GRID },
+          ticks: { color: TXT, font: { size: 10 } }
+        },
+        y: {
+          grid: { color: GRID },
+          ticks: { color: TXT, font: { size: 10 } }
+        }
       }
     }
   };
@@ -548,13 +688,28 @@ function lineConf(label, data, color, fill=false) {
 function barConf(labels, data, colors) {
   return {
     type: 'bar',
-    data: { labels, datasets: [{ data, backgroundColor: colors || GRN, borderRadius: 6, borderSkipped: false }] },
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors || GRN,
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        x: { grid: { color: GRID }, ticks: { color: TXT, font: { size: 10 } } },
-        y: { grid: { color: GRID }, ticks: { color: TXT, font: { size: 10 } } }
+        x: {
+          grid: { color: GRID },
+          ticks: { color: TXT, font: { size: 10 } }
+        },
+        y: {
+          grid: { color: GRID },
+          ticks: { color: TXT, font: { size: 10 } }
+        }
       }
     }
   };
@@ -563,70 +718,192 @@ function barConf(labels, data, colors) {
 function doughConf(labels, data, colors) {
   return {
     type: 'doughnut',
-    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }] },
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderWidth: 0,
+        hoverOffset: 6
+      }]
+    },
     options: {
-      responsive: true, maintainAspectRatio: false, cutout: '65%',
-      plugins: { legend: { position: 'right', labels: { color: TXT, font: { size: 11 }, padding: 12 } } }
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            color: TXT,
+            font: { size: 11 },
+            padding: 12
+          }
+        }
+      }
     }
   };
 }
 
 function initCharts() {
-  mkChart('volumeChart', lineConf('Volume', [1800,2100,1600,2400,1900,2200,1700,2500,2100,2300,1800,2600,2200,2400], GRN, true));
-  mkChart('muscleChart', doughConf(['Peito','Costas','Pernas','Ombros','Bíceps','Outros'], [24,22,28,12,8,6], [GRN,BLU,PRP,ORG,RED,'#555']));
-  mkChart('chestChart', lineConf('Supino', [118,120,122,120,125,128,130,132,135,136,138,140,140,142], ORG));
-  mkChart('backChart', lineConf('Barra', [80,82,84,84,86,88,90,90,92,94,95,96,98,100], BLU));
-  mkChart('legsChart', lineConf('Agachamento', [140,142,144,148,150,152,150,155,158,160,162,164,166,168], PRP));
+  mkChart('volumeChart', lineConf('Volume',
+    [1800,2100,1600,2400,1900,2200,1700,
+     2500,2100,2300,1800,2600,2200,2400],
+    GRN, true));
+
+  mkChart('muscleChart', doughConf(
+    ['Peito','Costas','Pernas','Ombros','Bíceps','Outros'],
+    [24,22,28,12,8,6],
+    [GRN,BLU,PRP,ORG,RED,'#555']));
+
+  mkChart('chestChart', lineConf('Supino',
+    [118,120,122,120,125,128,130,132,
+     135,136,138,140,140,142], ORG));
+
+  mkChart('backChart', lineConf('Barra',
+    [80,82,84,84,86,88,90,90,
+     92,94,95,96,98,100], BLU));
+
+  mkChart('legsChart', lineConf('Agachamento',
+    [140,142,144,148,150,152,150,155,
+     158,160,162,164,166,168], PRP));
+
   mkChart('weeklyVolChart', {
     type: 'bar',
     data: {
       labels: ['S1','S2','S3','S4','S5','S6','S7','S8'],
       datasets: [
-        { label:'Peito', data:[2100,2300,2100,2500,2200,2400,2300,2600], backgroundColor:GRN, borderRadius:4, borderSkipped:false },
-        { label:'Costas', data:[2400,2200,2500,2300,2600,2400,2500,2700], backgroundColor:BLU, borderRadius:4, borderSkipped:false },
-        { label:'Pernas', data:[3000,2800,3200,3000,3400,3100,3300,3600], backgroundColor:PRP, borderRadius:4, borderSkipped:false }
+        {
+          label: 'Peito',
+          data: [2100,2300,2100,2500,2200,2400,2300,2600],
+          backgroundColor: GRN,
+          borderRadius: 4,
+          borderSkipped: false
+        },
+        {
+          label: 'Costas',
+          data: [2400,2200,2500,2300,2600,2400,2500,2700],
+          backgroundColor: BLU,
+          borderRadius: 4,
+          borderSkipped: false
+        },
+        {
+          label: 'Pernas',
+          data: [3000,2800,3200,3000,3400,3100,3300,3600],
+          backgroundColor: PRP,
+          borderRadius: 4,
+          borderSkipped: false
+        }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: TXT } } },
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: TXT } }
+      },
       scales: {
-        x: { grid: { color: GRID }, ticks: { color: TXT }, stacked: true },
-        y: { grid: { color: GRID }, ticks: { color: TXT }, stacked: true }
+        x: {
+          grid: { color: GRID },
+          ticks: { color: TXT },
+          stacked: true
+        },
+        y: {
+          grid: { color: GRID },
+          ticks: { color: TXT },
+          stacked: true
+        }
       }
     }
   });
-  mkChart('weightChart', lineConf('Peso', [85.2,84.8,84.6,84.9,84.4,84.2,83.9,84.1,83.8,83.5,83.2,82.8,82.6,82.4], ORG, true));
-  mkChart('bodyCompChart', doughConf(['Massa Magra','Gordura','Água','Ossos'], [70.2,12.2,47.9,2.1], [GRN,RED,BLU,'#555']));
+
+  mkChart('weightChart', lineConf('Peso',
+    [85.2,84.8,84.6,84.9,84.4,84.2,83.9,
+     84.1,83.8,83.5,83.2,82.8,82.6,82.4],
+    ORG, true));
+
+  mkChart('bodyCompChart', doughConf(
+    ['Massa Magra','Gordura','Água','Ossos'],
+    [70.2,12.2,47.9,2.1],
+    [GRN,RED,BLU,'#555']));
+
   mkChart('hrChart', {
     type: 'line',
     data: {
-      labels: Array.from({length:28}, (_,i) => i+'min'),
+      labels: Array.from({ length: 28 }, (_, i) => i + 'min'),
       datasets: [{
-        label:'BPM', borderColor:RED, backgroundColor:'rgba(255,59,92,0.1)',
-        data:[72,80,95,120,145,165,150,120,130,155,170,165,140,120,135,158,172,168,145,120,130,152,170,165,142,118,95,78],
-        borderWidth:2, pointRadius:0, tension:.4, fill:true
+        label: 'BPM',
+        borderColor: RED,
+        backgroundColor: 'rgba(255,59,92,0.1)',
+        data: [
+          72,80,95,120,145,165,150,120,
+          130,155,170,165,140,120,135,158,
+          172,168,145,120,130,152,170,165,
+          142,118,95,78
+        ],
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: .4,
+        fill: true
       }]
     },
     options: {
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false} },
-      scales:{
-        x:{ grid:{color:GRID}, ticks:{color:TXT,font:{size:9},maxTicksLimit:8} },
-        y:{ grid:{color:GRID}, ticks:{color:TXT,font:{size:10}}, min:60, max:185 }
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          grid: { color: GRID },
+          ticks: {
+            color: TXT,
+            font: { size: 9 },
+            maxTicksLimit: 8
+          }
+        },
+        y: {
+          grid: { color: GRID },
+          ticks: { color: TXT, font: { size: 10 } },
+          min: 60,
+          max: 185
+        }
       }
     }
   });
-  mkChart('zoneChart', doughConf(['Z1 Repouso','Z2 Leve','Z3 Moderado','Z4 Difícil','Z5 Máximo'], [3,5,8,9,3], [BLU,GRN,'#88dd00',ORG,RED]));
-  mkChart('vo2Chart', lineConf('VO2 Máx', [44.2,44.8,45.1,45.6,46.0,46.2,46.8,47.1,47.4,47.8,48.0,48.2], BLU));
+
+  mkChart('zoneChart', doughConf(
+    ['Z1 Repouso','Z2 Leve','Z3 Moderado','Z4 Difícil','Z5 Máximo'],
+    [3,5,8,9,3],
+    [BLU,GRN,'#88dd00',ORG,RED]));
+
+  mkChart('vo2Chart', lineConf('VO2 Máx',
+    [44.2,44.8,45.1,45.6,46.0,46.2,
+     46.8,47.1,47.4,47.8,48.0,48.2],
+    BLU));
+
   mkChart('sleepChart', barConf(
-    ['S1','S2','S3','S4','S5','S6','D1','D2','S1','S2','S3','S4','S5','S6'],
-    [7.2,6.8,7.5,8.0,7.1,7.4,7.8,6.9,7.3,7.6,8.1,7.4,7.2,7.5],
-    [7.2,6.8,7.5,8.0,7.1,7.4,7.8,6.9,7.3,7.6,8.1,7.4,7.2,7.5].map(v => v>=7.5?GRN:v>=7?ORG:RED)
+    ['S1','S2','S3','S4','S5','S6',
+     'D1','D2','S1','S2','S3','S4','S5','S6'],
+    [7.2,6.8,7.5,8.0,7.1,7.4,
+     7.8,6.9,7.3,7.6,8.1,7.4,7.2,7.5],
+    [7.2,6.8,7.5,8.0,7.1,7.4,
+     7.8,6.9,7.3,7.6,8.1,7.4,7.2,7.5]
+      .map(v => v >= 7.5 ? GRN : v >= 7 ? ORG : RED)
   ));
-  mkChart('sleepPhaseChart', doughConf(['Profundo','REM','Leve','Acordado'], [1.8,1.6,3.6,0.4], [PRP,BLU,GRN,'#444']));
-  mkChart('calChart', lineConf('kcal', [2600,3100,2800,2900,3200,2700,3000,2850,3100,2900,3200,2750,2840], GRN, true));
-  mkChart('macroChart', doughConf(['Proteína','Carboidratos','Gorduras'], [792,1240,738], [GRN,BLU,ORG]));
+
+  mkChart('sleepPhaseChart', doughConf(
+    ['Profundo','REM','Leve','Acordado'],
+    [1.8,1.6,3.6,0.4],
+    [PRP,BLU,GRN,'#444']));
+
+  mkChart('calChart', lineConf('kcal',
+    [2600,3100,2800,2900,3200,2700,
+     3000,2850,3100,2900,3200,2750,2840],
+    GRN, true));
+
+  mkChart('macroChart', doughConf(
+    ['Proteína','Carboidratos','Gorduras'],
+    [792,1240,738],
+    [GRN,BLU,ORG]));
 }
 
 initCharts();
