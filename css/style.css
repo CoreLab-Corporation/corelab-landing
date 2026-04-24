@@ -966,3 +966,139 @@ footer {
   .feat-grid { grid-template-columns: 1fr; }
   .slide-eye { font-size: 9px; padding: 5px 12px; }
 }
+
+/* ====================================================
+   MODAL TABS
+==================================================== */
+.modal-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg3);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+.modal-tab {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .25s;
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.modal-tab.active {
+  background: var(--surf);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+.modal-tab-content { display: none; }
+.modal-tab-content.active { display: block; }
+
+/* ALERT */
+.modal-alert {
+  display: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.modal-alert.error {
+  display: block;
+  background: rgba(255,59,92,.1);
+  border: 1px solid rgba(255,59,92,.3);
+  color: var(--red);
+}
+.modal-alert.success {
+  display: block;
+  background: rgba(0,255,135,.08);
+  border: 1px solid rgba(0,255,135,.2);
+  color: var(--green);
+}
+
+/* GOOGLE BUTTON */
+.btn-google {
+  width: 100%;
+  padding: 13px;
+  background: var(--surf);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-google:hover {
+  border-color: rgba(66,133,244,.5);
+  background: rgba(66,133,244,.05);
+}
+
+/* MODAL LINK */
+.modal-link {
+  color: var(--green);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: opacity .2s;
+}
+.modal-link:hover { opacity: .7; }
+
+/* SPINNER */
+.btn-spinner { animation: spin .8s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* USER MENU DROPDOWN */
+.user-menu {
+  position: absolute;
+  top: calc(var(--nav) + 8px);
+  right: clamp(20px, 5vw, 60px);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 8px;
+  min-width: 200px;
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: all .25s var(--ease);
+}
+.user-menu.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+.user-menu-header {
+  padding: 10px 12px 14px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.user-menu-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.user-menu-email { font-size: 12px; color: var(--text2); }
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+}
+.user-menu-item:hover { background: var(--bg3); color: var(--text); }
+.user-menu-item.danger { color: var(--red); }
+.user-menu-item.danger:hover { background: rgba(255,59,92,.08); }
+.user-menu-icon { font-size: 16px; width: 20px; text-align: center; }
