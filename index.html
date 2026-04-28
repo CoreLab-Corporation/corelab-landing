@@ -1,450 +1,859 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR" data-theme="dark">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="CoreLab — O aplicativo que transforma seu corpo e mente."/>
-<title>CoreLab — Forge Your Core</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="css/style.css"/>
-</head>
-<body>
-
-<!-- SPLASH -->
-<div id="splash">
-  <div class="splash-logo">CORE<span>LAB</span></div>
-  <div class="splash-bar"><div class="splash-fill"></div></div>
-  <div class="splash-tag" id="stag">Inicializando...</div>
-</div>
-
-<!-- NAVBAR -->
-<nav id="nav">
-  <a href="#" class="nav-logo">CORE<span>LAB</span></a>
-  <div class="nav-space"></div>
-  <div class="nav-ctrl">
-    <div class="lang-pill">
-      <button class="lang-btn active" data-lang="pt">PT</button>
-      <button class="lang-btn" data-lang="es">ES</button>
-      <button class="lang-btn" data-lang="en">EN</button>
-    </div>
-    <button class="icon-btn" id="themeBtn">🌙</button>
-    <button class="icon-btn" id="loginBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-      <div class="avatar-inner" id="avatarEl"></div>
-    </button>
-  </div>
-</nav>
-
-<!-- LOGIN MODAL -->
-<div class="overlay" id="loginOverlay">
-  <div class="modal">
-    <button class="modal-x" id="loginClose">✕</button>
-
-    <!-- TABS DO MODAL -->
-    <div class="modal-tabs">
-      <button class="modal-tab active" data-tab="login">Entrar</button>
-      <button class="modal-tab" data-tab="register">Cadastrar</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CoreLab — O aplicativo que transforma seu corpo e mente."
+    />
+    <title>CoreLab — Forge Your Core</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- SPLASH -->
+    <div id="splash">
+      <div class="splash-logo">CORE<span>LAB</span></div>
+      <div class="splash-bar"><div class="splash-fill"></div></div>
+      <div class="splash-tag" id="stag">Inicializando...</div>
     </div>
 
-    <!-- MENSAGEM DE ERRO/SUCESSO -->
-    <div class="modal-alert" id="modalAlert"></div>
-
-    <!-- ═══ TAB LOGIN ═══ -->
-    <div class="modal-tab-content active" id="tab-login">
-      <div class="modal-tag">Acesso à conta</div>
-      <div class="modal-title">BEM-VINDO<br>DE VOLTA</div>
-
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="loginEmail" placeholder="seu@email.com"/>
+    <!-- NAVBAR -->
+    <nav id="nav">
+      <a href="#" class="nav-logo">CORE<span>LAB</span></a>
+      <div class="nav-space"></div>
+      <div class="nav-ctrl">
+        <div class="lang-pill">
+          <button class="lang-btn active" data-lang="pt">PT</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="es">ES</button>
+        </div>
+        <button class="icon-btn" id="themeBtn">🌙</button>
+        <button class="icon-btn" id="loginBtn">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <div class="avatar-inner" id="avatarEl"></div>
+        </button>
       </div>
-      <div class="field">
-        <label>Senha</label>
-        <input type="password" id="loginPass" placeholder="••••••••"/>
-      </div>
+    </nav>
 
-      <button class="btn-submit" id="loginSubmit">
-        <span id="loginBtnText">ENTRAR</span>
-        <span class="btn-spinner" id="loginSpinner" style="display:none">⏳</span>
-      </button>
+    <!-- LOGIN MODAL -->
+    <div class="overlay" id="loginOverlay">
+      <div class="modal">
+        <button class="modal-x" id="loginClose">✕</button>
 
-      <div class="modal-div">ou</div>
+        <div class="modal-tabs">
+          <button
+            class="modal-tab active"
+            data-tab="login"
+            data-i18n="modal_tab_login"
+          >
+            Entrar
+          </button>
+          <button
+            class="modal-tab"
+            data-tab="register"
+            data-i18n="modal_tab_register"
+          >
+            Cadastrar
+          </button>
+        </div>
 
-      <button class="btn-google" id="googleLogin">
-        <svg width="18" height="18" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        Continuar com Google
-      </button>
+        <div class="modal-alert" id="modalAlert"></div>
 
-      <div class="modal-foot">
-        <span class="modal-link" id="forgotPass">Esqueci minha senha</span>
-      </div>
-    </div>
+        <!-- TAB LOGIN -->
+        <div class="modal-tab-content active" id="tab-login">
+          <div class="modal-tag" data-i18n="modal_login_tag">
+            Acesso à conta
+          </div>
+          <div class="modal-title" data-i18n-html="modal_login_title">
+            BEM-VINDO<br />DE VOLTA
+          </div>
 
-    <!-- ═══ TAB CADASTRO ═══ -->
-    <div class="modal-tab-content" id="tab-register">
-      <div class="modal-tag">Criar conta</div>
-      <div class="modal-title">COMECE<br>AGORA</div>
+          <div class="field">
+            <label data-i18n="modal_label_email">Email</label>
+            <input
+              type="email"
+              id="loginEmail"
+              data-i18n-placeholder="modal_ph_email"
+              placeholder="seu@email.com"
+            />
+          </div>
+          <div class="field">
+            <label data-i18n="modal_label_pass">Senha</label>
+            <input
+              type="password"
+              id="loginPass"
+              data-i18n-placeholder="modal_ph_pass"
+              placeholder="••••••••"
+            />
+          </div>
 
-      <div class="field">
-        <label>Nome completo</label>
-        <input type="text" id="registerName" placeholder="Seu nome"/>
-      </div>
-      <div class="field">
-        <label>Email</label>
-        <input type="email" id="registerEmail" placeholder="seu@email.com"/>
-      </div>
-      <div class="field">
-        <label>Senha</label>
-        <input type="password" id="registerPass" placeholder="Mínimo 6 caracteres"/>
-      </div>
-      <div class="field">
-        <label>Confirmar senha</label>
-        <input type="password" id="registerPassConfirm" placeholder="Repita a senha"/>
-      </div>
+          <button class="btn-submit" id="loginSubmit">
+            <span id="loginBtnText" data-i18n="modal_btn_login">ENTRAR</span>
+            <span class="btn-spinner" id="loginSpinner" style="display: none"
+              >⏳</span
+            >
+          </button>
 
-      <button class="btn-submit" id="registerSubmit">
-        <span id="registerBtnText">CRIAR CONTA GRÁTIS</span>
-        <span class="btn-spinner" id="registerSpinner" style="display:none">⏳</span>
-      </button>
+          <div class="modal-div" data-i18n="modal_or">ou</div>
 
-      <div class="modal-div">ou</div>
+          <button class="btn-google" id="googleLogin">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
+            </svg>
+            <span data-i18n="modal_google_login">Continuar com Google</span>
+          </button>
 
-      <button class="btn-google" id="googleRegister">
-        <svg width="18" height="18" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        Cadastrar com Google
-      </button>
+          <div class="modal-foot">
+            <span class="modal-link" id="forgotPass" data-i18n="modal_forgot"
+              >Esqueci minha senha</span
+            >
+          </div>
+        </div>
 
-      <div class="modal-foot" style="font-size:11px;color:var(--text3);margin-top:12px">
-        Ao criar conta você concorda com os
-        <span style="color:var(--green);cursor:pointer">Termos de Uso</span>
-      </div>
-    </div>
+        <!-- TAB CADASTRO -->
+        <div class="modal-tab-content" id="tab-register">
+          <div class="modal-tag" data-i18n="modal_register_tag">
+            Criar conta
+          </div>
+          <div class="modal-title" data-i18n-html="modal_register_title">
+            COMECE<br />AGORA
+          </div>
 
-    <!-- ═══ TAB RESET SENHA ═══ -->
-    <div class="modal-tab-content" id="tab-reset">
-      <div class="modal-tag">Recuperar acesso</div>
-      <div class="modal-title">REDEFINIR<br>SENHA</div>
-      <p style="font-size:14px;color:var(--text2);font-weight:300;margin-bottom:20px;line-height:1.6">
-        Digite seu email e enviaremos um link para redefinir sua senha.
-      </p>
-      <div class="field">
-        <label>Email cadastrado</label>
-        <input type="email" id="resetEmail" placeholder="seu@email.com"/>
-      </div>
-      <button class="btn-submit" id="resetSubmit">ENVIAR LINK</button>
-      <div class="modal-foot" style="margin-top:16px">
-        <span class="modal-link" id="backToLogin">← Voltar ao login</span>
-      </div>
-    </div>
+          <div class="field">
+            <label data-i18n="modal_label_name">Nome completo</label>
+            <input
+              type="text"
+              id="registerName"
+              data-i18n-placeholder="modal_ph_name"
+              placeholder="Seu nome"
+            />
+          </div>
+          <div class="field">
+            <label data-i18n="modal_label_email">Email</label>
+            <input
+              type="email"
+              id="registerEmail"
+              data-i18n-placeholder="modal_ph_email_reg"
+              placeholder="seu@email.com"
+            />
+          </div>
+          <div class="field">
+            <label data-i18n="modal_label_pass">Senha</label>
+            <input
+              type="password"
+              id="registerPass"
+              data-i18n-placeholder="modal_ph_pass"
+              placeholder="••••••••"
+            />
+          </div>
+          <div class="field">
+            <label data-i18n="modal_label_confirm">Confirmar senha</label>
+            <input
+              type="password"
+              id="registerPassConfirm"
+              data-i18n-placeholder="modal_ph_confirm"
+              placeholder="Repita a senha"
+            />
+          </div>
 
-  </div>
-</div>
+          <button class="btn-submit" id="registerSubmit">
+            <span id="registerBtnText" data-i18n="modal_btn_register"
+              >CRIAR CONTA GRÁTIS</span
+            >
+            <span class="btn-spinner" id="registerSpinner" style="display: none"
+              >⏳</span
+            >
+          </button>
 
-<!-- CHIP POPUP -->
-<div id="chip-overlay">
-  <div class="chip-modal">
-    <div class="chip-head">
-      <div class="chip-head-icon" id="cpIcon"></div>
-      <div class="chip-head-meta">
-        <div class="chip-head-tag" id="cpTag"></div>
-        <div class="chip-head-title" id="cpTitle"></div>
-      </div>
-      <button class="chip-x" id="cpClose">✕</button>
-    </div>
-    <div class="chip-body" id="cpBody"></div>
-  </div>
-</div>
+          <div class="modal-div" data-i18n="modal_or">ou</div>
 
-<!-- HERO CAROUSEL -->
-<section id="hero">
-  <div class="carousel-track" id="cTrack">
+          <button class="btn-google" id="googleRegister">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path
+                fill="#4285F4"
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              />
+            </svg>
+            <span data-i18n="modal_google_register">Cadastrar com Google</span>
+          </button>
 
-    <!-- SLIDE 1 -->
-    <div class="c-slide">
-      <div class="slide-bg">
-        <div class="slide-grid"></div>
-        <div class="slide-glow" style="background:radial-gradient(ellipse 80% 60% at 60% 50%,rgba(0,255,135,.07),transparent)"></div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-eye"><div class="dot"></div><span>Early Access — Vagas Limitadas</span></div>
-        <h1 class="slide-title">FORJE<br><span class="acc">SEU</span> <span class="str">CORE</span></h1>
-        <p class="slide-sub">O aplicativo que entende seu corpo. Treinos personalizados, acompanhamento em tempo real e uma comunidade que te impulsiona além dos limites.</p>
-        <div class="slide-cta">
-          <a href="#early" class="btn-pri">Quero Early Access →</a>
-          <a href="#sec-mente" class="btn-sec">Explorar</a>
+          <div
+            class="modal-foot"
+            style="font-size: 11px; color: var(--text3); margin-top: 12px"
+          >
+            <span data-i18n="modal_terms"
+              >Ao criar conta você concorda com os</span
+            >
+            <span
+              style="color: var(--green); cursor: pointer"
+              data-i18n="modal_terms_link"
+              >Termos de Uso</span
+            >
+          </div>
+        </div>
+
+        <!-- TAB RESET SENHA -->
+        <div class="modal-tab-content" id="tab-reset">
+          <div class="modal-tag" data-i18n="modal_reset_tag">
+            Recuperar acesso
+          </div>
+          <div class="modal-title" data-i18n-html="modal_reset_title">
+            REDEFINIR<br />SENHA
+          </div>
+          <p
+            style="
+              font-size: 14px;
+              color: var(--text2);
+              font-weight: 300;
+              margin-bottom: 20px;
+              line-height: 1.6;
+            "
+            data-i18n="modal_reset_desc"
+          >
+            Digite seu email e enviaremos um link para redefinir sua senha.
+          </p>
+          <div class="field">
+            <label data-i18n="modal_label_reset_email">Email cadastrado</label>
+            <input
+              type="email"
+              id="resetEmail"
+              data-i18n-placeholder="modal_ph_email"
+              placeholder="seu@email.com"
+            />
+          </div>
+          <button
+            class="btn-submit"
+            id="resetSubmit"
+            data-i18n="modal_btn_reset"
+          >
+            ENVIAR LINK
+          </button>
+          <div class="modal-foot" style="margin-top: 16px">
+            <span
+              class="modal-link"
+              id="backToLogin"
+              data-i18n="modal_back_login"
+              >← Voltar ao login</span
+            >
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- SLIDE 2 -->
-    <div class="c-slide">
-      <div class="slide-bg">
-        <div class="slide-grid"></div>
-        <div class="slide-glow" style="background:radial-gradient(ellipse 80% 60% at 40% 50%,rgba(0,255,135,.09),transparent)"></div>
+    <!-- CHIP POPUP -->
+    <div id="chip-overlay">
+      <div class="chip-modal">
+        <div class="chip-head">
+          <div class="chip-head-icon" id="cpIcon"></div>
+          <div class="chip-head-meta">
+            <div class="chip-head-tag" id="cpTag"></div>
+            <div class="chip-head-title" id="cpTitle"></div>
+          </div>
+          <button class="chip-x" id="cpClose">✕</button>
+        </div>
+        <div class="chip-body" id="cpBody"></div>
       </div>
-      <div class="slide-content">
-        <div class="slide-eye"><div class="dot"></div><span>IA Personalizada — Novo</span></div>
-        <h1 class="slide-title">TREINO<br><span class="acc">COM</span> <span class="str">IA</span></h1>
-        <p class="slide-sub">Nosso chatbot de IA analisa seu histórico, objetivos e limitações para criar o treino perfeito para você. Zero achismo, 100% ciência.</p>
-        <div class="slide-cta">
-          <a href="chatbot.html" class="btn-pri">Falar com a IA →</a>
-          <a href="#features" class="btn-sec">Saiba mais</a>
+    </div>
+
+    <!-- HERO CAROUSEL -->
+    <section id="hero">
+      <div class="carousel-track" id="cTrack">
+        <!-- SLIDE 1 -->
+        <div class="c-slide">
+          <div class="slide-bg">
+            <div class="slide-grid"></div>
+            <div
+              class="slide-glow"
+              style="
+                background: radial-gradient(
+                  ellipse 80% 60% at 60% 50%,
+                  rgba(0, 255, 135, 0.07),
+                  transparent
+                );
+              "
+            ></div>
+          </div>
+          <div class="slide-content">
+            <div class="slide-eye">
+              <div class="dot"></div>
+              <span data-i18n="slide1_eye">Early Access — Vagas Limitadas</span>
+            </div>
+            <h1 class="slide-title" data-i18n-html="slide1_title">
+              FORJE<br /><span class="acc">SEU</span>
+              <span class="str">CORE</span>
+            </h1>
+            <p class="slide-sub" data-i18n="slide1_sub">
+              O aplicativo que entende seu corpo. Treinos personalizados,
+              acompanhamento em tempo real e uma comunidade que te impulsiona
+              além dos limites.
+            </p>
+            <div class="slide-cta">
+              <a href="#early" class="btn-pri" data-i18n="slide1_cta1"
+                >Quero Early Access →</a
+              >
+              <a href="#sec-mente" class="btn-sec" data-i18n="slide1_cta2"
+                >Explorar</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="c-slide">
+          <div class="slide-bg">
+            <div class="slide-grid"></div>
+            <div
+              class="slide-glow"
+              style="
+                background: radial-gradient(
+                  ellipse 80% 60% at 40% 50%,
+                  rgba(0, 255, 135, 0.09),
+                  transparent
+                );
+              "
+            ></div>
+          </div>
+          <div class="slide-content">
+            <div class="slide-eye">
+              <div class="dot"></div>
+              <span data-i18n="slide2_eye">IA Personalizada — Novo</span>
+            </div>
+            <h1 class="slide-title" data-i18n-html="slide2_title">
+              TREINO<br /><span class="acc">COM</span>
+              <span class="str">IA</span>
+            </h1>
+            <p class="slide-sub" data-i18n="slide2_sub">
+              Nosso chatbot de IA analisa seu histórico, objetivos e limitações
+              para criar o treino perfeito para você. Zero achismo, 100%
+              ciência.
+            </p>
+            <div class="slide-cta">
+              <a href="chatbot.html" class="btn-pri" data-i18n="slide2_cta1"
+                >Falar com a IA →</a
+              >
+              <a href="#features" class="btn-sec" data-i18n="slide2_cta2"
+                >Saiba mais</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="c-slide">
+          <div class="slide-bg">
+            <div class="slide-grid"></div>
+            <div
+              class="slide-glow"
+              style="
+                background: radial-gradient(
+                  ellipse 80% 60% at 70% 40%,
+                  rgba(0, 200, 100, 0.08),
+                  transparent
+                );
+              "
+            ></div>
+          </div>
+          <div class="slide-content">
+            <div class="slide-eye">
+              <div class="dot"></div>
+              <span data-i18n="slide3_eye">Comunidade — Elite</span>
+            </div>
+            <h1 class="slide-title" data-i18n-html="slide3_title">
+              JUNTE-SE<br /><span class="acc">À</span>
+              <span class="str">ELITE</span>
+            </h1>
+            <p class="slide-sub" data-i18n="slide3_sub">
+              Crie desafios, conquiste prêmios e conecte-se com atletas de alta
+              performance. A comunidade que transforma rotinas em resultados.
+            </p>
+            <div class="slide-cta">
+              <a href="comunidade.html" class="btn-pri" data-i18n="slide3_cta1"
+                >Entrar na Comunidade →</a
+              >
+              <a href="#features" class="btn-sec" data-i18n="slide3_cta2"
+                >Ver desafios</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="c-slide">
+          <div class="slide-bg">
+            <div class="slide-grid"></div>
+            <div
+              class="slide-glow"
+              style="
+                background: radial-gradient(
+                  ellipse 80% 60% at 50% 60%,
+                  rgba(0, 255, 135, 0.06),
+                  transparent
+                );
+              "
+            ></div>
+          </div>
+          <div class="slide-content">
+            <div class="slide-eye">
+              <div class="dot"></div>
+              <span data-i18n="slide4_eye">Dashboard — Power Analytics</span>
+            </div>
+            <h1 class="slide-title" data-i18n-html="slide4_title">
+              SEU<br /><span class="acc">PROGRESSO</span>
+              <span class="str">REAL</span>
+            </h1>
+            <p class="slide-sub" data-i18n="slide4_sub">
+              Dashboards em tempo real com métricas de performance, composição
+              corporal e evolução semanal. Dados que inspiram ação.
+            </p>
+            <div class="slide-cta">
+              <a href="dashboard.html" class="btn-pri" data-i18n="slide4_cta1"
+                >Ver Dashboard →</a
+              >
+              <a href="#features" class="btn-sec" data-i18n="slide4_cta2"
+                >Explorar métricas</a
+              >
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- SLIDE 3 -->
-    <div class="c-slide">
-      <div class="slide-bg">
-        <div class="slide-grid"></div>
-        <div class="slide-glow" style="background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(0,200,100,.08),transparent)"></div>
+      <div class="carousel-dots" id="cDots">
+        <div class="cdot active" data-i="0"></div>
+        <div class="cdot" data-i="1"></div>
+        <div class="cdot" data-i="2"></div>
+        <div class="cdot" data-i="3"></div>
       </div>
-      <div class="slide-content">
-        <div class="slide-eye"><div class="dot"></div><span>Comunidade — Elite</span></div>
-        <h1 class="slide-title">JUNTE-SE<br><span class="acc">À</span> <span class="str">ELITE</span></h1>
-        <p class="slide-sub">Crie desafios, conquiste prêmios e conecte-se com atletas de alta performance. A comunidade que transforma rotinas em resultados.</p>
-        <div class="slide-cta">
-          <a href="comunidade.html" class="btn-pri">Entrar na Comunidade →</a>
-          <a href="#features" class="btn-sec">Ver desafios</a>
+      <div class="carousel-arrows">
+        <button class="carrow" id="cPrev">←</button>
+        <button class="carrow" id="cNext">→</button>
+      </div>
+      <div class="scroll-hint">
+        <span data-i18n="scroll_hint">scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 01 — MENTE -->
+    <section class="sec" id="sec-mente">
+      <div class="sec-inner">
+        <div class="sec-grid">
+          <div class="vis reveal-l">
+            <div class="vis-bg vis-mente">
+              <div class="vis-lines"></div>
+              <div class="vis-glow"></div>
+              <div class="vis-icon">🧠</div>
+              <div class="vis-badge">
+                <div class="vis-bdot"></div>
+                <div class="vis-btxt" data-i18n="vis_mente_badge">
+                  FOCO ATIVADO
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal-r">
+            <div class="sec-tag" data-i18n="sec_mente_tag">01 — Mente</div>
+            <h2 class="sec-title" data-i18n-html="sec_mente_title">
+              TREINO<br /><span class="acc">MENTAL</span>
+            </h2>
+            <p class="sec-body" data-i18n="sec_mente_body">
+              Seu maior músculo é o cérebro. Técnicas de foco, respiração e
+              mindfulness integradas ao treino para performance máxima.
+            </p>
+            <div class="chips">
+              <button class="chip" data-chip="foco" data-i18n="chip_foco">
+                Foco
+              </button>
+              <button
+                class="chip"
+                data-chip="mindfulness"
+                data-i18n="chip_mindfulness"
+              >
+                Mindfulness
+              </button>
+              <button
+                class="chip"
+                data-chip="respiracao"
+                data-i18n="chip_respiracao"
+              >
+                Respiração
+              </button>
+              <button class="chip" data-chip="sono" data-i18n="chip_sono">
+                Sono &amp; Recuperação
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- SLIDE 4 -->
-    <div class="c-slide">
-      <div class="slide-bg">
-        <div class="slide-grid"></div>
-        <div class="slide-glow" style="background:radial-gradient(ellipse 80% 60% at 50% 60%,rgba(0,255,135,.06),transparent)"></div>
-      </div>
-      <div class="slide-content">
-        <div class="slide-eye"><div class="dot"></div><span>Dashboard — Power Analytics</span></div>
-        <h1 class="slide-title">SEU<br><span class="acc">PROGRESSO</span> <span class="str">REAL</span></h1>
-        <p class="slide-sub">Dashboards em tempo real com métricas de performance, composição corporal e evolução semanal. Dados que inspiram ação.</p>
-        <div class="slide-cta">
-          <a href="dashboard.html" class="btn-pri">Ver Dashboard →</a>
-          <a href="#features" class="btn-sec">Explorar métricas</a>
+    <!-- SEÇÃO 02 — FORÇA -->
+    <section class="sec" id="sec-forca">
+      <div class="sec-inner">
+        <div class="sec-grid rev">
+          <div class="vis reveal-r">
+            <div class="vis-bg vis-forca">
+              <div class="vis-lines"></div>
+              <div class="vis-glow"></div>
+              <div class="vis-icon">💪</div>
+              <div class="vis-badge">
+                <div class="vis-bdot"></div>
+                <div class="vis-btxt" data-i18n="vis_forca_badge">
+                  MÚSCULO ATIVO
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal-l">
+            <div class="sec-tag" data-i18n="sec_forca_tag">02 — Força</div>
+            <h2 class="sec-title" data-i18n-html="sec_forca_title">
+              PODER<br /><span class="acc">MUSCULAR</span>
+            </h2>
+            <p class="sec-body" data-i18n="sec_forca_body">
+              Protocolos de hipertrofia desenvolvidos com especialistas. Séries
+              e cargas ajustadas automaticamente ao seu progresso.
+            </p>
+            <div class="chips">
+              <button
+                class="chip"
+                data-chip="hipertrofia"
+                data-i18n="chip_hipertrofia"
+              >
+                Hipertrofia
+              </button>
+              <button
+                class="chip"
+                data-chip="forca-maxima"
+                data-i18n="chip_forca_maxima"
+              >
+                Força Máxima
+              </button>
+              <button
+                class="chip"
+                data-chip="composicao"
+                data-i18n="chip_composicao"
+              >
+                Composição Corporal
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-  </div>
-
-  <div class="carousel-dots" id="cDots">
-    <div class="cdot active" data-i="0"></div>
-    <div class="cdot" data-i="1"></div>
-    <div class="cdot" data-i="2"></div>
-    <div class="cdot" data-i="3"></div>
-  </div>
-  <div class="carousel-arrows">
-    <button class="carrow" id="cPrev">←</button>
-    <button class="carrow" id="cNext">→</button>
-  </div>
-  <div class="scroll-hint">
-    <span>scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<!-- SEÇÃO MENTE -->
-<section class="sec" id="sec-mente">
-  <div class="sec-inner"><div class="sec-grid">
-    <div class="vis reveal-l">
-      <div class="vis-bg vis-mente">
-        <div class="vis-lines"></div><div class="vis-glow"></div>
-        <div class="vis-icon">🧠</div>
-        <div class="vis-badge"><div class="vis-bdot"></div><div class="vis-btxt">FOCO ATIVADO</div></div>
+    <!-- SEÇÃO 03 — CARDIO -->
+    <section class="sec" id="sec-cardio">
+      <div class="sec-inner">
+        <div class="sec-grid">
+          <div class="vis reveal-l">
+            <div class="vis-bg vis-cardio">
+              <div class="vis-lines"></div>
+              <div class="vis-glow"></div>
+              <div class="vis-icon">❤️</div>
+              <div class="vis-badge">
+                <div class="vis-bdot"></div>
+                <div class="vis-btxt" data-i18n="vis_cardio_badge">BPM 145</div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal-r">
+            <div class="sec-tag" data-i18n="sec_cardio_tag">03 — Cardio</div>
+            <h2 class="sec-title" data-i18n-html="sec_cardio_title">
+              CORAÇÃO<br /><span class="acc">DE AÇO</span>
+            </h2>
+            <p class="sec-body" data-i18n="sec_cardio_body">
+              HIIT, LISS, Steady State — o sistema identifica o treino
+              cardiovascular ideal para seu perfil e objetivo.
+            </p>
+            <div class="chips">
+              <button class="chip" data-chip="hiit" data-i18n="chip_hiit">
+                HIIT
+              </button>
+              <button
+                class="chip"
+                data-chip="resistencia"
+                data-i18n="chip_resistencia"
+              >
+                Resistência
+              </button>
+              <button class="chip" data-chip="queima" data-i18n="chip_queima">
+                Queima de Gordura
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="reveal-r">
-      <div class="sec-tag">01 — Mente</div>
-      <h2 class="sec-title">TREINO<br><span class="acc">MENTAL</span></h2>
-      <p class="sec-body">Seu maior músculo é o cérebro. Técnicas de foco, respiração e mindfulness integradas ao treino para performance máxima.</p>
-      <div class="chips">
-        <button class="chip" data-chip="foco">Foco</button>
-        <button class="chip" data-chip="mindfulness">Mindfulness</button>
-        <button class="chip" data-chip="respiracao">Respiração</button>
-        <button class="chip" data-chip="sono">Sono & Recuperação</button>
-      </div>
-    </div>
-  </div></div>
-</section>
+    </section>
 
-<!-- SEÇÃO FORÇA -->
-<section class="sec" id="sec-forca">
-  <div class="sec-inner"><div class="sec-grid rev">
-    <div class="vis reveal-r">
-      <div class="vis-bg vis-forca">
-        <div class="vis-lines"></div><div class="vis-glow"></div>
-        <div class="vis-icon">💪</div>
-        <div class="vis-badge"><div class="vis-bdot"></div><div class="vis-btxt">MÚSCULO ATIVO</div></div>
+    <!-- SEÇÃO 04 — FLEXIBILIDADE -->
+    <section class="sec" id="sec-flexi">
+      <div class="sec-inner">
+        <div class="sec-grid rev">
+          <div class="vis reveal-r">
+            <div class="vis-bg vis-flexi">
+              <div class="vis-lines"></div>
+              <div class="vis-glow"></div>
+              <div class="vis-icon">🤸</div>
+              <div class="vis-badge">
+                <div class="vis-bdot"></div>
+                <div class="vis-btxt" data-i18n="vis_flexi_badge">
+                  AMPLITUDE MAX
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal-l">
+            <div class="sec-tag" data-i18n="sec_flexi_tag">
+              04 — Flexibilidade
+            </div>
+            <h2 class="sec-title" data-i18n-html="sec_flexi_title">
+              CORPO<br /><span class="acc">LIVRE</span>
+            </h2>
+            <p class="sec-body" data-i18n="sec_flexi_body">
+              Mobilidade e flexibilidade que previnem lesões e melhoram
+              performance. Rotinas guiadas por vídeo adaptadas ao seu nível.
+            </p>
+            <div class="chips">
+              <button
+                class="chip"
+                data-chip="mobilidade"
+                data-i18n="chip_mobilidade"
+              >
+                Mobilidade
+              </button>
+              <button
+                class="chip"
+                data-chip="alongamento"
+                data-i18n="chip_alongamento"
+              >
+                Alongamento
+              </button>
+              <button class="chip" data-chip="yoga" data-i18n="chip_yoga">
+                Yoga &amp; Pilates
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="reveal-l">
-      <div class="sec-tag">02 — Força</div>
-      <h2 class="sec-title">PODER<br><span class="acc">MUSCULAR</span></h2>
-      <p class="sec-body">Protocolos de hipertrofia desenvolvidos com especialistas. Séries e cargas ajustadas automaticamente ao seu progresso.</p>
-      <div class="chips">
-        <button class="chip" data-chip="hipertrofia">Hipertrofia</button>
-        <button class="chip" data-chip="forca-maxima">Força Máxima</button>
-        <button class="chip" data-chip="composicao">Composição Corporal</button>
-      </div>
-    </div>
-  </div></div>
-</section>
+    </section>
 
-<!-- SEÇÃO CARDIO -->
-<section class="sec" id="sec-cardio">
-  <div class="sec-inner"><div class="sec-grid">
-    <div class="vis reveal-l">
-      <div class="vis-bg vis-cardio">
-        <div class="vis-lines"></div><div class="vis-glow"></div>
-        <div class="vis-icon">❤️</div>
-        <div class="vis-badge"><div class="vis-bdot"></div><div class="vis-btxt">BPM 145</div></div>
+    <!-- SEÇÃO 05 — RECUPERAÇÃO -->
+    <section class="sec" id="sec-recup">
+      <div class="sec-inner">
+        <div class="sec-grid">
+          <div class="vis reveal-l">
+            <div class="vis-bg vis-recup">
+              <div class="vis-lines"></div>
+              <div class="vis-glow"></div>
+              <div class="vis-icon">⚡</div>
+              <div class="vis-badge">
+                <div class="vis-bdot"></div>
+                <div class="vis-btxt" data-i18n="vis_recup_badge">
+                  RECUPERAÇÃO 100%
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal-r">
+            <div class="sec-tag" data-i18n="sec_recup_tag">
+              05 — Recuperação
+            </div>
+            <h2 class="sec-title" data-i18n-html="sec_recup_title">
+              RENASÇA<br /><span class="acc">MAIS FORTE</span>
+            </h2>
+            <p class="sec-body" data-i18n="sec_recup_body">
+              O descanso é onde o crescimento acontece. Monitoramento de sono,
+              nutrição e recuperação muscular integrados.
+            </p>
+            <div class="chips">
+              <button class="chip" data-chip="sono2" data-i18n="chip_sono2">
+                Sono
+              </button>
+              <button
+                class="chip"
+                data-chip="nutricao"
+                data-i18n="chip_nutricao"
+              >
+                Nutrição
+              </button>
+              <button
+                class="chip"
+                data-chip="hidratacao"
+                data-i18n="chip_hidratacao"
+              >
+                Hidratação
+              </button>
+              <button
+                class="chip"
+                data-chip="descanso"
+                data-i18n="chip_descanso"
+              >
+                Dias de descanso
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="reveal-r">
-      <div class="sec-tag">03 — Cardio</div>
-      <h2 class="sec-title">CORAÇÃO<br><span class="acc">DE AÇO</span></h2>
-      <p class="sec-body">HIIT, LISS, Steady State — o sistema identifica o treino cardiovascular ideal para seu perfil e objetivo.</p>
-      <div class="chips">
-        <button class="chip" data-chip="hiit">HIIT</button>
-        <button class="chip" data-chip="resistencia">Resistência</button>
-        <button class="chip" data-chip="queima">Queima de Gordura</button>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="reveal">
+        <div class="sec-tag" data-i18n="feat_tag">Funcionalidades</div>
+        <h2 class="feat-main-title" data-i18n-html="feat_title">
+          TUDO QUE <span class="acc">VOCÊ PRECISA</span>
+        </h2>
       </div>
-    </div>
-  </div></div>
-</section>
-
-<!-- SEÇÃO FLEXIBILIDADE -->
-<section class="sec" id="sec-flexi">
-  <div class="sec-inner"><div class="sec-grid rev">
-    <div class="vis reveal-r">
-      <div class="vis-bg vis-flexi">
-        <div class="vis-lines"></div><div class="vis-glow"></div>
-        <div class="vis-icon">🤸</div>
-        <div class="vis-badge"><div class="vis-bdot"></div><div class="vis-btxt">AMPLITUDE MAX</div></div>
+      <div class="feat-grid">
+        <div
+          class="feat-card reveal d1"
+          onclick="location.href = 'dashboard.html'"
+        >
+          <div class="feat-badge" data-i18n="feat_badge_live">AO VIVO</div>
+          <div class="feat-icon">📊</div>
+          <div class="feat-title" data-i18n="feat1_title">
+            Progresso em Tempo Real
+          </div>
+          <div class="feat-desc" data-i18n="feat1_desc">
+            Dashboards com métricas de performance, composição corporal e
+            evolução semanal — como um Power BI do seu treino.
+          </div>
+          <div class="feat-cta" data-i18n="feat1_cta">Ver Dashboard</div>
+        </div>
+        <div
+          class="feat-card reveal d2"
+          onclick="location.href = 'chatbot.html'"
+        >
+          <div class="feat-badge">IA</div>
+          <div class="feat-icon">🤖</div>
+          <div class="feat-title" data-i18n="feat2_title">IA Personalizada</div>
+          <div class="feat-desc" data-i18n="feat2_desc">
+            Chatbot que cria treinos sob medida, responde dúvidas e adapta seu
+            plano baseado no seu progresso.
+          </div>
+          <div class="feat-cta" data-i18n="feat2_cta">Conversar com IA</div>
+        </div>
+        <div
+          class="feat-card reveal d3"
+          onclick="location.href = 'comunidade.html'"
+        >
+          <div class="feat-badge">SOCIAL</div>
+          <div class="feat-icon">🏆</div>
+          <div class="feat-title" data-i18n="feat3_title">Comunidade Elite</div>
+          <div class="feat-desc" data-i18n="feat3_desc">
+            Desafios, prêmios e uma rede social focada em performance.
+            Conecte-se com atletas de alto nível.
+          </div>
+          <div class="feat-cta" data-i18n="feat3_cta">Entrar na Comunidade</div>
+        </div>
+        <div class="feat-card reveal d4">
+          <div class="feat-badge">OFFLINE</div>
+          <div class="feat-icon">📱</div>
+          <div class="feat-title" data-i18n="feat4_title">100% Offline</div>
+          <div class="feat-desc" data-i18n="feat4_desc">
+            Treinos, vídeos e métricas disponíveis sem internet. Gym, parque ou
+            quarto — sem desculpas para parar.
+          </div>
+          <div class="feat-cta" data-i18n="feat4_cta">Saiba como funciona</div>
+        </div>
       </div>
-    </div>
-    <div class="reveal-l">
-      <div class="sec-tag">04 — Flexibilidade</div>
-      <h2 class="sec-title">CORPO<br><span class="acc">LIVRE</span></h2>
-      <p class="sec-body">Mobilidade e flexibilidade que previnem lesões e melhoram performance. Rotinas guiadas por vídeo adaptadas ao seu nível.</p>
-      <div class="chips">
-        <button class="chip" data-chip="mobilidade">Mobilidade</button>
-        <button class="chip" data-chip="alongamento">Alongamento</button>
-        <button class="chip" data-chip="yoga">Yoga & Pilates</button>
+    </section>
+
+    <!-- EARLY ACCESS -->
+    <section id="early">
+      <div class="reveal">
+        <div
+          class="sec-tag"
+          style="justify-content: center"
+          data-i18n="early_tag"
+        >
+          Early Access
+        </div>
+        <h2 class="early-title" data-i18n-html="early_title">
+          SEJA O<br /><span class="acc">PRIMEIRO</span>
+        </h2>
+        <p class="early-sub" data-i18n="early_sub">
+          Garanta acesso antecipado e exclusivo antes do lançamento oficial.
+        </p>
+        <form class="early-form" id="earlyForm">
+          <input
+            type="email"
+            id="earlyEmail"
+            required
+            data-i18n-placeholder="early_placeholder"
+            placeholder="seu@email.com"
+          />
+          <button type="submit" class="btn-pri" data-i18n="early_btn">
+            GARANTIR VAGA
+          </button>
+        </form>
+        <p class="early-note" data-i18n="early_note">
+          ✓ Sem spam &nbsp; ✓ Cancele quando quiser &nbsp; ✓ Grátis
+        </p>
+        <div id="success-msg">
+          <p data-i18n="early_success_title">🎉 VOCÊ ESTÁ NA LISTA!</p>
+          <span data-i18n="early_success_sub"
+            >Entraremos em contato com seu acesso exclusivo em breve.</span
+          >
+        </div>
       </div>
-    </div>
-  </div></div>
-</section>
+    </section>
 
-<!-- SEÇÃO RECUPERAÇÃO -->
-<section class="sec" id="sec-recup">
-  <div class="sec-inner"><div class="sec-grid">
-    <div class="vis reveal-l">
-      <div class="vis-bg vis-recup">
-        <div class="vis-lines"></div><div class="vis-glow"></div>
-        <div class="vis-icon">⚡</div>
-        <div class="vis-badge"><div class="vis-bdot"></div><div class="vis-btxt">RECUPERAÇÃO 100%</div></div>
+    <!-- FOOTER -->
+    <footer>
+      <div class="foot-logo">CORE<span>LAB</span></div>
+      <div class="foot-space"></div>
+      <div class="foot-links">
+        <a href="#" data-i18n="foot_privacy">Política de Privacidade</a>
+        <a href="#" data-i18n="foot_terms">Termos de Uso</a>
+        <a href="#" data-i18n="foot_contact">Contato</a>
       </div>
-    </div>
-    <div class="reveal-r">
-      <div class="sec-tag">05 — Recuperação</div>
-      <h2 class="sec-title">RENASÇA<br><span class="acc">MAIS FORTE</span></h2>
-      <p class="sec-body">O descanso é onde o crescimento acontece. Monitoramento de sono, nutrição e recuperação muscular integrados.</p>
-      <div class="chips">
-        <button class="chip" data-chip="sono2">Sono</button>
-        <button class="chip" data-chip="nutricao">Nutrição</button>
-        <button class="chip" data-chip="hidratacao">Hidratação</button>
-        <button class="chip" data-chip="descanso">Dias de descanso</button>
+      <div class="foot-copy" data-i18n="foot_copy">
+        © 2026 CoreLab Corporation — UNIP Limeira. Todos os direitos reservados.
       </div>
-    </div>
-  </div></div>
-</section>
+    </footer>
 
-<!-- FEATURES -->
-<section id="features">
-  <div class="reveal">
-    <div class="sec-tag">Funcionalidades</div>
-    <h2 class="feat-main-title">TUDO QUE <span class="acc">VOCÊ PRECISA</span></h2>
-  </div>
-  <div class="feat-grid">
-    <div class="feat-card reveal d1" onclick="location.href='dashboard.html'">
-      <div class="feat-badge">AO VIVO</div>
-      <div class="feat-icon">📊</div>
-      <div class="feat-title">Progresso em Tempo Real</div>
-      <div class="feat-desc">Dashboards com métricas de performance, composição corporal e evolução semanal — como um Power BI do seu treino.</div>
-      <div class="feat-cta">Ver Dashboard</div>
-    </div>
-    <div class="feat-card reveal d2" onclick="location.href='chatbot.html'">
-      <div class="feat-badge">IA</div>
-      <div class="feat-icon">🤖</div>
-      <div class="feat-title">IA Personalizada</div>
-      <div class="feat-desc">Chatbot que cria treinos sob medida, responde dúvidas e adapta seu plano baseado no seu progresso.</div>
-      <div class="feat-cta">Conversar com IA</div>
-    </div>
-    <div class="feat-card reveal d3" onclick="location.href='comunidade.html'">
-      <div class="feat-badge">SOCIAL</div>
-      <div class="feat-icon">🏆</div>
-      <div class="feat-title">Comunidade Elite</div>
-      <div class="feat-desc">Desafios, prêmios e uma rede social focada em performance. Conecte-se com atletas de alto nível.</div>
-      <div class="feat-cta">Entrar na Comunidade</div>
-    </div>
-    <div class="feat-card reveal d4">
-      <div class="feat-badge">OFFLINE</div>
-      <div class="feat-icon">📱</div>
-      <div class="feat-title">100% Offline</div>
-      <div class="feat-desc">Treinos, vídeos e métricas disponíveis sem internet. Gym, parque ou quarto — sem desculpas para parar.</div>
-      <div class="feat-cta">Saiba como funciona</div>
-    </div>
-  </div>
-</section>
-
-<!-- EARLY ACCESS -->
-<section id="early">
-  <div class="reveal">
-    <div class="sec-tag" style="justify-content:center">Early Access</div>
-    <h2 class="early-title">SEJA O<br><span class="acc">PRIMEIRO</span></h2>
-    <p class="early-sub">Garanta acesso antecipado e exclusivo antes do lançamento oficial.</p>
-    <form class="early-form" id="earlyForm">
-      <input type="email" id="earlyEmail" placeholder="seu@email.com" required/>
-      <button type="submit" class="btn-pri">GARANTIR VAGA</button>
-    </form>
-    <p class="early-note">✓ Sem spam &nbsp; ✓ Cancele quando quiser &nbsp; ✓ Grátis</p>
-    <div id="success-msg">
-      <p>🎉 VOCÊ ESTÁ NA LISTA!</p>
-      <span>Entraremos em contato com seu acesso exclusivo em breve.</span>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="foot-logo">CORE<span>LAB</span></div>
-  <div class="foot-space"></div>
-  <div class="foot-links">
-    <a href="#">Política de Privacidade</a>
-    <a href="#">Termos de Uso</a>
-    <a href="#">Contato</a>
-  </div>
-  <div class="foot-copy">© 2026 CoreLab Corporation — UNIP Limeira. Todos os direitos reservados.</div>
-</footer>
-
-<script type="module" src="js/main.js"></script>
-</body>
+    <script type="module" src="js/main.js"></script>
+  </body>
 </html>

@@ -2,8 +2,8 @@
    AUTH.JS — Autenticação CoreLab
 ==================================================== */
 
-import { auth, googleProvider } from './firebase-config.js';
-import { createUserProfile, getUserProfile } from './db.js';
+import { auth, googleProvider } from "./firebase-config.js";
+import { createUserProfile, getUserProfile } from "./db.js";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -11,7 +11,7 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 /* ====================================================
@@ -21,7 +21,9 @@ export async function registerWithEmail(name, email, password) {
   try {
     // Cria usuário no Firebase Auth
     const credential = await createUserWithEmailAndPassword(
-      auth, email, password
+      auth,
+      email,
+      password,
     );
     const user = credential.user;
 
@@ -32,7 +34,7 @@ export async function registerWithEmail(name, email, password) {
     await createUserProfile(user.uid, {
       name,
       email,
-      photoURL: ''
+      photoURL: "",
     });
 
     return { success: true, user };
@@ -46,9 +48,7 @@ export async function registerWithEmail(name, email, password) {
 ==================================================== */
 export async function loginWithEmail(email, password) {
   try {
-    const credential = await signInWithEmailAndPassword(
-      auth, email, password
-    );
+    const credential = await signInWithEmailAndPassword(auth, email, password);
     return { success: true, user: credential.user };
   } catch (err) {
     return { success: false, error: getAuthError(err.code) };
@@ -67,9 +67,9 @@ export async function loginWithGoogle() {
     const existing = await getUserProfile(user.uid);
     if (!existing) {
       await createUserProfile(user.uid, {
-        name: user.displayName || '',
-        email: user.email || '',
-        photoURL: user.photoURL || ''
+        name: user.displayName || "",
+        email: user.email || "",
+        photoURL: user.photoURL || "",
       });
     }
 
@@ -122,15 +122,15 @@ export function getCurrentUser() {
 ==================================================== */
 function getAuthError(code) {
   const errors = {
-    'auth/email-already-in-use':    'Este email já está cadastrado.',
-    'auth/invalid-email':           'Email inválido.',
-    'auth/weak-password':           'Senha muito fraca. Mínimo 6 caracteres.',
-    'auth/user-not-found':          'Usuário não encontrado.',
-    'auth/wrong-password':          'Senha incorreta.',
-    'auth/too-many-requests':       'Muitas tentativas. Tente novamente mais tarde.',
-    'auth/popup-closed-by-user':    'Login cancelado.',
-    'auth/network-request-failed':  'Erro de conexão. Verifique sua internet.',
-    'auth/invalid-credential':      'Email ou senha incorretos.'
+    "auth/email-already-in-use": "Este email já está cadastrado.",
+    "auth/invalid-email": "Email inválido.",
+    "auth/weak-password": "Senha muito fraca. Mínimo 6 caracteres.",
+    "auth/user-not-found": "Usuário não encontrado.",
+    "auth/wrong-password": "Senha incorreta.",
+    "auth/too-many-requests": "Muitas tentativas. Tente novamente mais tarde.",
+    "auth/popup-closed-by-user": "Login cancelado.",
+    "auth/network-request-failed": "Erro de conexão. Verifique sua internet.",
+    "auth/invalid-credential": "Email ou senha incorretos.",
   };
-  return errors[code] || 'Ocorreu um erro. Tente novamente.';
+  return errors[code] || "Ocorreu um erro. Tente novamente.";
 }
