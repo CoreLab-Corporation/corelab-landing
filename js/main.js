@@ -11,6 +11,7 @@ import {
 } from "./auth.js";
 
 import { saveEarlyAccessLead, getUserProfile } from "./db.js";
+import { trackEvent } from "./analytics.js";
 
 /* ====================================================
    IMPORTS — i18n
@@ -610,6 +611,10 @@ document.getElementById("earlyForm").onsubmit = async (e) => {
       msg.querySelector("p").textContent = "✅ VOCÊ JÁ ESTÁ NA LISTA!";
       msg.querySelector("span").textContent =
         "Seu email já foi registrado. Aguarde nosso contato!";
+    } else {
+      trackEvent("early_access_signup", {
+        source: "landing",
+      });
     }
   } catch (err) {
     btn.textContent = "GARANTIR VAGA";

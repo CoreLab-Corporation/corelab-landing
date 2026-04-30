@@ -11,8 +11,8 @@
   --surf: #1a1a1a;
   --border: rgba(255, 255, 255, 0.07);
   --text: #f0f0f0;
-  --text2: #888;
-  --text3: #444;
+  --text2: #b0b0b0;
+  --text3: #707070;
   --nav: 72px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -23,8 +23,8 @@
   --surf: #fff;
   --border: rgba(0, 0, 0, 0.08);
   --text: #0a0a0a;
-  --text2: #555;
-  --text3: #aaa;
+  --text2: #3a3a3a;
+  --text3: #666666;
 }
 *,
 *::before,
@@ -1497,4 +1497,16 @@ footer {
   position: fixed;
   top: calc(var(--nav) + 8px);
   right: clamp(20px, 5vw, 60px);
+}
+
+/* ACCESSIBILITY */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

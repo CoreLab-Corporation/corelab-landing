@@ -15,6 +15,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
+    <script type="module" src="js/analytics.js" defer></script>
   </head>
   <body>
     <!-- SPLASH -->
@@ -34,13 +35,14 @@
           <button class="lang-btn" data-lang="en">EN</button>
           <button class="lang-btn" data-lang="es">ES</button>
         </div>
-        <button class="icon-btn" id="themeBtn">🌙</button>
-        <button class="icon-btn" id="loginBtn">
+        <button class="icon-btn" id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+        <button class="icon-btn" id="loginBtn" aria-label="Abrir modal de login">
           <svg
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="1.8"
+            aria-hidden="true"
           >
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
             <circle cx="12" cy="7" r="4" />
@@ -53,7 +55,7 @@
     <!-- LOGIN MODAL -->
     <div class="overlay" id="loginOverlay">
       <div class="modal">
-        <button class="modal-x" id="loginClose">✕</button>
+        <button class="modal-x" id="loginClose" aria-label="Fechar modal">✕</button>
 
         <div class="modal-tabs">
           <button
@@ -291,7 +293,7 @@
             <div class="chip-head-tag" id="cpTag"></div>
             <div class="chip-head-title" id="cpTitle"></div>
           </div>
-          <button class="chip-x" id="cpClose">✕</button>
+          <button class="chip-x" id="cpClose" aria-label="Fechar detalhes">✕</button>
         </div>
         <div class="chip-body" id="cpBody"></div>
       </div>
@@ -466,8 +468,8 @@
         <div class="cdot" data-i="3"></div>
       </div>
       <div class="carousel-arrows">
-        <button class="carrow" id="cPrev">←</button>
-        <button class="carrow" id="cNext">→</button>
+        <button class="carrow" id="cPrev" aria-label="Slide anterior">←</button>
+        <button class="carrow" id="cNext" aria-label="Próximo slide">→</button>
       </div>
       <div class="scroll-hint">
         <span data-i18n="scroll_hint">scroll</span>
@@ -817,14 +819,18 @@
           Garanta acesso antecipado e exclusivo antes do lançamento oficial.
         </p>
         <form class="early-form" id="earlyForm">
+          <label for="earlyEmail" class="visually-hidden">Seu e-mail para Early Access</label>
           <input
             type="email"
             id="earlyEmail"
+            name="email"
             required
+            autocomplete="email"
             data-i18n-placeholder="early_placeholder"
             placeholder="seu@email.com"
+            aria-label="Seu e-mail para Early Access"
           />
-          <button type="submit" class="btn-pri" data-i18n="early_btn">
+          <button type="submit" class="btn-pri" data-i18n="early_btn" aria-label="Garantir vaga no Early Access">
             GARANTIR VAGA
           </button>
         </form>
@@ -854,6 +860,6 @@
       </div>
     </footer>
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/main.js" defer></script>
   </body>
 </html>
