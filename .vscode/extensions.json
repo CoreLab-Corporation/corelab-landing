@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "ms-vsliveshare.vsliveshare",
+    "ritwickdey.liveserver",
+    "dbaeumer.vscode-eslint",
+    "ecmel.vscode-html-css"
+  ]
+}
