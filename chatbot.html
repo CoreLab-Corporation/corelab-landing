@@ -1,0 +1,530 @@
+<!doctype html>
+<!-- Comentário: Declaração do tipo de documento -->
+<html lang="pt-BR" data-theme="dark">
+  <!-- Comentário: Início do HTML com idioma e tema padrão escuro -->
+  <head>
+    <!-- Comentário: Cabeçalho do documento -->
+    <meta charset="UTF-8" />
+    <!-- Comentário: Codificação de caracteres -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!-- Comentário: Responsividade -->
+    <title>CoreLab — Coach IA</title>
+    <!-- Comentário: Título da página -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Comentário: Fontes externas (Google Fonts) -->
+    <link rel="stylesheet" href="css/global.css" />
+    <!-- Comentário: Estilos globais -->
+    <link rel="stylesheet" href="css/chatbot.css" />
+    <!-- Comentário: Estilos específicos do chatbot -->
+  </head>
+  <!-- Comentário: Fim do head -->
+  <body>
+    <!-- Comentário: Início do corpo da página -->
+    <div class="topbar">
+      <!-- Comentário: Barra superior -->
+      <div class="topbar-logo">CORE<span>LAB</span></div>
+      <!-- Comentário: Logo -->
+      <div class="ai-badge">
+        <!-- Comentário: Badge indicativo de IA -->
+        <div class="ai-dot"></div>
+        <!-- Comentário: Ponto de status -->
+        IA ATIVA
+        <!-- Comentário: Texto de status -->
+      </div>
+      <div class="topbar-space"></div>
+      <!-- Comentário: Espaçador flexível -->
+      <button class="topbar-btn danger" id="clearBtn">
+        <!-- Comentário: Botão de limpar histórico -->
+        🗑️ Limpar histórico
+      </button>
+      <button class="theme-btn" id="themeBtn">🌙</button>
+      <!-- Comentário: Alternador de tema -->
+      <a href="index.html" class="topbar-btn">← Voltar</a>
+      <!-- Comentário: Link de retorno -->
+    </div>
+    <!-- Comentário: Fim da topbar -->
+
+    <div class="chat-wrap">
+      <!-- Comentário: Container principal do chat -->
+      <div class="chat-sidebar">
+        <!-- Comentário: Barra lateral de sugestões e perfil -->
+        <div class="sidebar-head">
+          <!-- Comentário: Cabeçalho da sidebar -->
+          <div class="sidebar-head-title">COACH IA</div>
+          <!-- Comentário: Título -->
+          <div class="sidebar-head-sub">Seu personal trainer digital 24/7</div>
+          <!-- Comentário: Subtítulo -->
+        </div>
+        <div class="suggestions">
+          <!-- Comentário: Seção de sugestões de perguntas -->
+          <div class="suggestions-label">Sugestões rápidas</div>
+          <!-- Rótulo -->
+          <div
+            class="suggestion"
+            data-question="Monte um treino de hipertrofia para iniciante, 4 dias por semana"
+          >
+            <!-- Item de sugestão 1 -->
+            💪 Monte um treino de hipertrofia para iniciante, 4 dias por semana
+          </div>
+          <div
+            class="suggestion"
+            data-question="Crie um protocolo HIIT de 20 minutos para queima de gordura"
+          >
+            <!-- Item de sugestão 2 -->
+            🔥 Crie um protocolo HIIT de 20 minutos para queima de gordura
+          </div>
+          <div
+            class="suggestion"
+            data-question="Quais suplementos ajudam na recuperação muscular?"
+          >
+            <!-- Item de sugestão 3 -->
+            😴 Quais suplementos ajudam na recuperação muscular?
+          </div>
+          <div
+            class="suggestion"
+            data-question="Como devo me alimentar antes e depois do treino?"
+          >
+            <!-- Item de sugestão 4 -->
+            🍽️ Como devo me alimentar antes e depois do treino?
+          </div>
+          <div
+            class="suggestion"
+            data-question="Como melhorar minha resistência cardiovascular em 8 semanas?"
+          >
+            <!-- Item de sugestão 5 -->
+            🏃 Como melhorar minha resistência cardiovascular em 8 semanas?
+          </div>
+          <div
+            class="suggestion"
+            data-question="Técnicas de mindfulness para melhorar a performance no treino"
+          >
+            <!-- Item de sugestão 6 -->
+            🧠 Técnicas de mindfulness para melhorar a performance no treino
+          </div>
+          <div
+            class="suggestion"
+            data-question="Como fazer recomposição corporal — ganhar músculo e perder gordura ao mesmo tempo?"
+          >
+            <!-- Item de sugestão 7 -->
+            ⚖️ Como fazer recomposição corporal — ganhar músculo e perder
+            gordura?
+          </div>
+          <div
+            class="suggestion"
+            data-question="Sequência de mobilidade para antes do treino de pernas"
+          >
+            <!-- Item de sugestão 8 -->
+            🤸 Sequência de mobilidade para antes do treino de pernas
+          </div>
+          <div
+            class="suggestion"
+            data-question="Qual é a melhor estratégia para aumentar o 1RM no supino?"
+          >
+            <!-- Item de sugestão 9 -->
+            🏋️ Qual é a melhor estratégia para aumentar o 1RM no supino?
+          </div>
+          <div
+            class="suggestion"
+            data-question="Como montar uma dieta para ganho de massa muscular com 3000 calorias?"
+          >
+            <!-- Item de sugestão 10 -->
+            🥗 Como montar uma dieta para ganho de massa com 3000 calorias?
+          </div>
+        </div>
+        <div class="profile-section">
+          <!-- Comentário: Seção de contexto do usuário -->
+          <div class="profile-label">Seu perfil</div>
+          <!-- Rótulo -->
+          <div class="profile-field">
+            <!-- Campo: Nível -->
+            <label>Nível</label>
+            <select id="profileLevel">
+              <option>Iniciante</option>
+              <option selected>Intermediário</option>
+              <option>Avançado</option>
+            </select>
+          </div>
+          <div class="profile-field">
+            <!-- Campo: Objetivo -->
+            <label>Objetivo</label>
+            <select id="profileGoal">
+              <option>Perda de gordura</option>
+              <option selected>Hipertrofia</option>
+              <option>Resistência</option>
+              <option>Força máxima</option>
+              <option>Saúde geral</option>
+            </select>
+          </div>
+          <div class="profile-field">
+            <!-- Campo: Disponibilidade -->
+            <label>Dias disponíveis/semana</label>
+            <select id="profileDays">
+              <option>2-3 dias</option>
+              <option selected>4 dias</option>
+              <option>5-6 dias</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- Fim sidebar -->
+
+      <div class="chat-main">
+        <!-- Comentário: Área principal de mensagens -->
+        <div class="messages" id="messages">
+          <!-- Container de balões de chat -->
+          <div class="messages-empty" id="emptyState">
+            <!-- Estado inicial sem mensagens -->
+            <div class="empty-icon">🤖</div>
+            <div class="empty-title">Olá, eu sou o Coach IA</div>
+            <div class="empty-sub">
+              Seu personal trainer digital. Pergunte sobre treinos, nutrição,
+              recuperação ou qualquer dúvida sobre fitness.
+            </div>
+            <div class="empty-chips">
+              <!-- Botões rápidos no estado vazio -->
+              <div class="empty-chip" data-question="Monte um treino para mim">
+                💪 Monte um treino
+              </div>
+              <div
+                class="empty-chip"
+                data-question="Dicas de nutrição para ganhar massa muscular"
+              >
+                🥗 Nutrição
+              </div>
+              <div
+                class="empty-chip"
+                data-question="Como melhorar minha recuperação pós-treino?"
+              >
+                😴 Recuperação
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Fim messages -->
+        <div class="chat-input-area">
+          <!-- Comentário: Área de entrada de texto -->
+          <div class="input-row">
+            <!-- Linha de entrada -->
+            <div class="input-wrap">
+              <!-- Wrapper da textarea -->
+              <textarea
+                class="chat-textarea"
+                id="chatInput"
+                placeholder="Pergunte sobre treino, nutrição, recuperação..."
+                rows="1"
+              ></textarea>
+              <!-- Campo de texto expansível -->
+            </div>
+            <button class="send-btn" id="sendBtn">↑</button>
+            <!-- Botão de envio -->
+          </div>
+          <div class="input-note">
+            <!-- Nota de rodapé -->
+            Coach IA usa inteligência artificial para respostas personalizadas •
+            CoreLab 2026
+          </div>
+        </div>
+      </div>
+      <!-- Fim chat-main -->
+    </div>
+    <!-- Fim chat-wrap -->
+
+    <script type="module">
+      // Comentário: Lógica do Chatbot
+      import { onAuthChange } from "./js/auth.js"; // Importa monitor de login
+      import {
+        getUserProfile,
+        getChatHistory,
+        saveChatMessage,
+        clearChatHistory,
+      } from "./js/db.js"; // Importa funções de banco de dados
+
+      let currentUser = null; // Usuário atual
+      let history = []; // Histórico local da conversa
+      let isLoading = false; // Controle de estado de carregamento
+
+      onAuthChange(async (user) => {
+        // Monitor de autenticação
+        if (!user) {
+          window.location.href = "index.html"; // Redireciona se não logado
+          return;
+        }
+        currentUser = user;
+        const profile = await getUserProfile(user.uid); // Busca perfil
+        if (profile) {
+          // Sincroniza campos da sidebar com o perfil real
+          const lvlEl = document.getElementById("profileLevel");
+          const goalEl = document.getElementById("profileGoal");
+          const daysEl = document.getElementById("profileDays");
+          if (profile.level && lvlEl) lvlEl.value = profile.level;
+          if (profile.goal && goalEl) goalEl.value = profile.goal;
+          if (profile.daysPerWeek && daysEl) daysEl.value = profile.daysPerWeek;
+        }
+        await loadHistory(user.uid); // Carrega mensagens anteriores
+        const hasMsgs =
+          document.getElementById("messages").querySelectorAll(".msg").length >
+          0;
+        if (!hasMsgs) showGreeting(profile); // Saudação inicial se vazio
+      });
+
+      async function loadHistory(userId) {
+        // Carrega histórico do Firestore
+        const saved = await getChatHistory(userId, 30);
+        if (!saved.length) return;
+        removeEmpty();
+        saved.forEach((msg) => {
+          const role = msg.role === "assistant" ? "assistant" : "user";
+          const display = msg.role === "assistant" ? "ai" : "user";
+          history.push({ role, content: msg.content });
+          addMsg(
+            display,
+            msg.role === "assistant"
+              ? formatAI(msg.content)
+              : escHtml(msg.content),
+            true,
+          );
+        });
+      }
+
+      function showGreeting(profile) {
+        // Gera mensagem de boas-vindas
+        const name = profile?.name?.split(" ")[0] || "atleta";
+        const level = profile?.level || "Intermediário";
+        const goal = (profile?.goal || "hipertrofia").toLowerCase();
+        setTimeout(() => {
+          addMsg(
+            "ai",
+            formatAI(
+              `👋 Olá, **${name}**! Sou o **Coach IA do CoreLab**.\n\n` +
+                `Baseado no seu perfil (**${level}**, foco em **${goal}**), ` +
+                `estou pronto para criar treinos personalizados, responder dúvidas sobre ` +
+                `nutrição, recuperação, suplementação e muito mais.\n\n` +
+                `Use as sugestões ao lado ou escreva sua pergunta. O que posso fazer por você hoje? 💪`,
+            ),
+            true,
+          );
+        }, 400);
+      }
+
+      function removeEmpty() {
+        // Remove o estado vazio da tela
+        document.getElementById("emptyState")?.remove();
+      }
+
+      function getTime() {
+        // Retorna hora atual formatada
+        return new Date().toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      function escHtml(t) {
+        // Escapa HTML para segurança
+        return String(t)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\n/g, "<br>");
+      }
+
+      function formatAI(text) {
+        // Converte markdown simples da IA em HTML
+        return (
+          "<p>" +
+          text
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            .replace(/`(.*?)`/g, "<code>$1</code>")
+            .replace(/\n\n/g, '</p><p style="margin-top:10px">')
+            .replace(/\n- /g, "<br>• ")
+            .replace(/\n/g, "<br>") +
+          "</p>"
+        );
+      }
+
+      function addMsg(role, content, isHtml = false) {
+        // Adiciona balão de mensagem ao DOM
+        removeEmpty();
+        const msgs = document.getElementById("messages");
+        const div = document.createElement("div");
+        div.className = "msg " + role;
+        div.innerHTML = `
+    <div class="msg-av ${role}">${role === "ai" ? "CL" : "👤"}</div>
+    <div>
+      <div class="msg-bubble ${role}">${isHtml ? content : escHtml(content)}</div>
+      <div class="msg-time">${getTime()}</div>
+    </div>`;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+      }
+
+      function showTyping() {
+        // Mostra indicador de digitação
+        removeEmpty();
+        const msgs = document.getElementById("messages");
+        const d = document.createElement("div");
+        d.className = "msg ai";
+        d.id = "typingMsg";
+        d.innerHTML = `<div class="msg-av ai">CL</div><div class="typing"><span></span><span></span><span></span></div>`;
+        msgs.appendChild(d);
+        msgs.scrollTop = msgs.scrollHeight;
+      }
+
+      function removeTyping() {
+        // Remove indicador de digitação
+        document.getElementById("typingMsg")?.remove();
+      }
+
+      async function sendMessage(overrideText) {
+        // Envia mensagem para a API da Anthropic
+        if (isLoading) return;
+        const input = document.getElementById("chatInput");
+        const text = overrideText || input.value.trim();
+        if (!text) return;
+
+        const level = document.getElementById("profileLevel").value;
+        const goal = document.getElementById("profileGoal").value;
+        const days = document.getElementById("profileDays").value;
+
+        addMsg("user", text);
+        if (!overrideText) {
+          input.value = "";
+          input.style.height = "auto";
+        }
+
+        history.push({ role: "user", content: text });
+        if (currentUser)
+          saveChatMessage(currentUser.uid, { role: "user", content: text });
+
+        isLoading = true;
+        document.getElementById("sendBtn").disabled = true;
+        showTyping();
+
+        const systemPrompt = // Prompt de sistema para guiar a IA
+          `Você é o Coach IA do CoreLab, personal trainer digital especializado ` +
+          `em fitness, musculação, nutrição esportiva, recuperação e bem-estar.\n\n` +
+          `Perfil do usuário:\n- Nível: ${level}\n- Objetivo: ${goal}\n- Disponibilidade: ${days}\n\n` +
+          `Responda sempre em português brasileiro de forma prática, motivadora e baseada em evidências. ` +
+          `Use **negrito** para destacar pontos importantes. Máximo 350 palavras por resposta. ` +
+          `Quando listar exercícios ou etapas, use marcadores com "- " no início de cada item.`;
+
+        try {
+          const response = await fetch(
+            "https://api.anthropic.com/v1/messages",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 1000,
+                system: systemPrompt,
+                messages: history,
+              }),
+            },
+          );
+
+          removeTyping();
+
+          if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error?.message || `HTTP ${response.status}`);
+          }
+
+          const data = await response.json();
+          const aiText =
+            data.content?.[0]?.text ||
+            "Desculpe, não consegui processar sua mensagem. Tente novamente.";
+
+          history.push({ role: "assistant", content: aiText });
+          addMsg("ai", formatAI(aiText), true);
+
+          if (currentUser)
+            saveChatMessage(currentUser.uid, {
+              role: "assistant",
+              content: aiText,
+            });
+        } catch (err) {
+          removeTyping();
+          console.error("Coach IA erro:", err);
+          addMsg(
+            "ai",
+            formatAI(
+              `⚠️ **Não foi possível conectar ao Coach IA.**\n\n` +
+                `Verifique sua conexão ou tente novamente em instantes.\n\n` +
+                `_Erro: ${err.message}_`,
+            ),
+            true,
+          );
+          history.pop();
+        }
+
+        isLoading = false;
+        document.getElementById("sendBtn").disabled = false;
+        document.getElementById("chatInput").focus();
+      }
+
+      document.getElementById("clearBtn").onclick = async () => {
+        // Handler: Limpar histórico
+        if (!currentUser) return;
+        if (!confirm("Limpar todo o histórico desta conversa?")) return;
+        await clearChatHistory(currentUser.uid);
+        history = [];
+        document.getElementById("messages").innerHTML = `
+    <div class="messages-empty" id="emptyState">
+      <div class="empty-icon">🤖</div>
+      <div class="empty-title">Histórico limpo!</div>
+      <div class="empty-sub">Comece uma nova conversa com o Coach IA.</div>
+    </div>`;
+      };
+
+      document.querySelectorAll(".suggestion").forEach((el) => {
+        // Handler: Sugestões sidebar
+        el.addEventListener("click", () => {
+          const q = el.dataset.question;
+          if (q) sendMessage(q);
+        });
+      });
+
+      document.querySelectorAll(".empty-chip").forEach((el) => {
+        // Handler: Sugestões empty state
+        el.addEventListener("click", () => {
+          const q = el.dataset.question;
+          if (q) sendMessage(q);
+        });
+      });
+
+      const ta = document.getElementById("chatInput"); // Handler: Auto-resize textarea
+      ta.addEventListener("input", () => {
+        ta.style.height = "auto";
+        ta.style.height = Math.min(ta.scrollHeight, 120) + "px";
+      });
+      ta.addEventListener("keydown", (e) => {
+        // Handler: Enviar com Enter
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+      document
+        .getElementById("sendBtn")
+        .addEventListener("click", () => sendMessage()); // Handler: Enviar com Botão
+
+      let dark = true; // Controle de tema
+      document.getElementById("themeBtn").onclick = () => {
+        dark = !dark;
+        document.documentElement.setAttribute(
+          "data-theme",
+          dark ? "dark" : "light",
+        );
+        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
+      };
+    </script>
+    <!-- Fim do script -->
+  </body>
+  <!-- Fim body -->
+</html>
+<!-- Fim html -->

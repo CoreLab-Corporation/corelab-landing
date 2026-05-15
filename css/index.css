@@ -1,0 +1,1730 @@
+/* ==================================================== 
+   SPLASH Estilos para a tela de carregamento inicial
+==================================================== */
+#splash {
+  /* Identificador da tela de splash */
+  position: fixed; /* Fixa a tela sobre todo o conteúdo */
+  inset: 0; /* Ocupa do topo à base, da esquerda à direita */
+  z-index: 9999; /* Fica acima de absolutamente tudo */
+  background: #000; /* Fundo preto puro para foco no logo */
+  display: flex; /* Ativa layout flexível */
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+  flex-direction: column; /* Alinha itens em coluna (logo em cima da barra) */
+  gap: 20px; /* Espaçamento entre os elementos */
+  animation: splashOut 0.6s ease 2.8s forwards; /* Animação de saída após 2.8 segundos */
+} /* Fim de #splash */
+@keyframes splashOut {
+  /* Definição da animação de desaparecimento */
+  to {
+    /* Estado final */
+    opacity: 0; /* Torna invisível */
+    pointer-events: none; /* Desabilita cliques para não bloquear a página */
+    visibility: hidden; /* Remove da árvore de renderização visual */
+  } /* Fim do estado final */
+} /* Fim de @keyframes splashOut */
+.splash-logo {
+  /* Estilo do logo na tela de splash */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: clamp(64px, 12vw, 120px); /* Tamanho responsivo fluido */
+  letter-spacing: 0.08em; /* Espaçamento entre letras para elegância */
+  color: #fff; /* Cor branca para contraste */
+  opacity: 0; /* Começa invisível */
+  transform: translateY(30px); /* Começa levemente deslocado para baixo */
+  animation: splashIn 0.7s var(--ease) 0.3s forwards; /* Animação de entrada suave */
+} /* Fim de .splash-logo */
+.splash-logo span {
+  /* Estilo para a parte destacada do logo (Lab) */
+  color: var(--green); /* Usa a cor neon de destaque */
+} /* Fim de span no logo */
+@keyframes splashIn {
+  /* Definição da animação de entrada do logo */
+  to {
+    /* Estado final */
+    opacity: 1; /* Torna visível */
+    transform: translateY(0); /* Volta para a posição original */
+  } /* Fim do estado final */
+} /* Fim de @keyframes splashIn */
+.splash-bar {
+  /* Container da barra de progresso */
+  width: 180px; /* Largura fixa da barra */
+  height: 2px; /* Altura fina e elegante */
+  background: var(--text3); /* Cor de fundo neutra */
+  border-radius: 2px; /* Cantos arredondados */
+  overflow: hidden; /* Esconde o preenchimento que estiver fora */
+  opacity: 0; /* Começa invisível */
+  animation: fadeUp 0.3s ease 0.9s forwards; /* Aparece suavemente */
+} /* Fim de .splash-bar */
+.splash-fill {
+  /* O preenchimento dinâmico da barra */
+  height: 100%; /* Ocupa toda a altura do pai */
+  background: var(--green); /* Cor de destaque neon */
+  width: 0; /* Começa com largura zero */
+  animation: fillBar 1.6s ease 1s forwards; /* Animação de preenchimento (1.6s) */
+} /* Fim de .splash-fill */
+@keyframes fillBar {
+  /* Definição da animação da barra */
+  to {
+    /* Estado final */
+    width: 100%; /* Preenche totalmente a barra */
+  } /* Fim do estado final */
+} /* Fim de @keyframes fillBar */
+.splash-tag {
+  /* Texto secundário abaixo da barra */
+  font-family: "Space Mono", monospace; /* Fonte técnica/futurista */
+  font-size: 11px; /* Tamanho pequeno e discreto */
+  letter-spacing: 0.3em; /* Grande espaçamento entre letras */
+  text-transform: uppercase; /* Força caixa alta */
+  color: var(--text2); /* Cor cinza suave */
+  opacity: 0; /* Começa invisível */
+  animation: fadeUp 0.4s ease 1s forwards; /* Aparece suavemente */
+} /* Fim de .splash-tag */
+@keyframes fadeUp {
+  /* Animação genérica de surgimento */
+  to {
+    /* Estado final */
+    opacity: 1; /* Torna visível */
+  } /* Fim do estado final */
+} /* Fim de @keyframes fadeUp */
+
+/* ==================================================== 
+   NAVBAR Barra de navegação superior
+==================================================== */
+#nav {
+  /* Identificador da barra de navegação */
+  position: fixed; /* Fixa no topo da tela */
+  top: 0; /* Alinha ao topo */
+  left: 0; /* Alinha à esquerda */
+  right: 0; /* Alinha à direita */
+  z-index: 100; /* Fica acima do conteúdo das seções */
+  height: var(--nav); /* Altura definida na variável global */
+  display: flex; /* Ativa layout flexível */
+  align-items: center; /* Centraliza itens verticalmente */
+  padding: 0 clamp(20px, 5vw, 60px); /* Espaçamento lateral responsivo */
+  background: transparent; /* Começa transparente */
+  transition: /* Transições suaves para scroll */
+    background 0.4s,
+    /* Suaviza mudança de cor de fundo */ backdrop-filter 0.4s; /* Suaviza efeito de desfoque */
+} /* Fim de #nav */
+#nav.scrolled {
+  /* Estado da navbar após rolagem da página */
+  background: rgba(8, 8, 8, 0.85); /* Fundo escuro semi-transparente */
+  backdrop-filter: blur(20px); /* Efeito de vidro jateado (blur) */
+  box-shadow: 0 1px 0 var(--border); /* Linha divisória sutil na base */
+} /* Fim de #nav.scrolled */
+[data-theme="light"] #nav.scrolled {
+  /* Ajuste da navbar rolada no modo claro */
+  background: rgba(245, 245, 240, 0.85); /* Fundo claro semi-transparente */
+} /* Fim do tema claro na navbar */
+.nav-logo {
+  /* Estilo do logo na navbar */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 28px; /* Tamanho de destaque */
+  letter-spacing: 0.1em; /* Espaçamento de marca */
+} /* Fim de .nav-logo */
+.nav-logo span {
+  /* Parte colorida do logo na navbar */
+  color: var(--green); /* Destaque neon */
+} /* Fim de span no logo nav */
+.nav-space {
+  /* Espaçador flexível */
+  flex: 1; /* Ocupa todo o espaço disponível entre o logo e os controles */
+} /* Fim de .nav-space */
+.nav-ctrl {
+  /* Container de botões de controle (idioma, tema, login) */
+  display: flex; /* Itens em linha */
+  align-items: center; /* Alinhamento vertical */
+  gap: 8px; /* Espaçamento entre botões */
+} /* Fim de .nav-ctrl */
+
+.lang-pill {
+  /* Container em formato de pílula para seleção de idioma */
+  display: flex; /* Itens em linha */
+  align-items: center; /* Alinhamento vertical */
+  background: var(--surf); /* Fundo da superfície */
+  border: 1px solid var(--border); /* Borda discreta */
+  border-radius: 40px; /* Formato arredondado */
+  padding: 4px; /* Espaçamento interno */
+  gap: 2px; /* Espaçamento entre os botões de idioma */
+} /* Fim de .lang-pill */
+.lang-btn {
+  /* Botões individuais de idioma (PT, EN, ES) */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto pequeno */
+  font-weight: 700; /* Negrito para legibilidade */
+  letter-spacing: 0.05em; /* Leve espaçamento */
+  color: var(--text2); /* Cor neutra */
+  padding: 5px 10px; /* Área de clique confortável */
+  border-radius: 30px; /* Bordas redondas */
+  transition: all 0.25s; /* Transição suave de cores */
+} /* Fim de .lang-btn */
+.lang-btn.active {
+  /* Estado do idioma selecionado */
+  background: var(--green); /* Fundo neon */
+  color: #000; /* Texto preto para contraste */
+} /* Fim de .lang-btn.active */
+.lang-btn:hover:not(.active) {
+  /* Efeito de hover em idiomas não selecionados */
+  color: var(--text); /* Clareia o texto */
+  background: var(--border); /* Fundo sutil de destaque */
+} /* Fim de .lang-btn:hover */
+/* Estilos para botões circulares de ícone */
+.icon-btn {
+  /* Classe base para botões de tema e login */
+  width: 40px; /* Largura fixa */
+  height: 40px; /* Altura fixa */
+  border-radius: 50%; /* Círculo perfeito */
+  background: var(--surf); /* Fundo da superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  display: flex; /* Centralização interna */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 16px; /* Tamanho do ícone/emoji */
+  transition: all 0.25s; /* Transição suave para hover */
+} /* Fim de .icon-btn */
+.icon-btn:hover {
+  /* Estado de hover nos botões de ícone */
+  border-color: var(--green); /* Borda brilha em verde */
+  transform: scale(1.08); /* Leve aumento de tamanho */
+} /* Fim de .icon-btn:hover */
+.icon-btn svg {
+  /* Ícones SVG dentro dos botões */
+  width: 18px; /* Largura controlada */
+  height: 18px; /* Altura controlada */
+} /* Fim de ícones svg */
+.avatar-inner {
+  /* Elemento que mostra as iniciais do usuário logado */
+  width: 100%; /* Preenche o botão circular */
+  height: 100%; /* Preenche o botão circular */
+  border-radius: 50%; /* Círculo */
+  background: linear-gradient(
+    135deg,
+    var(--green),
+    #00aa55
+  ); /* Gradiente de sucesso */
+  display: none; /* Escondido por padrão */
+  align-items: center; /* Centraliza iniciais */
+  justify-content: center; /* Centraliza iniciais */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de destaque */
+  font-size: 16px; /* Tamanho das letras */
+  color: #000; /* Cor preta para leitura sobre o verde */
+} /* Fim de .avatar-inner */
+.icon-btn.logged .avatar-inner {
+  /* Quando o usuário está logado */
+  display: flex; /* Mostra o avatar com iniciais */
+} /* Fim do estado logado */
+.icon-btn.logged svg {
+  /* Quando logado */
+  display: none; /* Esconde o ícone de usuário padrão (bonequinho) */
+} /* Fim da ocultação do svg logado */
+.icon-btn.logged {
+  /* Estilo do botão de login quando logado */
+  border-color: var(--green); /* Borda fica permanentemente verde */
+} /* Fim da borda logada */
+
+/* ==================================================== 
+   Início do bloco de Modal de Login
+   LOGIN MODAL  Interface de autenticação 
+==================================================== */
+.overlay {
+  /* Camada de fundo que escurece a página sob o modal */
+  position: fixed; /* Fixa na tela */
+  inset: 0; /* Cobre tudo */
+  z-index: 200; /* Acima da navbar */
+  background: rgba(0, 0, 0, 0.75); /* Preto com transparência */
+  backdrop-filter: blur(12px); /* Desfoque do fundo para foco no modal */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  opacity: 0; /* Começa invisível */
+  pointer-events: none; /* Ignora cliques quando fechado */
+  transition: opacity 0.35s; /* Transição suave de aparecimento */
+  padding: 20px; /* Margem de segurança para telas pequenas */
+} /* Fim de .overlay */
+.overlay.open {
+  /* Estado aberto do modal */
+  opacity: 1; /* Fica visível */
+  pointer-events: all; /* Habilita interação */
+} /* Fim de .overlay.open */
+.modal {
+  /* O container branco/escuro do formulário */
+  background: var(--bg2); /* Cor de fundo de segunda camada */
+  border: 1px solid var(--border); /* Borda discreta */
+  border-radius: 20px; /* Cantos bem arredondados e modernos */
+  padding: 40px; /* Espaçamento interno generoso */
+  width: min(420px, 100%); /* Largura máxima de 420px ou total no mobile */
+  transform: translateY(20px) scale(0.97); /* Começa um pouco abaixo e menor */
+  transition: transform 0.4s var(--ease); /* Animação de entrada fluida */
+  position: relative; /* Para posicionar o botão fechar 'X' */
+} /* Fim de .modal */
+.overlay.open .modal {
+  /* Animação da caixa do modal ao abrir */
+  transform: translateY(0) scale(1); /* Vai para a posição e tamanho real */
+} /* Fim da animação de abertura do modal */
+.modal-x {
+  /* Botão de fechar (X) no canto do modal */
+  position: absolute; /* Posicionamento livre dentro do modal */
+  top: 16px; /* Distância do topo */
+  right: 16px; /* Distância da direita */
+  width: 32px; /* Tamanho fixo */
+  height: 32px; /* Tamanho fixo */
+  border-radius: 50%; /* Círculo */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 14px; /* Tamanho do ícone */
+  color: var(--text2); /* Cor suave */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .modal-x */
+.modal-x:hover {
+  /* Efeito de fechar ao passar o mouse */
+  background: var(--red); /* Fica vermelho */
+  color: #fff; /* Ícone branco */
+  border-color: var(--red); /* Borda vermelha */
+} /* Fim de .modal-x:hover */
+.modal-tag {
+  /* Pequeno texto acima do título */
+  font-family: "Space Mono", monospace; /* Fonte futurista */
+  font-size: 10px; /* Texto mini */
+  letter-spacing: 0.3em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--green); /* Destaque verde */
+  margin-bottom: 12px; /* Espaço para o título */
+} /* Fim de .modal-tag */
+.modal-title {
+  /* Título principal do modal (Entrar, Criar Conta) */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 40px; /* Tamanho grande */
+  letter-spacing: 0.05em; /* Leve espaçamento */
+  margin-bottom: 28px; /* Espaço para o formulário */
+  line-height: 1; /* Altura de linha ajustada */
+} /* Fim de .modal-title */
+.reset-desc {
+  /* Descrição para recuperação de senha */
+  font-size: 14px; /* Texto legível */
+  color: var(--text2); /* Cor suave */
+  font-weight: 300; /* Fonte leve */
+  margin-bottom: 20px; /* Espaço inferior */
+  line-height: 1.6; /* Espaçamento entre linhas confortável */
+} /* Fim de .reset-desc */
+.field {
+  /* Container de cada campo do formulário (label + input) */
+  margin-bottom: 16px; /* Espaçamento entre campos */
+} /* Fim de .field */
+.field label {
+  /* Rótulo do campo (ex: Email, Senha) */
+  display: block; /* Ocupa a linha toda acima do input */
+  font-size: 11px; /* Texto pequeno */
+  font-weight: 600; /* Semi-negrito */
+  letter-spacing: 0.1em; /* Leve espaçamento */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text2); /* Cor suave */
+  margin-bottom: 8px; /* Espaço para o input */
+} /* Fim de label no campo */
+.field input {
+  /* A caixa de texto propriamente dita */
+  width: 100%; /* Ocupa toda a largura do modal */
+  padding: 14px 16px; /* Espaçamento interno para conforto ao digitar */
+  background: var(--surf); /* Cor de superfície variável */
+  border: 1px solid var(--border); /* Borda discreta */
+  border-radius: 10px; /* Cantos suavizados */
+  color: var(--text); /* Cor do texto digitado */
+  font-family: "DM Sans", sans-serif; /* Fonte do projeto */
+  font-size: 15px; /* Tamanho ideal de leitura */
+  outline: none; /* Remove o brilho padrão azul do navegador */
+  transition: border-color 0.2s; /* Transição suave ao focar */
+} /* Fim de input no campo */
+.field input:focus {
+  /* Quando o usuário clica para digitar */
+  border-color: var(--green); /* Borda fica verde neon */
+} /* Fim de foco no input */
+.field input::placeholder {
+  /* Texto de exemplo dentro do campo */
+  color: var(--text3); /* Cor bem discreta */
+} /* Fim do estilo placeholder */
+.btn-submit {
+  /* Botão principal de ação do formulário */
+  width: 100%; /* Ocupa a largura total */
+  padding: 15px; /* Altura confortável */
+  background: var(--green); /* Cor de destaque principal */
+  color: #000; /* Texto preto para máxima legibilidade */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 20px; /* Tamanho grande */
+  letter-spacing: 0.1em; /* Espaçamento elegante */
+  border-radius: 10px; /* Combina com os inputs */
+  margin-top: 8px; /* Espaço do campo anterior */
+  transition: all 0.25s; /* Transição para efeitos */
+} /* Fim de .btn-submit */
+.btn-submit:hover {
+  /* Efeito ao passar o mouse no botão */
+  background: var(--green2); /* Fica um verde um pouco mais escuro */
+  transform: translateY(-1px); /* Sobe levemente (efeito de profundidade) */
+} /* Fim de .btn-submit:hover */
+.modal-div {
+  /* Divisória horizontal (ex: "ou entre com") */
+  display: flex; /* Alinhamento flexível */
+  align-items: center; /* Alinha texto com as linhas */
+  gap: 12px; /* Espaço entre linhas e texto */
+  margin: 20px 0; /* Margem vertical */
+  color: var(--text3); /* Cor discreta */
+  font-size: 12px; /* Tamanho pequeno */
+} /* Fim de .modal-div */
+.modal-div::before, /* Linha à esquerda do texto */
+.modal-div::after {
+  /* Linha à direita do texto */
+  content: ""; /* Necessário para exibir o elemento */
+  flex: 1; /* Faz a linha crescer para ocupar o espaço */
+  height: 1px; /* Altura da linha */
+  background: var(--border); /* Cor da borda padrão */
+} /* Fim das pseudo-linhas da divisória */
+.modal-foot {
+  /* Rodapé do modal para alternar entre login/cadastro */
+  text-align: center; /* Centralizado */
+  margin-top: 16px; /* Espaço superior */
+  font-size: 13px; /* Tamanho pequeno */
+  color: var(--text2); /* Cor suave */
+} /* Fim de .modal-foot */
+.modal-foot span {
+  /* O link clicável (ex: "Criar Conta") */
+  color: var(--green); /* Destaque verde */
+  cursor: pointer; /* Mãozinha ao passar o mouse */
+  font-weight: 600; /* Semi-negrito */
+} /* Fim de span no modal-foot */
+
+/* ==================================================== 
+   Início do bloco de Popup de Detalhes
+   CHIP POPUP  Interface expandida para informações detalhadas 
+==================================================== */
+#chip-overlay {
+  /* Identificador da camada de fundo do popup de chips */
+  position: fixed; /* Fixa na tela inteira */
+  inset: 0; /* Cobre do topo à base */
+  z-index: 300; /* Acima da navbar e do modal de login */
+  background: rgba(0, 0, 0, 0.82); /* Preto quase opaco para foco total */
+  backdrop-filter: blur(16px); /* Desfoque intenso do fundo (efeito premium) */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  opacity: 0; /* Invisível por padrão */
+  pointer-events: none; /* Ignora cliques */
+  transition: opacity 0.35s; /* Transição suave */
+  padding: 20px; /* Margem mobile */
+} /* Fim de #chip-overlay */
+#chip-overlay.open {
+  /* Estado aberto do detalhamento */
+  opacity: 1; /* Fica visível */
+  pointer-events: all; /* Habilita cliques */
+} /* Fim de #chip-overlay.open */
+.chip-modal {
+  /* Caixa de conteúdo do detalhamento */
+  background: var(--bg2); /* Fundo escuro de contraste */
+  border: 1px solid var(--border); /* Borda elegante */
+  border-radius: 24px; /* Cantos arredondados modernos */
+  width: min(560px, 100%); /* Largura máxima confortável */
+  max-height: 82vh; /* Não deixa o modal ser maior que a tela */
+  overflow-y: auto; /* Habilita rolagem interna se o texto for longo */
+  transform: translateY(24px) scale(0.96); /* Começa abaixo e menor */
+  transition: transform 0.4s var(--ease); /* Entrada suave */
+  position: relative; /* Para o botão fechar 'X' */
+} /* Fim de .chip-modal */
+#chip-overlay.open .chip-modal {
+  /* Animação de entrada */
+  transform: translateY(0) scale(1); /* Posição e tamanho final */
+} /* Fim da animação chip-modal */
+.chip-head {
+  /* Cabeçalho do popup de chip */
+  padding: 28px 28px 20px; /* Espaçamento interno */
+  border-bottom: 1px solid var(--border); /* Linha divisória */
+  display: flex; /* Ícone e textos lado a lado */
+  align-items: flex-start; /* Alinha ao topo */
+  gap: 16px; /* Espaço entre ícone e texto */
+  position: sticky; /* Mantém o topo visível ao rolar o conteúdo longo */
+  top: 0; /* Fixa no topo da caixa */
+  background: var(--bg2); /* Fundo opaco para não misturar no scroll */
+  z-index: 2; /* Acima do corpo do texto */
+} /* Fim de .chip-head */
+.chip-head-icon {
+  /* Ícone grande de categoria (emoji) */
+  font-size: 40px; /* Tamanho grande e visual */
+  flex-shrink: 0; /* Não deixa o ícone esmagar */
+} /* Fim de .chip-head-icon */
+.chip-head-meta {
+  /* Container de categoria e título */
+  flex: 1; /* Ocupa o espaço restante */
+} /* Fim de .chip-head-meta */
+.chip-head-tag {
+  /* Texto da categoria (ex: 01 — Mente) */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 9px; /* Texto pequeno */
+  letter-spacing: 0.3em; /* Bem espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--green); /* Verde neon */
+  margin-bottom: 6px; /* Espaço para o título */
+} /* Fim de .chip-head-tag */
+.chip-head-title {
+  /* Título principal da categoria */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 32px; /* Tamanho médio-grande */
+  letter-spacing: 0.05em; /* Espaçamento elegante */
+  line-height: 1; /* Altura ajustada */
+} /* Fim de .chip-head-title */
+.chip-x {
+  /* Botão de fechar do popup de chip */
+  width: 36px; /* Tamanho do círculo */
+  height: 36px; /* Tamanho do círculo */
+  border-radius: 50%; /* Círculo */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 14px; /* Tamanho do ícone */
+  color: var(--text2); /* Cor suave */
+  flex-shrink: 0; /* Mantém o tamanho */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .chip-x */
+.chip-x:hover {
+  /* Efeito de fechar no chip */
+  background: var(--red); /* Vermelho */
+  color: #fff; /* Branco */
+  border-color: var(--red); /* Borda vermelha */
+} /* Fim de .chip-x:hover */
+.chip-body {
+  /* Área de texto e benefícios do chip */
+  padding: 24px 28px 32px; /* Espaçamento interno */
+} /* Fim de .chip-body */
+.chip-body p {
+  /* Parágrafos de explicação técnica */
+  font-size: 15px; /* Texto legível */
+  font-weight: 300; /* Fonte leve */
+  color: var(--text2); /* Cor suave */
+  line-height: 1.75; /* Espaçamento confortável */
+  margin-bottom: 16px; /* Espaço entre parágrafos */
+} /* Fim de p no corpo */
+.chip-body h4 {
+  /* Subtítulos dentro da explicação (ex: Metodologia) */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 20px; /* Tamanho de subtítulo */
+  letter-spacing: 0.05em; /* Espaçamento */
+  color: var(--text); /* Texto principal */
+  margin: 20px 0 10px; /* Espaçamento vertical */
+} /* Fim de h4 no corpo */
+.chip-benefit {
+  /* Item de lista destacada (benefício) */
+  display: flex; /* Ícone e texto */
+  align-items: flex-start; /* Topo */
+  gap: 12px; /* Espaço entre ícone e texto */
+  padding: 12px 16px; /* Espaçamento interno */
+  background: rgba(0, 255, 135, 0.04); /* Verde quase invisível ao fundo */
+  border: 1px solid rgba(0, 255, 135, 0.1); /* Borda verde bem sutil */
+  border-radius: 12px; /* Cantos arredondados */
+  margin-bottom: 8px; /* Espaço para o próximo benefício */
+} /* Fim de .chip-benefit */
+.chip-benefit-icon {
+  /* Ícone do benefício (emoji pequeno) */
+  font-size: 20px; /* Tamanho médio */
+  flex-shrink: 0; /* Não esmaga */
+  margin-top: 2px; /* Ajuste fino de alinhamento */
+} /* Fim de .chip-benefit-icon */
+.chip-benefit-text {
+  /* Texto explicativo do benefício */
+  font-size: 14px; /* Texto de suporte */
+  color: var(--text2); /* Cor suave */
+  font-weight: 300; /* Leve */
+  line-height: 1.5; /* Espaçamento */
+} /* Fim de .chip-benefit-text */
+.chip-benefit-text strong {
+  /* Destaque dentro do benefício */
+  color: var(--text); /* Texto mais claro */
+  font-weight: 600; /* Negrito */
+} /* Fim de strong no benefício */
+.chip-stat {
+  /* Bloco de estatística de impacto (ex: 34% de aumento) */
+  display: flex; /* Itens em linha */
+  align-items: center; /* Centraliza verticalmente */
+  gap: 20px; /* Espaço entre número e rótulo */
+  padding: 20px; /* Espaçamento interno */
+  background: var(--bg3); /* Cor de fundo de terceira camada */
+  border-radius: 14px; /* Cantos suaves */
+  margin-top: 16px; /* Espaço do conteúdo acima */
+} /* Fim de .chip-stat */
+.chip-stat-num {
+  /* O número grande da estatística */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 40px; /* Tamanho gigante */
+  color: var(--green); /* Destaque verde neon */
+  line-height: 1; /* Altura mínima */
+} /* Fim de .chip-stat-num */
+.chip-stat-label {
+  /* Descrição da estatística */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  font-weight: 300; /* Leve */
+} /* Fim de .chip-stat-label */
+
+/* ==================================================== 
+   Início do bloco de Hero Carousel
+   HERO CAROUSEL  A seção de impacto com slides deslizantes 
+==================================================== */
+#hero {
+  /* Identificador da seção principal (Hero) */
+  position: relative; /* Para posicionar slides e controles internos */
+  height: 100vh; /* Ocupa exatamente a altura da tela */
+  overflow: hidden; /* Esconde os slides que estão fora da visão */
+} /* Fim de #hero */
+.carousel-track {
+  /* O "trilho" que contém todos os slides alinhados */
+  display: flex; /* Alinha os slides lado a lado horizontalmente */
+  height: 100%; /* Ocupa toda a altura do hero */
+  transition: transform 0.8s var(--ease); /* Animação de deslizamento suave */
+} /* Fim de .carousel-track */
+.c-slide {
+  /* Cada slide individual */
+  min-width: 100%; /* Ocupa toda a largura da tela */
+  height: 100%; /* Ocupa toda a altura da tela */
+  position: relative; /* Para elementos internos absolutos (fundo, grid) */
+  display: flex; /* Alinhamento flexível do conteúdo */
+  align-items: center; /* Centraliza conteúdo verticalmente */
+  padding: calc(var(--nav) + 40px) clamp(20px, 6vw, 80px) 80px; /* Espaçamento seguro (considera navbar) */
+} /* Fim de .c-slide */
+.slide-bg {
+  /* Fundo do slide (pode conter gradientes ou cores) */
+  position: absolute; /* Cobre todo o slide */
+  inset: 0; /* Do topo à base */
+  z-index: 0; /* Atrás do conteúdo */
+} /* Fim de .slide-bg */
+.slide-grid {
+  /* Efeito de grade técnica/futurista no fundo */
+  position: absolute; /* Absoluto sobre o bg */
+  inset: 0; /* Cobre tudo */
+  background-image: /* Cria as linhas da grade usando gradientes repetidos */
+    linear-gradient(var(--border) 1px, transparent 1px),
+    /* Linhas horizontais */
+    linear-gradient(90deg, var(--border) 1px, transparent 1px); /* Linhas verticais */
+  background-size: 60px 60px; /* Tamanho de cada quadrado da grade */
+  mask-image: radial-gradient(
+    /* Efeito de máscara para sumir a grade nas bordas */ ellipse 80% 80% at
+      center,
+    /* Gradiente circular/elíptico */ black 30%,
+    /* Centro visível */ transparent 100% /* Bordas invisíveis */
+  ); /* Fim da máscara */
+} /* Fim de .slide-grid */
+.slide-glow {
+  /* Camada de brilho atmosférico */
+  position: absolute; /* Absoluto */
+  inset: 0; /* Cobre tudo */
+} /* Fim de .slide-glow */
+.slide-content {
+  /* Container do texto e botões (o conteúdo útil) */
+  position: relative; /* Fica acima da grade e do fundo */
+  z-index: 1; /* Prioridade visual */
+  max-width: 900px; /* Limite de largura para não esticar demais em telas ultra-wide */
+} /* Fim de .slide-content */
+.slide-eye {
+  /* Pequeno badge "Live" ou categoria no topo do slide */
+  display: inline-flex; /* Itens em linha */
+  align-items: center; /* Centro vertical */
+  gap: 10px; /* Espaço entre ponto e texto */
+  background: rgba(0, 255, 135, 0.08); /* Fundo verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde discreta */
+  border-radius: 40px; /* Pílula */
+  padding: 6px 14px; /* Espaçamento interno */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 11px; /* Texto pequeno */
+  letter-spacing: 0.2em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--green); /* Texto verde neon */
+  margin-bottom: 28px; /* Espaço para o título */
+} /* Fim de .slide-eye */
+.slide-eye .dot {
+  /* O ponto que pisca (indicador de atividade) */
+  width: 6px; /* Tamanho */
+  height: 6px; /* Tamanho */
+  border-radius: 50%; /* Círculo */
+  background: var(--green); /* Cor neon */
+  animation: pulse 2s ease infinite; /* Animação de pulsação eterna */
+} /* Fim de .dot */
+@keyframes pulse {
+  /* Definição da animação de pulso */
+  0%, /* Início */
+  100% {
+    /* Fim do ciclo */
+    opacity: 1; /* Visível */
+    transform: scale(1); /* Tamanho normal */
+  } /* Fim do estado 1 */
+  50% {
+    /* Meio do ciclo */
+    opacity: 0.4; /* Fica transparente */
+    transform: scale(0.8); /* Diminui levemente */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes pulse */
+.slide-title {
+  /* O grande título do slide */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: clamp(60px, 11vw, 136px); /* Tamanho gigante responsivo */
+  line-height: 0.92; /* Altura de linha compacta (estilo pôster) */
+  letter-spacing: 0.02em; /* Leve espaçamento */
+  margin-bottom: 24px; /* Espaço para o subtítulo */
+} /* Fim de .slide-title */
+.slide-title .acc {
+  /* Destaque colorido no título */
+  color: var(--green); /* Verde neon */
+} /* Fim de .acc */
+.slide-title .str {
+  /* Efeito de texto vazado (outline) no título */
+  -webkit-text-stroke: 2px var(--text); /* Borda do texto */
+  color: transparent; /* Fundo transparente */
+} /* Fim de .str */
+.slide-sub {
+  /* Subtítulo descritivo abaixo do título */
+  font-size: clamp(15px, 1.8vw, 19px); /* Tamanho médio fluido */
+  font-weight: 300; /* Fonte leve */
+  color: var(--text2); /* Cor cinza suave */
+  line-height: 1.65; /* Espaçamento confortável */
+  max-width: 500px; /* Limite de leitura */
+  margin-bottom: 36px; /* Espaço para os botões de ação */
+} /* Fim de .slide-sub */
+.slide-cta {
+  /* Container para os botões Call to Action */
+  display: flex; /* Itens em linha */
+  gap: 14px; /* Espaço entre botões */
+  flex-wrap: wrap; /* Quebra linha em telas muito pequenas */
+} /* Fim de .slide-cta */
+
+.btn-pri {
+  /* Botão principal de destaque (Garantir Vaga) */
+  display: inline-flex; /* Alinhamento interno */
+  align-items: center; /* Centro vertical */
+  gap: 10px; /* Espaço entre texto e ícone (se houver) */
+  padding: 15px 30px; /* Tamanho grande */
+  background: var(--green); /* Fundo neon */
+  color: #000; /* Texto preto (máximo contraste) */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 20px; /* Tamanho legível */
+  letter-spacing: 0.1em; /* Espaçado */
+  border-radius: 50px; /* Bordas redondas */
+  transition: all 0.3s var(--ease); /* Transição fluida */
+} /* Fim de .btn-pri */
+.btn-pri:hover {
+  /* Efeito de hover no botão principal */
+  transform: translateY(-3px) scale(1.02); /* Sobe e cresce levemente */
+  box-shadow: 0 20px 40px rgba(0, 255, 135, 0.25); /* Sombra neon de profundidade */
+} /* Fim de .btn-pri:hover */
+.btn-sec {
+  /* Botão secundário (Saiba Mais, etc) */
+  display: inline-flex; /* Alinhamento interno */
+  align-items: center; /* Centro vertical */
+  gap: 8px; /* Espaçamento */
+  padding: 15px 26px; /* Tamanho médio */
+  border: 1px solid var(--border); /* Apenas borda */
+  border-radius: 50px; /* Redondo */
+  font-size: 15px; /* Texto menor */
+  font-weight: 600; /* Negrito */
+  transition: all 0.25s; /* Transição suave */
+} /* Fim de .btn-sec */
+.btn-sec:hover {
+  /* Efeito de hover no botão secundário */
+  border-color: var(--green); /* Borda fica verde */
+  color: var(--green); /* Texto fica verde */
+} /* Fim de .btn-sec:hover */
+
+.carousel-dots {
+  /* Container dos pontos indicadores de slide */
+  position: absolute; /* Posicionado sobre o hero */
+  bottom: 32px; /* Distância da base */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translateX(-50%); /* Ajuste fino de centralização */
+  display: flex; /* Itens em linha */
+  gap: 8px; /* Espaço entre pontos */
+  z-index: 10; /* Acima dos slides */
+} /* Fim de .carousel-dots */
+.cdot {
+  /* Cada ponto indicador individual */
+  width: 8px; /* Tamanho normal (círculo) */
+  height: 8px; /* Tamanho normal (círculo) */
+  border-radius: 50%; /* Círculo */
+  background: var(--text3); /* Cor cinza escura (inativo) */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.3s; /* Transição de tamanho e cor */
+} /* Fim de .cdot */
+.cdot.active {
+  /* O ponto que representa o slide atual */
+  background: var(--green); /* Cor neon (ativo) */
+  width: 24px; /* Expande horizontalmente (efeito pílula) */
+  border-radius: 4px; /* Ajuste do arredondamento para a expansão */
+} /* Fim de .cdot.active */
+.carousel-arrows {
+  /* Container das setas de navegação */
+  position: absolute; /* Absoluto sobre o hero */
+  bottom: 28px; /* Base */
+  right: clamp(20px, 5vw, 60px); /* Alinhado à direita de forma responsiva */
+  display: flex; /* Setas lado a lado */
+  gap: 12px; /* Espaçamento */
+  z-index: 10; /* Acima dos slides */
+} /* Fim de .carousel-arrows */
+.carrow {
+  /* Cada seta individual (Anterior/Próximo) */
+  width: 44px; /* Círculo de tamanho confortável */
+  height: 44px; /* Círculo de tamanho confortável */
+  border-radius: 50%; /* Círculo */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  display: flex; /* Centralização interna */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 18px; /* Tamanho do ícone */
+  color: var(--text2); /* Cor suave */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.25s; /* Transição suave */
+} /* Fim de .carrow */
+.carrow:hover {
+  /* Efeito de hover nas setas */
+  border-color: var(--green); /* Borda brilha em verde */
+  color: var(--green); /* Ícone fica verde */
+} /* Fim de .carrow:hover */
+.scroll-hint {
+  /* Pequeno indicador de "Role para baixo" no centro inferior */
+  position: absolute; /* Absoluto */
+  bottom: 80px; /* Distância da base */
+  left: 50%; /* Centralizado */
+  transform: translateX(-50%); /* Ajuste de centralização */
+  display: flex; /* Texto e linha em coluna */
+  flex-direction: column; /* Alinhamento vertical */
+  align-items: center; /* Centralizado */
+  gap: 8px; /* Espaço entre texto e linha */
+} /* Fim de .scroll-hint */
+.scroll-hint span {
+  /* O texto "SCROLL" */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 9px; /* Texto mini */
+  letter-spacing: 0.3em; /* Bem espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text3); /* Cor bem discreta */
+} /* Fim de span no scroll-hint */
+.scroll-line {
+  /* A linha animada que indica o movimento de rolagem */
+  width: 1px; /* Linha bem fina */
+  height: 48px; /* Comprimento da linha */
+  background: linear-gradient(
+    to bottom,
+    var(--green),
+    transparent
+  ); /* Gradiente que some na base */
+  animation: scrollPulse 2s ease infinite; /* Animação de pulso/descida */
+} /* Fim de .scroll-line */
+@keyframes scrollPulse {
+  /* Definição da animação da linha de scroll */
+  0% {
+    /* Início do ciclo */
+    transform: scaleY(0); /* Tamanho zero */
+    transform-origin: top; /* Começa a crescer do topo */
+    opacity: 1; /* Visível */
+  } /* Fim do estado 1 */
+  100% {
+    /* Fim do ciclo */
+    transform: scaleY(1); /* Tamanho total */
+    transform-origin: top; /* Mantém a origem no topo para parecer que desce */
+    opacity: 0; /* Some no final da descida */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes scrollPulse */
+
+/* ==================================================== 
+   Início do bloco de Seções do Corpo
+   BODY SECTIONS  Estrutura das seções informativas da página 
+==================================================== */
+.sec {
+  /* Classe base para uma seção do site */
+  position: relative; /* Para posicionar elementos internos */
+  overflow: hidden; /* Esconde o que vazar da seção */
+  border-bottom: 1px solid var(--border); /* Linha divisória entre seções */
+} /* Fim de .sec */
+.sec-inner {
+  /* Container interno centralizado da seção */
+  min-height: 100vh; /* Cada seção tenta ocupar a tela inteira */
+  display: grid; /* Layout em grade para alinhamento */
+  align-items: center; /* Centraliza conteúdo verticalmente */
+  padding: 100px clamp(20px, 6vw, 80px); /* Espaçamento interno responsivo */
+} /* Fim de .sec-inner */
+.sec-grid {
+  /* Grade de duas colunas (texto e visual) */
+  display: grid; /* Ativa grade */
+  grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+  gap: clamp(40px, 6vw, 100px); /* Espaço entre as colunas */
+  align-items: center; /* Alinha itens no centro da linha */
+} /* Fim de .sec-grid */
+.sec-grid.rev {
+  /* Variante com ordem invertida (Visual na esquerda, Texto na direita) */
+  direction: rtl; /* Inverte a direção de leitura do container */
+} /* Fim de .sec-grid.rev */
+.sec-grid.rev > * {
+  /* Corrige a direção dos filhos do container invertido */
+  direction: ltr; /* Volta a leitura normal para o conteúdo interno */
+} /* Fim dos filhos da grade invertida */
+.sec-tag {
+  /* Pequeno marcador de categoria da seção (ex: 01 Mente) */
+  font-family: "Space Mono", monospace; /* Fonte futurista */
+  font-size: 10px; /* Texto pequeno */
+  letter-spacing: 0.3em; /* Bem espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--green); /* Verde neon */
+  margin-bottom: 16px; /* Espaço para o título */
+  display: flex; /* Alinha com a linha decorativa */
+  align-items: center; /* Centro vertical */
+  gap: 12px; /* Espaço entre a linha e o texto */
+} /* Fim de .sec-tag */
+.sec-tag::before {
+  /* Linha decorativa antes do texto da categoria */
+  content: ""; /* Necessário para o elemento existir */
+  width: 24px; /* Comprimento da linha */
+  height: 1px; /* Espessura */
+  background: var(--green); /* Cor verde neon */
+} /* Fim de pseudo-elemento sec-tag */
+.sec-title {
+  /* Título principal da seção */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: clamp(44px, 7vw, 88px); /* Tamanho grande e responsivo */
+  letter-spacing: 0.02em; /* Leve espaçamento */
+  line-height: 0.95; /* Compacto */
+} /* Fim de .sec-title */
+.sec-title .acc {
+  /* Destaque colorido no título da seção */
+  color: var(--green); /* Verde neon */
+} /* Fim de .acc na seção */
+.sec-body {
+  /* Texto descritivo da seção */
+  font-size: clamp(14px, 1.4vw, 17px); /* Tamanho de leitura confortável */
+  font-weight: 300; /* Fonte leve */
+  color: var(--text2); /* Cor suave */
+  line-height: 1.7; /* Espaçamento entre linhas generoso */
+  max-width: 480px; /* Limite de largura para facilitar a leitura */
+  margin-top: 18px; /* Espaço do título */
+} /* Fim de .sec-body */
+
+/* VISUAL BLOCK /* Estilos para os blocos de mídia/animação ao lado do texto */
+*/ .vis {
+  /* Container principal do visual */
+  position: relative; /* Para elementos internos absolutos */
+  border-radius: 20px; /* Cantos arredondados */
+  overflow: hidden; /* Corta o conteúdo que sair da caixa */
+  aspect-ratio: 4/5; /* Formato vertical elegante */
+} /* Fim de .vis */
+.vis-bg {
+  /* Fundo do bloco visual */
+  width: 100%; /* Ocupa tudo */
+  height: 100%; /* Ocupa tudo */
+  display: flex; /* Para centralizar o ícone */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  position: relative; /* Para as camadas de glow e linhas */
+  overflow: hidden; /* Esconde overflow interno */
+} /* Fim de .vis-bg */
+.vis-mente {
+  /* Gradiente específico para o tema Mente */
+  background: linear-gradient(
+    135deg,
+    #0a0a0a,
+    #001a0d,
+    #000d0a
+  ); /* Tons verdes escuros */
+} /* Fim vis-mente */
+.vis-forca {
+  /* Gradiente específico para o tema Força */
+  background: linear-gradient(
+    135deg,
+    #0d0800,
+    #1a0d00,
+    #0d0500
+  ); /* Tons laranjas escuros */
+} /* Fim vis-forca */
+.vis-cardio {
+  /* Gradiente específico para o tema Cardio */
+  background: linear-gradient(
+    135deg,
+    #0d0005,
+    #1a0010,
+    #0d0008
+  ); /* Tons avermelhados escuros */
+} /* Fim vis-cardio */
+.vis-flexi {
+  /* Gradiente específico para o tema Flexibilidade */
+  background: linear-gradient(
+    135deg,
+    #00050d,
+    #001020,
+    #000a15
+  ); /* Tons azulados escuros */
+} /* Fim vis-flexi */
+.vis-recup {
+  /* Gradiente específico para o tema Recuperação */
+  background: linear-gradient(
+    135deg,
+    #050d00,
+    #0a1a00,
+    #050d00
+  ); /* Tons verdes floresta */
+} /* Fim vis-recup */
+.vis-lines {
+  /* Camada de linhas horizontais decorativas sobre o visual */
+  position: absolute; /* Cobre o fundo */
+  inset: 0; /* Topo à base */
+  background-image: repeating-linear-gradient(
+    /* Cria o padrão de scanline */ 0deg,
+    /* Horizontal */ transparent,
+    /* Começa transparente */ transparent 28px,
+    /* Mantém transparente por 28px */ rgba(0, 255, 135, 0.04) 28px,
+    /* Adiciona uma linha verde quase invisível */ rgba(0, 255, 135, 0.04) 29px
+      /* Espessura de 1px */
+  ); /* Fim do padrão */
+} /* Fim de .vis-lines */
+.vis-glow {
+  /* Camada de brilho radial ao fundo do ícone */
+  position: absolute; /* Absoluto */
+  inset: 0; /* Cobre tudo */
+  background: radial-gradient(
+    /* Cria o efeito de luz */ ellipse 60% 60% at 50% 60%,
+    /* Formato e posição do brilho */ rgba(0, 255, 135, 0.12),
+    /* Cor verde suave no centro */ transparent /* Some nas bordas */
+  ); /* Fim do gradiente */
+} /* Fim de .vis-glow */
+.vis-icon {
+  /* O grande emoji que representa a categoria */
+  font-size: clamp(80px, 14vw, 130px); /* Tamanho gigante responsivo */
+  position: absolute; /* Posicionamento livre */
+  filter: drop-shadow(
+    0 0 40px rgba(0, 255, 135, 0.3)
+  ); /* Brilho externo no ícone */
+  animation: floatIcon 4s ease-in-out infinite; /* Animação de flutuação eterna */
+} /* Fim de .vis-icon */
+@keyframes floatIcon {
+  /* Definição do movimento de flutuação */
+  0%, /* Início do ciclo */
+  100% {
+    /* Fim do ciclo */
+    transform: translateY(0) scale(1); /* Posição e tamanho original */
+  } /* Fim do estado 1 */
+  50% {
+    /* Meio do ciclo */
+    transform: translateY(-16px) scale(1.03); /* Sobe e cresce levemente */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes floatIcon */
+.vis-badge {
+  /* Pequena etiqueta informativa no canto do visual */
+  position: absolute; /* Fixa no bloco visual */
+  bottom: 20px; /* Margem inferior */
+  right: 20px; /* Margem direita */
+  background: rgba(0, 0, 0, 0.6); /* Fundo preto translúcido */
+  backdrop-filter: blur(10px); /* Desfoque do fundo */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde discreta */
+  border-radius: 12px; /* Cantos arredondados */
+  padding: 12px 16px; /* Espaçamento interno */
+  display: flex; /* Itens em linha */
+  align-items: center; /* Centro vertical */
+  gap: 10px; /* Espaço entre ponto e texto */
+} /* Fim de .vis-badge */
+.vis-bdot {
+  /* Ponto piscante da etiqueta */
+  width: 8px; /* Pequeno círculo */
+  height: 8px; /* Pequeno círculo */
+  border-radius: 50%; /* Círculo */
+  background: var(--green); /* Cor neon */
+  animation: pulse 2s ease infinite; /* Animação de pulso */
+} /* Fim de .vis-bdot */
+.vis-btxt {
+  /* Texto da etiqueta (ex: SENSOR ATIVO) */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto mini */
+  letter-spacing: 0.1em; /* Espaçado */
+  color: #fff; /* Branco puro */
+} /* Fim de .vis-btxt */
+
+/* CHIPS /* Pequenos botões de "Saiba Mais" em cada seção */
+*/ .chips {
+  /* Container para os botões de chips */
+  display: flex; /* Em linha */
+  flex-wrap: wrap; /* Quebra linha se necessário */
+  gap: 8px; /* Espaço entre botões */
+  margin-top: 28px; /* Distância do texto acima */
+} /* Fim de .chips */
+.chip {
+  /* Botão individual (ex: BIOFEEDBACK) */
+  padding: 7px 16px; /* Tamanho compacto */
+  background: rgba(0, 255, 135, 0.07); /* Verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.15); /* Borda verde suave */
+  border-radius: 30px; /* Formato pílula */
+  font-size: 13px; /* Texto de leitura */
+  color: var(--green); /* Texto verde neon */
+  font-weight: 500; /* Semi-negrito */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.25s; /* Transição suave */
+} /* Fim de .chip */
+.chip::after {
+  /* Símbolo de "Expandir" no final do botão */
+  content: " ↗"; /* Seta para cima e direita */
+  font-size: 10px; /* Pequeno */
+  opacity: 0.6; /* Discreto */
+} /* Fim do símbolo do chip */
+.chip:hover {
+  /* Efeito de interação no botão chip */
+  background: rgba(0, 255, 135, 0.18); /* Verde fica mais visível */
+  border-color: var(--green); /* Borda brilha */
+  transform: translateY(-2px); /* Sobe levemente */
+  box-shadow: 0 8px 20px rgba(0, 255, 135, 0.15); /* Sombra verde */
+} /* Fim de .chip:hover */
+
+/* ==================================================== 
+   Início do bloco de Funcionalidades (Features)
+   FEATURES  Vitrine de recursos tecnológicos da plataforma 
+==================================================== */
+#features {
+  /* Identificador da seção de recursos */
+  padding: 80px clamp(20px, 6vw, 80px); /* Espaçamento responsivo */
+  background: var(--bg2); /* Fundo de contraste secundário */
+  border-top: 1px solid var(--border); /* Divisória superior */
+  border-bottom: 1px solid var(--border); /* Divisória inferior */
+} /* Fim de #features */
+.feat-main-title {
+  /* Título principal da vitrine de recursos */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: clamp(44px, 7vw, 80px); /* Tamanho gigante */
+  letter-spacing: 0.02em; /* Leve espaçamento */
+  line-height: 0.95; /* Compacto */
+  margin-top: 8px; /* Espaço do topo */
+} /* Fim de .feat-main-title */
+.feat-main-title .acc {
+  /* Destaque verde no título */
+  color: var(--green); /* Verde neon */
+} /* Fim do destaque feat */
+.feat-grid {
+  /* Grade automática para os cards de recursos */
+  display: grid; /* Ativa grade */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(200px, 1fr)
+  ); /* Cria colunas que se adaptam ao tamanho da tela */
+  gap: 20px; /* Espaço entre cards */
+  margin-top: 48px; /* Distância do título */
+} /* Fim de .feat-grid */
+.feat-card {
+  /* Cada card de recurso individual */
+  background: var(
+    --bg3
+  ); /* Fundo de terceira camada (mais claro que a seção) */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 18px; /* Cantos arredondados */
+  padding: 28px; /* Espaçamento interno */
+  transition: all 0.3s var(--ease); /* Transição fluida */
+  cursor: pointer; /* Mãozinha */
+  position: relative; /* Para o gradiente de fundo no hover */
+  overflow: hidden; /* Esconde overflow do gradiente */
+} /* Fim de .feat-card */
+.feat-card::before {
+  /* Efeito de brilho de fundo que aparece no hover */
+  content: ""; /* Necessário */
+  position: absolute; /* Cobre o card */
+  inset: 0; /* Topo à base */
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 135, 0.06),
+    transparent
+  ); /* Gradiente verde sutil */
+  opacity: 0; /* Invisível por padrão */
+  transition: opacity 0.3s; /* Transição suave de visibilidade */
+} /* Fim do brilho feat */
+.feat-card:hover {
+  /* Efeito de hover no card de recurso */
+  border-color: rgba(0, 255, 135, 0.4); /* Borda verde mais forte */
+  transform: translateY(-6px); /* Sobe significativamente */
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4); /* Sombra profunda para destacar */
+} /* Fim de .feat-card:hover */
+.feat-card:hover::before {
+  /* Mostra o brilho de fundo no hover */
+  opacity: 1; /* Fica visível */
+} /* Fim do brilho visível */
+.feat-icon {
+  /* Ícone (emoji) do recurso */
+  font-size: 36px; /* Tamanho visual */
+  margin-bottom: 16px; /* Espaço para o título */
+} /* Fim de .feat-icon */
+.feat-title {
+  /* Título do recurso no card */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 22px; /* Tamanho de título médio */
+  letter-spacing: 0.05em; /* Espaçamento */
+  margin-bottom: 8px; /* Espaço para a descrição */
+} /* Fim de .feat-title */
+.feat-desc {
+  /* Breve explicação do recurso */
+  font-size: 14px; /* Texto legível */
+  color: var(--text2); /* Cor suave */
+  line-height: 1.6; /* Espaçamento entre linhas */
+  font-weight: 300; /* Leve */
+} /* Fim de .feat-desc */
+.feat-cta {
+  /* Texto de chamada à ação no final do card (ex: EXPLORAR) */
+  display: inline-flex; /* Em linha com ícone */
+  align-items: center; /* Centro vertical */
+  gap: 6px; /* Espaço para a seta */
+  margin-top: 16px; /* Distância do texto */
+  font-size: 12px; /* Pequeno */
+  font-weight: 600; /* Negrito */
+  color: var(--green); /* Verde neon */
+  letter-spacing: 0.05em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+} /* Fim de .feat-cta */
+.feat-cta::after {
+  /* Seta decorativa no CTA */
+  content: " →"; /* Seta para direita */
+  transition: transform 0.2s; /* Animação da seta */
+} /* Fim da seta feat */
+.feat-card:hover .feat-cta::after {
+  /* Move a seta no hover do card */
+  transform: translateX(4px); /* Seta desliza para a direita */
+} /* Fim do movimento da seta */
+.feat-badge {
+  /* Pequena etiqueta no canto do card (ex: BETA, NOVO) */
+  position: absolute; /* Fixa no card */
+  top: 16px; /* Topo */
+  right: 16px; /* Direita */
+  background: rgba(0, 255, 135, 0.1); /* Fundo verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde */
+  border-radius: 20px; /* Redondo */
+  padding: 3px 10px; /* Compacto */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 9px; /* Mini */
+  letter-spacing: 0.1em; /* Espaçado */
+  color: var(--green); /* Verde neon */
+} /* Fim de .feat-badge */
+
+/* ==================================================== 
+   Início do bloco de Acesso Antecipado
+   EARLY ACCESS  Seção de convite para a lista de espera 
+==================================================== */
+#early {
+  /* Identificador da seção de convite */
+  padding: 120px clamp(20px, 6vw, 80px); /* Espaçamento interno grande */
+  text-align: center; /* Centraliza tudo */
+  position: relative; /* Para o fundo brilhante */
+  overflow: hidden; /* Esconde o brilho que sair */
+} /* Fim de #early */
+#early::before {
+  /* Efeito de brilho centralizado no fundo da seção */
+  content: ""; /* Necessário */
+  position: absolute; /* Cobre a seção */
+  inset: 0; /* Topo à base */
+  background: radial-gradient(
+    /* Luz vinda do centro */ ellipse 70% 60% at center,
+    /* Formato elíptico */ rgba(0, 255, 135, 0.07),
+    /* Verde bem suave no centro */ transparent /* Desaparece nas bordas */
+  ); /* Fim do brilho central */
+} /* Fim do pseudo-brilho early */
+.early-title {
+  /* Título gigante do convite */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: clamp(56px, 10vw, 116px); /* Tamanho máximo responsivo */
+  letter-spacing: 0.02em; /* Leve espaçamento */
+  line-height: 0.9; /* Super compacto */
+  margin-bottom: 20px; /* Espaço para o subtítulo */
+  position: relative; /* Acima do brilho de fundo */
+  z-index: 1; /* Prioridade visual */
+} /* Fim de .early-title */
+.early-title .acc {
+  /* Destaque verde no título */
+  color: var(--green); /* Verde neon */
+} /* Fim do destaque early */
+.early-sub {
+  /* Subtítulo persuasivo */
+  font-size: 17px; /* Tamanho médio */
+  font-weight: 300; /* Leve */
+  color: var(--text2); /* Cor suave */
+  margin-bottom: 44px; /* Espaço para o formulário */
+  position: relative; /* Acima do brilho */
+  z-index: 1; /* Prioridade visual */
+} /* Fim de .early-sub */
+.early-form {
+  /* Formulário de captura de email */
+  display: flex; /* Campo e botão lado a lado */
+  gap: 12px; /* Espaço entre eles */
+  max-width: 480px; /* Limite de largura do form */
+  margin: 0 auto; /* Centraliza o formulário na página */
+  position: relative; /* Acima do brilho */
+  z-index: 1; /* Prioridade visual */
+  flex-wrap: wrap; /* Quebra para coluna no mobile */
+  justify-content: center; /* Centraliza conteúdo interno */
+} /* Fim de .early-form */
+.early-form input {
+  /* Campo de digitação de email */
+  flex: 1; /* Ocupa todo o espaço restante */
+  min-width: 220px; /* Não deixa ficar minúsculo */
+  padding: 15px 20px; /* Espaçamento para digitar */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 50px; /* Formato pílula (moderno) */
+  color: var(--text); /* Texto claro */
+  font-family: "DM Sans", sans-serif; /* Fonte do projeto */
+  font-size: 15px; /* Tamanho ideal */
+  outline: none; /* Sem brilho padrão azul */
+  transition: border-color 0.2s; /* Transição suave de foco */
+} /* Fim de input early */
+.early-form input:focus {
+  /* Ao clicar no campo */
+  border-color: var(--green); /* Borda brilha em verde neon */
+} /* Fim foco input early */
+.early-form input::placeholder {
+  /* Texto de exemplo */
+  color: var(--text3); /* Cor discreta */
+} /* Fim placeholder early */
+.early-note {
+  /* Pequena nota de rodapé do form (Privacidade) */
+  margin-top: 14px; /* Distância do botão */
+  font-size: 12px; /* Texto mini */
+  color: var(--text3); /* Cor discreta */
+  position: relative; /* Acima do brilho */
+  z-index: 1; /* Prioridade */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  letter-spacing: 0.05em; /* Espaçado */
+} /* Fim de .early-note */
+#success-msg {
+  /* Mensagem que aparece após o envio do formulário */
+  display: none; /* Escondida por padrão */
+  position: relative; /* Acima do brilho */
+  z-index: 1; /* Prioridade */
+  margin: 24px auto 0; /* Centraliza e dá espaço do form */
+  background: rgba(0, 255, 135, 0.08); /* Fundo verde transparente (sucesso) */
+  border: 1px solid rgba(0, 255, 135, 0.25); /* Borda verde suave */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 20px 28px; /* Espaçamento generoso */
+  max-width: 480px; /* Mesmo tamanho do formulário */
+} /* Fim de #success-msg */
+#success-msg p {
+  /* Título da mensagem de sucesso */
+  color: var(--green); /* Verde sucesso */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 24px; /* Tamanho de destaque */
+  letter-spacing: 0.08em; /* Espaçado */
+  margin-bottom: 4px; /* Espaço para a sub-mensagem */
+} /* Fim do parágrafo sucesso */
+#success-msg span {
+  /* Texto explicativo da mensagem de sucesso */
+  font-size: 13px; /* Pequeno */
+  color: var(--text2); /* Cor suave */
+} /* Fim do span sucesso */
+
+/* ==================================================== 
+   Início do bloco de Rodapé
+   FOOTER  Seção final com links e créditos 
+==================================================== */
+footer {
+  /* Estilo do container do rodapé */
+  padding: 40px clamp(20px, 6vw, 80px); /* Espaçamento responsivo */
+  border-top: 1px solid var(--border); /* Linha divisória superior */
+  display: flex; /* Alinhamento flexível */
+  align-items: center; /* Centro vertical */
+  flex-wrap: wrap; /* Quebra linha se necessário */
+  gap: 20px; /* Espaço entre os grupos de itens */
+  background: var(--bg2); /* Fundo secundário */
+} /* Fim de footer */
+.foot-logo {
+  /* Logo no rodapé */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de marca */
+  font-size: 22px; /* Tamanho discreto */
+  letter-spacing: 0.1em; /* Espaçado */
+} /* Fim de .foot-logo */
+.foot-logo span {
+  /* Destaque verde no logo do rodapé */
+  color: var(--green); /* Verde neon */
+} /* Fim do destaque no logo footer */
+.foot-space {
+  /* Espaçador flexível para empurrar os links para a direita */
+  flex: 1; /* Ocupa o máximo de espaço */
+} /* Fim de .foot-space */
+.foot-links {
+  /* Container para os links de navegação do rodapé */
+  display: flex; /* Itens em linha */
+  gap: 24px; /* Espaçamento entre links */
+  flex-wrap: wrap; /* Quebra linha em telas pequenas */
+} /* Fim de .foot-links */
+.foot-links a {
+  /* Cada link individual do rodapé */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  transition: color 0.2s; /* Transição suave de cor */
+} /* Fim de a no footer */
+.foot-links a:hover {
+  /* Efeito de hover nos links do rodapé */
+  color: var(--green); /* Fica verde neon */
+} /* Fim do hover nos links */
+.foot-copy {
+  /* Texto de direitos autorais e créditos finais */
+  width: 100%; /* Ocupa a largura total (para ficar em sua própria linha) */
+  text-align: center; /* Centralizado */
+  font-size: 11px; /* Texto mini */
+  color: var(--text3); /* Cor bem discreta */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-top: 20px; /* Espaço do conteúdo acima */
+  padding-top: 20px; /* Espaço interno superior */
+  border-top: 1px solid var(--border); /* Linha divisória interna */
+} /* Fim de .foot-copy */
+
+/* ==================================================== 
+   Início do bloco de Animações de Revelação
+   SCROLL REVEAL  Efeitos de surgimento ao rolar a página 
+==================================================== */
+.reveal {
+  /* Classe base para revelação vertical (sobe enquanto aparece) */
+  opacity: 0; /* Começa invisível */
+  transform: translateY(50px); /* Começa abaixo da posição final */
+  transition: /* Transição suave de entrada */
+    opacity 0.8s var(--ease),
+    /* Duração da transparência */ transform 0.8s var(--ease); /* Duração do movimento */
+} /* Fim de .reveal */
+.reveal.visible {
+  /* Estado quando o elemento entra na visão (ativado via JS) */
+  opacity: 1; /* Fica visível */
+  transform: translateY(0); /* Volta para a posição original */
+} /* Fim de .reveal.visible */
+.reveal-l {
+  /* Revelação vindo da esquerda */
+  opacity: 0; /* Invisível */
+  transform: translateX(-60px); /* Começa à esquerda */
+  transition: /* Transição suave */
+    opacity 0.8s var(--ease),
+    /* Transparência */ transform 0.8s var(--ease); /* Movimento horizontal */
+} /* Fim de .reveal-l */
+.reveal-l.visible {
+  /* Estado visível vindo da esquerda */
+  opacity: 1; /* Visível */
+  transform: translateX(0); /* Posição original */
+} /* Fim de .reveal-l.visible */
+.reveal-r {
+  /* Revelação vindo da direita */
+  opacity: 0; /* Invisível */
+  transform: translateX(60px); /* Começa à direita */
+  transition: /* Transição */
+    opacity 0.8s var(--ease),
+    /* Transparência */ transform 0.8s var(--ease); /* Movimento */
+} /* Fim de .reveal-r */
+.reveal-r.visible {
+  /* Estado visível vindo da direita */
+  opacity: 1; /* Visível */
+  transform: translateX(0); /* Posição original */
+} /* Fim de .reveal-r.visible */
+.d1 {
+  /* Delay nível 1 para animações em cascata */
+  transition-delay: 0.1s !important; /* 0.1 segundo de atraso */
+} /* Fim d1 */
+.d2 {
+  /* Delay nível 2 */
+  transition-delay: 0.2s !important; /* 0.2 segundos de atraso */
+} /* Fim d2 */
+.d3 {
+  /* Delay nível 3 */
+  transition-delay: 0.3s !important; /* 0.3 segundos de atraso */
+} /* Fim d3 */
+.d4 {
+  /* Delay nível 4 */
+  transition-delay: 0.4s !important; /* 0.4 segundos de atraso */
+} /* Fim d4 */
+
+/* ==================================================== 
+   Início do bloco de Responsividade
+   RESPONSIVE  Ajustes para diferentes tamanhos de tela 
+==================================================== */
+@media (max-width: 1024px) {
+  /* Telas médias (Tablets em paisagem, laptops pequenos) */
+  .sec-grid {
+    /* Grade das seções */
+    gap: 40px; /* Reduz o espaço entre colunas */
+  } /* Fim sec-grid tablet */
+  .slide-title {
+    /* Título do hero */
+    font-size: clamp(52px, 9vw, 100px); /* Reduz o tamanho máximo do título */
+  } /* Fim slide-title tablet */
+} /* Fim media 1024px */
+@media (max-width: 768px) {
+  /* Telas pequenas (Tablets em retrato, celulares grandes) */
+  .sec-grid, /* Grade normal */
+  .sec-grid.rev {
+    /* Grade invertida */
+    grid-template-columns: 1fr; /* Passa para apenas uma coluna (empilhado) */
+    direction: ltr; /* Garante leitura normal em todos */
+  } /* Fim grids empilhados */
+  .vis {
+    /* Bloco visual */
+    aspect-ratio: 4/3; /* Formato mais horizontal para mobile */
+  } /* Fim vis mobile */
+  .vis-icon {
+    /* Ícone flutuante */
+    font-size: 70px; /* Reduz o tamanho do ícone */
+  } /* Fim vis-icon mobile */
+  .sec-inner {
+    /* Container da seção */
+    padding: 60px 20px; /* Reduz espaçamentos internos */
+    min-height: auto; /* Não força mais 100vh se o conteúdo couber */
+  } /* Fim sec-inner mobile */
+  .feat-grid {
+    /* Grade de recursos */
+    grid-template-columns: 1fr 1fr; /* Mantém duas colunas se possível */
+  } /* Fim feat-grid mobile */
+  .carrow {
+    /* Setas do carrossel */
+    display: none; /* Esconde as setas (navegação via swipe/pontos) */
+  } /* Fim carrow mobile */
+  #nav {
+    /* Barra de navegação */
+    padding: 0 20px; /* Reduz padding lateral */
+  } /* Fim nav mobile */
+  .lang-pill {
+    /* Seletor de idioma */
+    display: none; /* Esconde o seletor complexo no mobile (prioriza espaço) */
+  } /* Fim lang-pill mobile */
+  #hero {
+    /* Seção Hero */
+    height: 100svh; /* Usa altura dinâmica de visualização para mobile (evita barra de endereço) */
+  } /* Fim hero mobile */
+  .c-slide {
+    /* Cada slide */
+    padding: calc(var(--nav) + 30px) 20px 60px; /* Ajusta paddings */
+  } /* Fim c-slide mobile */
+  .slide-title {
+    /* Título do slide */
+    font-size: clamp(52px, 14vw, 80px); /* Título menor e mais adaptável */
+  } /* Fim slide-title mobile */
+  .slide-sub {
+    /* Subtítulo do slide */
+    font-size: 15px; /* Texto menor */
+  } /* Fim slide-sub mobile */
+  .early-form {
+    /* Formulário de captura */
+    flex-direction: column; /* Empilha campo e botão */
+    align-items: stretch; /* Estica para ocupar a largura total */
+  } /* Fim early-form mobile */
+  .early-form input {
+    /* Campo de email */
+    min-width: unset; /* Remove restrição de largura */
+  } /* Fim input early mobile */
+  footer {
+    /* Rodapé */
+    flex-direction: column; /* Empilha itens do rodapé */
+    align-items: flex-start; /* Alinha tudo à esquerda */
+  } /* Fim footer mobile */
+  .foot-space {
+    /* Espaçador do rodapé */
+    display: none; /* Remove o espaço flexível */
+  } /* Fim foot-space mobile */
+} /* Fim media 768px */
+@media (max-width: 480px) {
+  /* Celulares muito pequenos */
+  .feat-grid {
+    /* Grade de recursos */
+    grid-template-columns: 1fr; /* Apenas uma coluna */
+  } /* Fim feat-grid small mobile */
+  .slide-eye {
+    /* Badge superior do slide */
+    font-size: 9px; /* Texto mini */
+    padding: 5px 12px; /* Mais compacto */
+  } /* Fim slide-eye small mobile */
+} /* Fim media 480px */
+
+/* ==================================================== 
+   Início do bloco de Abas do Modal
+   MODAL TABS  Sistema de alternância entre Login e Cadastro 
+==================================================== */
+.modal-tabs {
+  /* Container das abas */
+  display: flex; /* Abas lado a lado */
+  gap: 4px; /* Espaço entre abas */
+  background: var(--bg3); /* Fundo neutro escuro */
+  border-radius: 12px; /* Cantos arredondados */
+  padding: 4px; /* Espaçamento interno */
+  margin-bottom: 24px; /* Distância do formulário */
+} /* Fim de .modal-tabs */
+.modal-tab {
+  /* Cada botão de aba (Login / Criar Conta) */
+  flex: 1; /* Ocupam o mesmo espaço */
+  padding: 8px; /* Altura confortável */
+  border-radius: 8px; /* Cantos internos */
+  font-size: 13px; /* Texto legível */
+  font-weight: 600; /* Negrito */
+  color: var(--text2); /* Cor inativa suave */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.25s; /* Transição de cores */
+  background: none; /* Sem fundo por padrão */
+  border: none; /* Sem borda por padrão */
+  font-family: "DM Sans", sans-serif; /* Fonte do projeto */
+} /* Fim de .modal-tab */
+.modal-tab.active {
+  /* Estilo da aba selecionada */
+  background: var(--surf); /* Fundo de superfície claro */
+  color: var(--text); /* Texto em destaque */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Sombra para parecer elevado */
+} /* Fim da aba ativa */
+.modal-tab-content {
+  /* Container do conteúdo de cada aba */
+  display: none; /* Escondido por padrão */
+} /* Fim de .modal-tab-content */
+.modal-tab-content.active {
+  /* Mostra o conteúdo da aba selecionada */
+  display: block; /* Visível */
+} /* Fim do conteúdo ativo */
+
+/* ALERT /* Mensagens de erro ou sucesso dentro do modal */
+*/ .modal-alert {
+  /* Classe base para alertas */
+  display: none; /* Escondido por padrão */
+  padding: 10px 14px; /* Espaçamento interno */
+  border-radius: 10px; /* Cantos suaves */
+  font-size: 13px; /* Texto pequeno */
+  margin-bottom: 16px; /* Espaço inferior */
+  line-height: 1.5; /* Espaçamento de linha */
+} /* Fim de .modal-alert */
+.modal-alert.error {
+  /* Alerta de erro (ex: Senha incorreta) */
+  display: block; /* Visível */
+  background: rgba(255, 59, 92, 0.1); /* Fundo avermelhado transparente */
+  border: 1px solid rgba(255, 59, 92, 0.3); /* Borda vermelha suave */
+  color: var(--red); /* Texto vermelho */
+} /* Fim do alerta de erro */
+.modal-alert.success {
+  /* Alerta de sucesso (ex: Email enviado) */
+  display: block; /* Visível */
+  background: rgba(0, 255, 135, 0.08); /* Fundo esverdeado transparente */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde suave */
+  color: var(--green); /* Texto verde */
+} /* Fim do alerta de sucesso */
+
+/* GOOGLE BUTTON /* Botão de login social */
+*/ .btn-google {
+  /* Estilo do botão do Google */
+  width: 100%; /* Largura total */
+  padding: 13px; /* Altura padrão */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 10px; /* Cantos arredondados */
+  color: var(--text); /* Texto claro */
+  font-family: "DM Sans", sans-serif; /* Fonte técnica */
+  font-size: 14px; /* Tamanho médio */
+  font-weight: 600; /* Negrito */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.25s; /* Transição suave */
+  display: flex; /* Alinha logo e texto */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  gap: 10px; /* Espaço entre ícone e texto */
+} /* Fim de .btn-google */
+.btn-google:hover {
+  /* Efeito de hover no botão Google */
+  border-color: rgba(66, 133, 244, 0.5); /* Borda fica levemente azulada */
+  background: rgba(66, 133, 244, 0.05); /* Fundo levemente azulado */
+} /* Fim de .btn-google:hover */
+
+/* MODAL LINK /* Links de suporte dentro do modal (ex: Esqueci minha senha) */
+*/ .modal-link {
+  /* Estilo de link de texto */
+  color: var(--green); /* Verde neon */
+  cursor: pointer; /* Mãozinha */
+  font-size: 13px; /* Texto pequeno */
+  font-weight: 600; /* Negrito */
+  transition: opacity 0.2s; /* Transição suave */
+} /* Fim de .modal-link */
+.modal-link:hover {
+  /* Efeito de hover no link do modal */
+  opacity: 0.7; /* Fica levemente transparente */
+} /* Fim de .modal-link:hover */
+
+/* SPINNER /* Indicador de carregamento em botões */
+*/ .btn-spinner {
+  /* Ícone que gira */
+  animation: spin 0.8s linear infinite; /* Animação de rotação contínua */
+  display: inline-block; /* Permite rotação correta */
+} /* Fim de .btn-spinner */
+@keyframes spin {
+  /* Definição da animação de giro */
+  to {
+    /* Estado final */
+    transform: rotate(360deg); /* Dá uma volta completa */
+  } /* Fim do ciclo */
+} /* Fim de @keyframes spin */
+
+/* USER MENU DROPDOWN /* Menu de perfil do usuário logado */
+*/ .user-menu {
+  /* Container do menu suspenso */
+  position: absolute; /* Posicionado em relação à navbar */
+  top: calc(var(--nav) + 8px); /* Logo abaixo da navbar */
+  right: clamp(20px, 5vw, 60px); /* Alinhado com o avatar na direita */
+  background: var(--bg2); /* Fundo secundário escuro */
+  border: 1px solid var(--border); /* Borda elegante */
+  border-radius: 14px; /* Cantos arredondados */
+  padding: 8px; /* Espaçamento interno */
+  min-width: 200px; /* Largura mínima para o conteúdo */
+  z-index: 150; /* Acima de quase tudo */
+  opacity: 0; /* Invisível por padrão */
+  pointer-events: none; /* Ignora cliques */
+  transform: translateY(-8px); /* Começa um pouco acima */
+  transition: all 0.25s var(--ease); /* Transição suave de aparecimento */
+} /* Fim de .user-menu */
+.user-menu.open {
+  /* Estado aberto do menu do usuário */
+  opacity: 1; /* Visível */
+  pointer-events: all; /* Ativa cliques */
+  transform: translateY(0); /* Posição final */
+} /* Fim de .user-menu.open */
+.user-menu-header {
+  /* Cabeçalho do menu (Nome e Email) */
+  padding: 10px 12px 14px; /* Espaçamento interno */
+  border-bottom: 1px solid var(--border); /* Divisória base */
+  margin-bottom: 6px; /* Espaço para os itens do menu */
+} /* Fim de .user-menu-header */
+.user-menu-name {
+  /* Nome do usuário logado */
+  font-size: 14px; /* Texto legível */
+  font-weight: 600; /* Negrito */
+  margin-bottom: 2px; /* Espaço para o email */
+} /* Fim de .user-menu-name */
+.user-menu-email {
+  /* Email do usuário logado */
+  font-size: 12px; /* Texto menor */
+  color: var(--text2); /* Cor de suporte */
+} /* Fim de .user-menu-email */
+.user-menu-item {
+  /* Cada item clicável do menu (ex: Dashboard, Sair) */
+  display: flex; /* Ícone e texto alinhados */
+  align-items: center; /* Centro vertical */
+  gap: 10px; /* Espaço entre ícone e texto */
+  padding: 10px 12px; /* Área de clique confortável */
+  border-radius: 8px; /* Cantos internos */
+  font-size: 13px; /* Texto padrão do menu */
+  color: var(--text2); /* Cor de suporte */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição rápida */
+  text-decoration: none; /* Remove sublinhado de links */
+} /* Fim de .user-menu-item */
+.user-menu-item:hover {
+  /* Efeito de hover nos itens do menu */
+  background: var(--bg3); /* Fundo destaca */
+  color: var(--text); /* Texto clareia */
+} /* Fim de .user-menu-item:hover */
+.user-menu-item.danger {
+  /* Item de ação perigosa ou negativa (ex: Sair) */
+  color: var(--red); /* Texto vermelho */
+} /* Fim do item danger */
+.user-menu-item.danger:hover {
+  /* Hover no item perigoso */
+  background: rgba(255, 59, 92, 0.08); /* Fundo avermelhado sutil */
+} /* Fim do hover danger */
+.user-menu-icon {
+  /* Ícone (emoji ou font-icon) do item do menu */
+  font-size: 16px; /* Tamanho visual */
+  width: 20px; /* Largura fixa para alinhamento vertical perfeito */
+  text-align: center; /* Centraliza o ícone na sua largura */
+} /* Fim de .user-menu-icon */
+
+/* USER MENU — posicionado pelo body para evitar problemas de overflow */
+#userMenu {
+  /* Identificador único do menu (mesmos estilos do acima) */
+  position: fixed; /* Fixa na tela para evitar cortes por overflow de containers */
+  top: calc(var(--nav) + 8px); /* Mesma posição do topo */
+  right: clamp(20px, 5vw, 60px); /* Mesma posição da direita */
+} /* Fim de #userMenu */
