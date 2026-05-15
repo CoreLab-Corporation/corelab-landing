@@ -1,43 +1,49 @@
-/* ==================================================== // Início do bloco de cabeçalho
-   FIREBASE CONFIG — CoreLab // Título da configuração do Firebase
-   Substitua os valores pelas suas credenciais reais // Aviso para substituição de credenciais
-==================================================== */ // Fim do bloco de cabeçalho
+/* ====================================================
+   FIREBASE CONFIG — CoreLab
+   Credenciais do projeto corelab-app-ecfd5
+==================================================== */
 
-// Importa a função initializeApp do SDK do Firebase App
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-// Início da importação de serviços de autenticação
 import {
-  getAuth, // Função para obter a instância de autenticação
-  GoogleAuthProvider, // Classe para provedor de autenticação do Google
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"; // URL do SDK de autenticação
-// Importa a função getFirestore do SDK do Firestore
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  getAuth,
+  GoogleAuthProvider,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import {
+  getFirestore,
+  connectFirestoreEmulator,
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ⚠️ SUBSTITUA PELOS SEUS DADOS DO FIREBASE CONSOLE // Comentário de alerta sobre os dados
 const firebaseConfig = {
-  // Definição do objeto de configuração do Firebase
-  apiKey: "AIzaSyBVquVlMKbkem815fdDUPNvj9Z3TitUxIc", // Chave de API do projeto
-  authDomain: "corelab-app-ecfd5.firebaseapp.com", // Domínio de autenticação
-  projectId: "corelab-app-ecfd5", // ID do projeto no Firebase
-  storageBucket: "corelab-app-ecfd5.firebasestorage.app", // Bucket de armazenamento de arquivos
-  messagingSenderId: "270988545375", // ID do remetente de mensagens
-  appId: "1:270988545375:web:700ebf60dff3506740baea", // ID único do aplicativo web
-  measurementId: "G-GV4NR8NZM5", // ID de medição para Analytics
-}; // Fim do objeto de configuração
+  apiKey: "AIzaSyBVquVlMKbkem815fdDUPNvj9Z3TitUxIc",
+  authDomain: "corelab-app-ecfd5.firebaseapp.com",
+  projectId: "corelab-app-ecfd5",
+  storageBucket: "corelab-app-ecfd5.firebasestorage.app",
+  messagingSenderId: "270988545375",
+  appId: "1:270988545375:web:700ebf60dff3506740baea",
+  measurementId: "G-GV4NR8NZM5",
+};
 
-// Inicializa o Firebase com as configurações fornecidas
-const app = initializeApp(firebaseConfig);
+// Inicializa o app com verificação de instância duplicada
+let app;
+try {
+  app = initializeApp(firebaseConfig);
+} catch (err) {
+  // Se o app já foi inicializado (erro comum em páginas que re-importam), recupera
+  if (err.code === "app/duplicate-app") {
+    const { getApp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
+    app = getApp();
+  } else {
+    throw err;
+  }
+}
 
-// Inicializa os serviços do Firebase
-const auth = getAuth(app); // Inicializa o serviço de Autenticação
-const db = getFirestore(app); // Inicializa o serviço de Banco de Dados Firestore
-const googleProvider = new GoogleAuthProvider(); // Cria uma nova instância do provedor Google
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Configurações do Google Provider para autenticação
+// Configuração do provedor Google
+const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
-  // Define parâmetros customizados para o login
-  prompt: "select_account", // Força a seleção de conta ao fazer login
-}); // Fim da configuração de parâmetros
+  prompt: "select_account",
+});
 
-// Exporta as instâncias configuradas para uso em outros arquivos
 export { auth, db, googleProvider };
