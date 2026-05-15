@@ -1,561 +1,145 @@
 <!doctype html>
+<!-- Comentário: Declaração do tipo de documento -->
 <html lang="pt-BR" data-theme="dark">
+  <!-- Comentário: Início do HTML com idioma e tema padrão escuro -->
   <head>
+    <!-- Comentário: Cabeçalho do documento -->
     <meta charset="UTF-8" />
+    <!-- Comentário: Codificação de caracteres -->
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>CoreLab — IA Personalizada</title>
+    <!-- Comentário: Responsividade -->
+    <title>CoreLab — Coach IA</title>
+    <!-- Comentário: Título da página -->
     <link
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <style>
-      :root {
-        --green: #00ff87;
-        --green2: #00cc6a;
-        --red: #ff3b5c;
-        --bg: #080808;
-        --bg2: #0f0f0f;
-        --bg3: #161616;
-        --surf: #1a1a1a;
-        --border: rgba(255, 255, 255, 0.07);
-        --text: #f0f0f0;
-        --text2: #888;
-        --text3: #444;
-      }
-      [data-theme="light"] {
-        --bg: #f0f0ec;
-        --bg2: #e8e8e4;
-        --bg3: #dcdcd8;
-        --surf: #fff;
-        --border: rgba(0, 0, 0, 0.08);
-        --text: #0a0a0a;
-        --text2: #555;
-        --text3: #aaa;
-      }
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        font-family: "DM Sans", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      ::-webkit-scrollbar {
-        width: 4px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--green);
-        border-radius: 2px;
-      }
-      button {
-        cursor: pointer;
-        border: none;
-        background: none;
-        font-family: inherit;
-      }
-
-      /* TOPBAR */
-      .topbar {
-        flex-shrink: 0;
-        height: 64px;
-        background: rgba(8, 8, 8, 0.95);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--border);
-        padding: 0 24px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-      [data-theme="light"] .topbar {
-        background: rgba(240, 240, 236, 0.95);
-      }
-      .topbar-logo {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 22px;
-        letter-spacing: 0.1em;
-      }
-      .topbar-logo span {
-        color: var(--green);
-      }
-      .ai-badge {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 5px 14px;
-        background: rgba(0, 255, 135, 0.08);
-        border: 1px solid rgba(0, 255, 135, 0.2);
-        border-radius: 20px;
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        letter-spacing: 0.15em;
-        color: var(--green);
-      }
-      .ai-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--green);
-        animation: pulse 2s ease infinite;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.4;
-        }
-      }
-      .topbar-space {
-        flex: 1;
-      }
-      .topbar-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 30px;
-        font-size: 13px;
-        color: var(--text2);
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.25s;
-      }
-      .topbar-btn:hover {
-        border-color: var(--green);
-        color: var(--green);
-      }
-      .theme-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 15px;
-        transition: all 0.25s;
-      }
-      .theme-btn:hover {
-        border-color: var(--green);
-      }
-
-      /* LAYOUT */
-      .chat-wrap {
-        flex: 1;
-        display: grid;
-        grid-template-columns: 260px 1fr;
-        overflow: hidden;
-      }
-
-      /* SIDEBAR */
-      .chat-sidebar {
-        background: var(--bg2);
-        border-right: 1px solid var(--border);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-      .sidebar-head {
-        padding: 20px;
-        border-bottom: 1px solid var(--border);
-        flex-shrink: 0;
-      }
-      .sidebar-head-title {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 22px;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
-      }
-      .sidebar-head-sub {
-        font-size: 12px;
-        color: var(--text2);
-      }
-
-      .suggestions {
-        flex: 1;
-        overflow-y: auto;
-        padding: 12px;
-      }
-      .suggestions-label {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        color: var(--text3);
-        padding: 8px 8px 4px;
-        margin-bottom: 4px;
-      }
-      .suggestion {
-        padding: 10px 12px;
-        border-radius: 10px;
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        font-size: 13px;
-        color: var(--text2);
-        cursor: pointer;
-        margin-bottom: 6px;
-        transition: all 0.2s;
-        line-height: 1.4;
-      }
-      .suggestion:hover {
-        border-color: rgba(0, 255, 135, 0.3);
-        color: var(--text);
-        background: rgba(0, 255, 135, 0.04);
-      }
-
-      .profile-section {
-        padding: 16px;
-        border-top: 1px solid var(--border);
-        flex-shrink: 0;
-      }
-      .profile-label {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        color: var(--text3);
-        margin-bottom: 10px;
-      }
-      .profile-field {
-        margin-bottom: 8px;
-      }
-      .profile-field label {
-        font-size: 11px;
-        color: var(--text2);
-        display: block;
-        margin-bottom: 3px;
-      }
-      .profile-field select {
-        width: 100%;
-        padding: 7px 10px;
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        color: var(--text);
-        font-family: "DM Sans", sans-serif;
-        font-size: 13px;
-        outline: none;
-        cursor: pointer;
-        transition: border-color 0.2s;
-      }
-      .profile-field select:focus {
-        border-color: var(--green);
-      }
-
-      /* CHAT MAIN */
-      .chat-main {
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-      }
-
-      .messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-      }
-      .messages-empty {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 16px;
-      }
-      .empty-icon {
-        font-size: 64px;
-        filter: grayscale(0.3);
-        animation: float 3s ease-in-out infinite;
-      }
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-      .empty-title {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 32px;
-        letter-spacing: 0.05em;
-      }
-      .empty-sub {
-        font-size: 14px;
-        color: var(--text2);
-        max-width: 320px;
-        line-height: 1.6;
-      }
-
-      /* MESSAGES */
-      .msg {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 20px;
-        animation: msgIn 0.3s ease;
-      }
-      @keyframes msgIn {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .msg.user {
-        flex-direction: row-reverse;
-      }
-      .msg-av {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-      }
-      .msg-av.ai {
-        background: linear-gradient(135deg, var(--green), #00aa55);
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 14px;
-        color: #000;
-      }
-      .msg-av.user {
-        background: var(--surf);
-        border: 1px solid var(--border);
-      }
-      .msg-bubble {
-        max-width: 72%;
-        padding: 14px 18px;
-        border-radius: 18px;
-        font-size: 15px;
-        line-height: 1.65;
-        font-weight: 300;
-      }
-      .msg-bubble.ai {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-bottom-left-radius: 6px;
-      }
-      .msg-bubble.user {
-        background: var(--green);
-        color: #000;
-        font-weight: 400;
-        border-bottom-right-radius: 6px;
-      }
-      .msg-bubble strong {
-        font-weight: 600;
-      }
-      .msg-bubble ul {
-        margin: 8px 0 8px 16px;
-      }
-      .msg-bubble li {
-        margin-bottom: 4px;
-      }
-      .msg-time {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        color: var(--text3);
-        margin-top: 6px;
-        padding: 0 4px;
-      }
-      .msg.user .msg-time {
-        text-align: right;
-      }
-
-      /* TYPING */
-      .typing {
-        display: flex;
-        gap: 5px;
-        padding: 14px 18px;
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        border-bottom-left-radius: 6px;
-        width: fit-content;
-      }
-      .typing span {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--text3);
-        animation: typing 1.4s ease infinite;
-      }
-      .typing span:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .typing span:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-      @keyframes typing {
-        0%,
-        60%,
-        100% {
-          transform: translateY(0);
-        }
-        30% {
-          transform: translateY(-8px);
-          background: var(--green);
-        }
-      }
-
-      /* INPUT */
-      .chat-input-area {
-        flex-shrink: 0;
-        padding: 16px 24px;
-        border-top: 1px solid var(--border);
-        background: var(--bg2);
-      }
-      .input-row {
-        display: flex;
-        gap: 10px;
-        align-items: flex-end;
-      }
-      .input-wrap {
-        flex: 1;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        display: flex;
-        align-items: flex-end;
-        gap: 8px;
-        padding: 12px 16px;
-        transition: border-color 0.2s;
-      }
-      .input-wrap:focus-within {
-        border-color: var(--green);
-      }
-      .chat-textarea {
-        flex: 1;
-        background: transparent;
-        border: none;
-        outline: none;
-        color: var(--text);
-        font-family: "DM Sans", sans-serif;
-        font-size: 15px;
-        line-height: 1.5;
-        resize: none;
-        min-height: 24px;
-        max-height: 120px;
-      }
-      .chat-textarea::placeholder {
-        color: var(--text3);
-      }
-      .send-btn {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: var(--green);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.25s;
-        font-size: 18px;
-        flex-shrink: 0;
-        color: #000;
-        font-weight: 700;
-      }
-      .send-btn:hover {
-        background: var(--green2);
-        transform: scale(1.05);
-      }
-      .send-btn:disabled {
-        background: var(--border);
-        cursor: not-allowed;
-        transform: none;
-        color: var(--text3);
-      }
-      .input-note {
-        font-size: 11px;
-        color: var(--text3);
-        text-align: center;
-        margin-top: 8px;
-        font-family: "Space Mono", monospace;
-        letter-spacing: 0.05em;
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 700px) {
-        .chat-wrap {
-          grid-template-columns: 1fr;
-        }
-        .chat-sidebar {
-          display: none;
-        }
-      }
-    </style>
+    <!-- Comentário: Fontes externas (Google Fonts) -->
+    <link rel="stylesheet" href="css/global.css" />
+    <!-- Comentário: Estilos globais -->
+    <link rel="stylesheet" href="css/chatbot.css" />
+    <!-- Comentário: Estilos específicos do chatbot -->
   </head>
+  <!-- Comentário: Fim do head -->
   <body>
+    <!-- Comentário: Início do corpo da página -->
     <div class="topbar">
+      <!-- Comentário: Barra superior -->
       <div class="topbar-logo">CORE<span>LAB</span></div>
+      <!-- Comentário: Logo -->
       <div class="ai-badge">
+        <!-- Comentário: Badge indicativo de IA -->
         <div class="ai-dot"></div>
+        <!-- Comentário: Ponto de status -->
         IA ATIVA
+        <!-- Comentário: Texto de status -->
       </div>
       <div class="topbar-space"></div>
+      <!-- Comentário: Espaçador flexível -->
+      <button class="topbar-btn danger" id="clearBtn">
+        <!-- Comentário: Botão de limpar histórico -->
+        🗑️ Limpar histórico
+      </button>
       <button class="theme-btn" id="themeBtn">🌙</button>
+      <!-- Comentário: Alternador de tema -->
       <a href="index.html" class="topbar-btn">← Voltar</a>
+      <!-- Comentário: Link de retorno -->
     </div>
+    <!-- Comentário: Fim da topbar -->
 
     <div class="chat-wrap">
-      <!-- SIDEBAR -->
+      <!-- Comentário: Container principal do chat -->
       <div class="chat-sidebar">
+        <!-- Comentário: Barra lateral de sugestões e perfil -->
         <div class="sidebar-head">
+          <!-- Comentário: Cabeçalho da sidebar -->
           <div class="sidebar-head-title">COACH IA</div>
+          <!-- Comentário: Título -->
           <div class="sidebar-head-sub">Seu personal trainer digital 24/7</div>
+          <!-- Comentário: Subtítulo -->
         </div>
         <div class="suggestions">
+          <!-- Comentário: Seção de sugestões de perguntas -->
           <div class="suggestions-label">Sugestões rápidas</div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <!-- Rótulo -->
+          <div
+            class="suggestion"
+            data-question="Monte um treino de hipertrofia para iniciante, 4 dias por semana"
+          >
+            <!-- Item de sugestão 1 -->
             💪 Monte um treino de hipertrofia para iniciante, 4 dias por semana
           </div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <div
+            class="suggestion"
+            data-question="Crie um protocolo HIIT de 20 minutos para queima de gordura"
+          >
+            <!-- Item de sugestão 2 -->
             🔥 Crie um protocolo HIIT de 20 minutos para queima de gordura
           </div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <div
+            class="suggestion"
+            data-question="Quais suplementos ajudam na recuperação muscular?"
+          >
+            <!-- Item de sugestão 3 -->
             😴 Quais suplementos ajudam na recuperação muscular?
           </div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <div
+            class="suggestion"
+            data-question="Como devo me alimentar antes e depois do treino?"
+          >
+            <!-- Item de sugestão 4 -->
             🍽️ Como devo me alimentar antes e depois do treino?
           </div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <div
+            class="suggestion"
+            data-question="Como melhorar minha resistência cardiovascular em 8 semanas?"
+          >
+            <!-- Item de sugestão 5 -->
             🏃 Como melhorar minha resistência cardiovascular em 8 semanas?
           </div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <div
+            class="suggestion"
+            data-question="Técnicas de mindfulness para melhorar a performance no treino"
+          >
+            <!-- Item de sugestão 6 -->
             🧠 Técnicas de mindfulness para melhorar a performance no treino
           </div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <div
+            class="suggestion"
+            data-question="Como fazer recomposição corporal — ganhar músculo e perder gordura ao mesmo tempo?"
+          >
+            <!-- Item de sugestão 7 -->
             ⚖️ Como fazer recomposição corporal — ganhar músculo e perder
-            gordura ao mesmo tempo?
+            gordura?
           </div>
-          <div class="suggestion" onclick="askQuick(this)">
+          <div
+            class="suggestion"
+            data-question="Sequência de mobilidade para antes do treino de pernas"
+          >
+            <!-- Item de sugestão 8 -->
             🤸 Sequência de mobilidade para antes do treino de pernas
+          </div>
+          <div
+            class="suggestion"
+            data-question="Qual é a melhor estratégia para aumentar o 1RM no supino?"
+          >
+            <!-- Item de sugestão 9 -->
+            🏋️ Qual é a melhor estratégia para aumentar o 1RM no supino?
+          </div>
+          <div
+            class="suggestion"
+            data-question="Como montar uma dieta para ganho de massa muscular com 3000 calorias?"
+          >
+            <!-- Item de sugestão 10 -->
+            🥗 Como montar uma dieta para ganho de massa com 3000 calorias?
           </div>
         </div>
         <div class="profile-section">
+          <!-- Comentário: Seção de contexto do usuário -->
           <div class="profile-label">Seu perfil</div>
+          <!-- Rótulo -->
           <div class="profile-field">
+            <!-- Campo: Nível -->
             <label>Nível</label>
             <select id="profileLevel">
               <option>Iniciante</option>
@@ -564,15 +148,18 @@
             </select>
           </div>
           <div class="profile-field">
+            <!-- Campo: Objetivo -->
             <label>Objetivo</label>
             <select id="profileGoal">
               <option>Perda de gordura</option>
               <option selected>Hipertrofia</option>
               <option>Resistência</option>
+              <option>Força máxima</option>
               <option>Saúde geral</option>
             </select>
           </div>
           <div class="profile-field">
+            <!-- Campo: Disponibilidade -->
             <label>Dias disponíveis/semana</label>
             <select id="profileDays">
               <option>2-3 dias</option>
@@ -582,163 +169,153 @@
           </div>
         </div>
       </div>
+      <!-- Fim sidebar -->
 
-      <!-- CHAT -->
       <div class="chat-main">
+        <!-- Comentário: Área principal de mensagens -->
         <div class="messages" id="messages">
+          <!-- Container de balões de chat -->
           <div class="messages-empty" id="emptyState">
+            <!-- Estado inicial sem mensagens -->
             <div class="empty-icon">🤖</div>
             <div class="empty-title">Olá, eu sou o Coach IA</div>
             <div class="empty-sub">
               Seu personal trainer digital. Pergunte sobre treinos, nutrição,
-              recuperação, suplementação ou qualquer dúvida sobre fitness.
+              recuperação ou qualquer dúvida sobre fitness.
+            </div>
+            <div class="empty-chips">
+              <!-- Botões rápidos no estado vazio -->
+              <div class="empty-chip" data-question="Monte um treino para mim">
+                💪 Monte um treino
+              </div>
+              <div
+                class="empty-chip"
+                data-question="Dicas de nutrição para ganhar massa muscular"
+              >
+                🥗 Nutrição
+              </div>
+              <div
+                class="empty-chip"
+                data-question="Como melhorar minha recuperação pós-treino?"
+              >
+                😴 Recuperação
+              </div>
             </div>
           </div>
         </div>
+        <!-- Fim messages -->
         <div class="chat-input-area">
+          <!-- Comentário: Área de entrada de texto -->
           <div class="input-row">
+            <!-- Linha de entrada -->
             <div class="input-wrap">
+              <!-- Wrapper da textarea -->
               <textarea
                 class="chat-textarea"
                 id="chatInput"
                 placeholder="Pergunte sobre treino, nutrição, recuperação..."
                 rows="1"
               ></textarea>
+              <!-- Campo de texto expansível -->
             </div>
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-              ↑
-            </button>
+            <button class="send-btn" id="sendBtn">↑</button>
+            <!-- Botão de envio -->
           </div>
           <div class="input-note">
+            <!-- Nota de rodapé -->
             Coach IA usa inteligência artificial para respostas personalizadas •
             CoreLab 2026
           </div>
         </div>
       </div>
+      <!-- Fim chat-main -->
     </div>
+    <!-- Fim chat-wrap -->
 
     <script type="module">
-      import { onAuthChange, logout } from "./js/auth.js";
+      // Comentário: Lógica do Chatbot
+      import { onAuthChange } from "./js/auth.js"; // Importa monitor de login
       import {
+        getUserProfile,
         getChatHistory,
         saveChatMessage,
         clearChatHistory,
-        getUserProfile,
-      } from "./js/db.js";
+      } from "./js/db.js"; // Importa funções de banco de dados
 
-      /* ====================================================
-   AUTH GUARD
-==================================================== */
-      let currentUser = null;
+      let currentUser = null; // Usuário atual
+      let history = []; // Histórico local da conversa
+      let isLoading = false; // Controle de estado de carregamento
 
       onAuthChange(async (user) => {
-        currentUser = user;
+        // Monitor de autenticação
         if (!user) {
-          window.location.href = "index.html";
+          window.location.href = "index.html"; // Redireciona se não logado
           return;
         }
-
-        // Carrega perfil
-        const profile = await getUserProfile(user.uid);
+        currentUser = user;
+        const profile = await getUserProfile(user.uid); // Busca perfil
         if (profile) {
-          document.getElementById("profileLevel").value =
-            profile.level || "Intermediário";
-          document.getElementById("profileGoal").value =
-            profile.goal || "Hipertrofia";
-          document.getElementById("profileDays").value =
-            profile.daysPerWeek || "4 dias";
+          // Sincroniza campos da sidebar com o perfil real
+          const lvlEl = document.getElementById("profileLevel");
+          const goalEl = document.getElementById("profileGoal");
+          const daysEl = document.getElementById("profileDays");
+          if (profile.level && lvlEl) lvlEl.value = profile.level;
+          if (profile.goal && goalEl) goalEl.value = profile.goal;
+          if (profile.daysPerWeek && daysEl) daysEl.value = profile.daysPerWeek;
         }
-
-        // Carrega histórico do chat
-        await loadChatHistory(user.uid);
-
-        // Mostra saudação se histórico vazio
-        const msgs = document.getElementById("messages");
-        const hasMessages = msgs.querySelectorAll(".msg").length > 0;
-        if (!hasMessages) showGreeting(profile);
+        await loadHistory(user.uid); // Carrega mensagens anteriores
+        const hasMsgs =
+          document.getElementById("messages").querySelectorAll(".msg").length >
+          0;
+        if (!hasMsgs) showGreeting(profile); // Saudação inicial se vazio
       });
 
-      /* ====================================================
-   CARREGA HISTÓRICO DO CHAT
-==================================================== */
-      async function loadChatHistory(userId) {
-        const savedHistory = await getChatHistory(userId, 30);
-        if (savedHistory.length === 0) return;
-
-        // Remove empty state
-        const empty = document.getElementById("emptyState");
-        if (empty) empty.remove();
-
-        // Restaura mensagens
-        savedHistory.forEach((msg) => {
-          history.push({
-            role: msg.role === "ai" ? "assistant" : msg.role,
-            content: msg.content,
-          });
+      async function loadHistory(userId) {
+        // Carrega histórico do Firestore
+        const saved = await getChatHistory(userId, 30);
+        if (!saved.length) return;
+        removeEmpty();
+        saved.forEach((msg) => {
+          const role = msg.role === "assistant" ? "assistant" : "user";
+          const display = msg.role === "assistant" ? "ai" : "user";
+          history.push({ role, content: msg.content });
           addMsg(
-            msg.role === "assistant" ? "ai" : "user",
-            msg.role === "assistant" ? formatAI(msg.content) : msg.content,
-            msg.role === "assistant",
+            display,
+            msg.role === "assistant"
+              ? formatAI(msg.content)
+              : escHtml(msg.content),
+            true,
           );
         });
       }
 
-      /* ====================================================
-   SAUDAÇÃO INICIAL
-==================================================== */
       function showGreeting(profile) {
+        // Gera mensagem de boas-vindas
+        const name = profile?.name?.split(" ")[0] || "atleta";
         const level = profile?.level || "Intermediário";
-        const goal = profile?.goal || "hipertrofia";
+        const goal = (profile?.goal || "hipertrofia").toLowerCase();
         setTimeout(() => {
           addMsg(
             "ai",
             formatAI(
-              `👋 Olá **${profile?.name || "atleta"}**! ` +
-                `Sou o **Coach IA do CoreLab**, seu personal trainer digital 24/7.\n\n` +
-                `Baseado no seu perfil (**${level}**, foco em **${goal.toLowerCase()}**), ` +
-                `estou pronto para criar treinos personalizados, responder dúvidas ` +
-                `sobre nutrição e muito mais.\n\nO que posso ajudar hoje? 💪`,
+              `👋 Olá, **${name}**! Sou o **Coach IA do CoreLab**.\n\n` +
+                `Baseado no seu perfil (**${level}**, foco em **${goal}**), ` +
+                `estou pronto para criar treinos personalizados, responder dúvidas sobre ` +
+                `nutrição, recuperação, suplementação e muito mais.\n\n` +
+                `Use as sugestões ao lado ou escreva sua pergunta. O que posso fazer por você hoje? 💪`,
             ),
             true,
           );
-        }, 500);
+        }, 400);
       }
 
-      /* ====================================================
-   THEME
-==================================================== */
-      let dark = true;
-      document.getElementById("themeBtn").onclick = () => {
-        dark = !dark;
-        document.documentElement.setAttribute(
-          "data-theme",
-          dark ? "dark" : "light",
-        );
-        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
-      };
-
-      /* ====================================================
-   AUTO RESIZE TEXTAREA
-==================================================== */
-      const ta = document.getElementById("chatInput");
-      ta.addEventListener("input", () => {
-        ta.style.height = "auto";
-        ta.style.height = Math.min(ta.scrollHeight, 120) + "px";
-      });
-      ta.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
-        }
-      });
-
-      /* ====================================================
-   CHAT STATE
-==================================================== */
-      let history = [];
-      let isLoading = false;
+      function removeEmpty() {
+        // Remove o estado vazio da tela
+        document.getElementById("emptyState")?.remove();
+      }
 
       function getTime() {
+        // Retorna hora atual formatada
         return new Date().toLocaleTimeString("pt-BR", {
           hour: "2-digit",
           minute: "2-digit",
@@ -746,7 +323,8 @@
       }
 
       function escHtml(t) {
-        return t
+        // Escapa HTML para segurança
+        return String(t)
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")
@@ -754,36 +332,30 @@
       }
 
       function formatAI(text) {
+        // Converte markdown simples da IA em HTML
         return (
           "<p>" +
           text
             .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
             .replace(/\*(.*?)\*/g, "<em>$1</em>")
-            .replace(
-              /`(.*?)`/g,
-              '<code style="background:rgba(0,255,135,.1);' +
-                "padding:2px 6px;border-radius:4px;" +
-                'font-family:monospace;font-size:13px">$1</code>',
-            )
+            .replace(/`(.*?)`/g, "<code>$1</code>")
             .replace(/\n\n/g, '</p><p style="margin-top:10px">')
-            .replace(/\n- /g, "<br>• ") +
+            .replace(/\n- /g, "<br>• ")
+            .replace(/\n/g, "<br>") +
           "</p>"
         );
       }
 
       function addMsg(role, content, isHtml = false) {
-        const empty = document.getElementById("emptyState");
-        if (empty) empty.remove();
-
+        // Adiciona balão de mensagem ao DOM
+        removeEmpty();
         const msgs = document.getElementById("messages");
         const div = document.createElement("div");
         div.className = "msg " + role;
         div.innerHTML = `
     <div class="msg-av ${role}">${role === "ai" ? "CL" : "👤"}</div>
     <div>
-      <div class="msg-bubble ${role}">
-        ${isHtml ? content : escHtml(content)}
-      </div>
+      <div class="msg-bubble ${role}">${isHtml ? content : escHtml(content)}</div>
       <div class="msg-time">${getTime()}</div>
     </div>`;
         msgs.appendChild(div);
@@ -791,32 +363,25 @@
       }
 
       function showTyping() {
-        const empty = document.getElementById("emptyState");
-        if (empty) empty.remove();
+        // Mostra indicador de digitação
+        removeEmpty();
         const msgs = document.getElementById("messages");
         const d = document.createElement("div");
         d.className = "msg ai";
         d.id = "typingMsg";
-        d.innerHTML = `
-    <div class="msg-av ai">CL</div>
-    <div class="typing">
-      <span></span><span></span><span></span>
-    </div>`;
+        d.innerHTML = `<div class="msg-av ai">CL</div><div class="typing"><span></span><span></span><span></span></div>`;
         msgs.appendChild(d);
         msgs.scrollTop = msgs.scrollHeight;
       }
 
       function removeTyping() {
-        const t = document.getElementById("typingMsg");
-        if (t) t.remove();
+        // Remove indicador de digitação
+        document.getElementById("typingMsg")?.remove();
       }
 
-      /* ====================================================
-   SEND MESSAGE
-==================================================== */
       async function sendMessage(overrideText) {
+        // Envia mensagem para a API da Anthropic
         if (isLoading) return;
-
         const input = document.getElementById("chatInput");
         const text = overrideText || input.value.trim();
         if (!text) return;
@@ -831,30 +396,21 @@
           input.style.height = "auto";
         }
 
-        const userMsg = { role: "user", content: text };
-        history.push(userMsg);
-
-        // Salva mensagem do usuário no Firestore
-        if (currentUser) {
-          await saveChatMessage(currentUser.uid, {
-            role: "user",
-            content: text,
-          });
-        }
+        history.push({ role: "user", content: text });
+        if (currentUser)
+          saveChatMessage(currentUser.uid, { role: "user", content: text });
 
         isLoading = true;
         document.getElementById("sendBtn").disabled = true;
         showTyping();
 
-        const systemPrompt =
+        const systemPrompt = // Prompt de sistema para guiar a IA
           `Você é o Coach IA do CoreLab, personal trainer digital especializado ` +
           `em fitness, musculação, nutrição esportiva, recuperação e bem-estar.\n\n` +
-          `Perfil do usuário:\n` +
-          `- Nível: ${level}\n` +
-          `- Objetivo: ${goal}\n` +
-          `- Disponibilidade: ${days}\n\n` +
-          `Responda em português brasileiro, seja prático e baseado em evidências. ` +
-          `Máximo 350 palavras por resposta.`;
+          `Perfil do usuário:\n- Nível: ${level}\n- Objetivo: ${goal}\n- Disponibilidade: ${days}\n\n` +
+          `Responda sempre em português brasileiro de forma prática, motivadora e baseada em evidências. ` +
+          `Use **negrito** para destacar pontos importantes. Máximo 350 palavras por resposta. ` +
+          `Quando listar exercícios ou etapas, use marcadores com "- " no início de cada item.`;
 
         try {
           const response = await fetch(
@@ -873,86 +429,102 @@
 
           removeTyping();
 
-          if (!response.ok) throw new Error("Erro na API");
+          if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err.error?.message || `HTTP ${response.status}`);
+          }
 
           const data = await response.json();
           const aiText =
             data.content?.[0]?.text ||
-            "Desculpe, não consegui processar sua mensagem.";
+            "Desculpe, não consegui processar sua mensagem. Tente novamente.";
 
           history.push({ role: "assistant", content: aiText });
           addMsg("ai", formatAI(aiText), true);
 
-          // Salva resposta da IA no Firestore
-          if (currentUser) {
-            await saveChatMessage(currentUser.uid, {
+          if (currentUser)
+            saveChatMessage(currentUser.uid, {
               role: "assistant",
               content: aiText,
             });
-          }
         } catch (err) {
           removeTyping();
+          console.error("Coach IA erro:", err);
           addMsg(
             "ai",
             formatAI(
-              `⚠️ **Modo demonstração**\n\n` +
-                `Configure a API Key da Anthropic para ativar o Coach IA completo.\n\n` +
-                `Dica para **${text.substring(0, 40)}**: ` +
-                `Consistência supera perfeição — 80% de adesão por meses é melhor que ` +
-                `100% por duas semanas. 🚀`,
+              `⚠️ **Não foi possível conectar ao Coach IA.**\n\n` +
+                `Verifique sua conexão ou tente novamente em instantes.\n\n` +
+                `_Erro: ${err.message}_`,
             ),
             true,
           );
+          history.pop();
         }
 
         isLoading = false;
         document.getElementById("sendBtn").disabled = false;
+        document.getElementById("chatInput").focus();
       }
 
-      /* ====================================================
-   LIMPAR HISTÓRICO
-==================================================== */
-      async function clearHistory() {
+      document.getElementById("clearBtn").onclick = async () => {
+        // Handler: Limpar histórico
         if (!currentUser) return;
-        if (!confirm("Limpar todo o histórico de conversa?")) return;
-
+        if (!confirm("Limpar todo o histórico desta conversa?")) return;
         await clearChatHistory(currentUser.uid);
         history = [];
-
-        const msgs = document.getElementById("messages");
-        msgs.innerHTML = `
+        document.getElementById("messages").innerHTML = `
     <div class="messages-empty" id="emptyState">
       <div class="empty-icon">🤖</div>
       <div class="empty-title">Histórico limpo!</div>
-      <div class="empty-sub">Comece uma nova conversa.</div>
+      <div class="empty-sub">Comece uma nova conversa com o Coach IA.</div>
     </div>`;
-      }
-
-      /* ====================================================
-   QUICK SUGGESTIONS
-==================================================== */
-      window.askQuick = function (el) {
-        const text = el.textContent.trim().replace(/^[^\w]+/, "");
-        sendMessage(text);
       };
 
-      /* ====================================================
-   EXPÕE sendMessage globalmente
-==================================================== */
-      window.sendMessage = sendMessage;
+      document.querySelectorAll(".suggestion").forEach((el) => {
+        // Handler: Sugestões sidebar
+        el.addEventListener("click", () => {
+          const q = el.dataset.question;
+          if (q) sendMessage(q);
+        });
+      });
 
-      /* ====================================================
-   BOTÃO LIMPAR HISTÓRICO
-==================================================== */
-      const clearBtn = document.createElement("button");
-      clearBtn.textContent = "🗑️ Limpar histórico";
-      clearBtn.className = "topbar-btn";
-      clearBtn.style.cssText =
-        "color:var(--red);border-color:rgba(255,59,92,.3);font-size:12px";
-      clearBtn.onclick = clearHistory;
+      document.querySelectorAll(".empty-chip").forEach((el) => {
+        // Handler: Sugestões empty state
+        el.addEventListener("click", () => {
+          const q = el.dataset.question;
+          if (q) sendMessage(q);
+        });
+      });
+
+      const ta = document.getElementById("chatInput"); // Handler: Auto-resize textarea
+      ta.addEventListener("input", () => {
+        ta.style.height = "auto";
+        ta.style.height = Math.min(ta.scrollHeight, 120) + "px";
+      });
+      ta.addEventListener("keydown", (e) => {
+        // Handler: Enviar com Enter
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
       document
-        .querySelector(".topbar-space")
-        .insertAdjacentElement("afterend", clearBtn);
+        .getElementById("sendBtn")
+        .addEventListener("click", () => sendMessage()); // Handler: Enviar com Botão
+
+      let dark = true; // Controle de tema
+      document.getElementById("themeBtn").onclick = () => {
+        dark = !dark;
+        document.documentElement.setAttribute(
+          "data-theme",
+          dark ? "dark" : "light",
+        );
+        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
+      };
     </script>
+    <!-- Fim do script -->
   </body>
+  <!-- Fim body -->
 </html>
+<!-- Fim html -->

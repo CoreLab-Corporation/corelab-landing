@@ -1,208 +1,322 @@
 <!doctype html>
+<!-- Comentário: Declaração do tipo de documento HTML5 -->
 <html lang="pt-BR" data-theme="dark">
+  <!-- Elemento raiz com idioma padrão e tema escuro inicial -->
   <head>
+    <!-- Cabeçalho do documento: metadados e recursos externos -->
     <meta charset="UTF-8" />
+    <!-- Codificação de caracteres universal -->
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!-- Configuração de responsividade para dispositivos móveis -->
     <meta
       name="description"
       content="CoreLab — O aplicativo que transforma seu corpo e mente."
     />
+    <!-- Descrição da página para motores de busca (SEO) -->
     <title>CoreLab — Forge Your Core</title>
+    <!-- Título da aba do navegador -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Otimização de conexão para Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Otimização de conexão para fontes estáticas -->
     <link
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <!-- Importação das famílias de fontes do projeto -->
+    <link rel="stylesheet" href="css/global.css" />
+    <!-- Estilos base e variáveis globais -->
+    <link rel="stylesheet" href="css/index.css" />
+    <!-- Estilos específicos da Landing Page -->
   </head>
+  <!-- Fim do head -->
   <body>
+    <!-- Início do corpo da página -->
     <!-- SPLASH -->
+    <!-- Comentário: Tela de carregamento inicial (Splash Screen) -->
     <div id="splash">
+      <!-- Container principal do splash -->
       <div class="splash-logo">CORE<span>LAB</span></div>
+      <!-- Logo exibida durante o carregamento -->
       <div class="splash-bar"><div class="splash-fill"></div></div>
+      <!-- Barra de progresso visual -->
       <div class="splash-tag" id="stag">Inicializando...</div>
+      <!-- Texto de status do carregamento -->
     </div>
+    <!-- Fim do splash -->
 
     <!-- NAVBAR -->
+    <!-- Comentário: Barra de navegação superior fixa -->
     <nav id="nav">
+      <!-- Elemento de navegação -->
       <a href="#" class="nav-logo">CORE<span>LAB</span></a>
+      <!-- Logo clicável que retorna ao topo -->
       <div class="nav-space"></div>
+      <!-- Espaçador flexível para empurrar os controles para a direita -->
       <div class="nav-ctrl">
+        <!-- Container de controles da navbar (idioma, tema, login) -->
         <div class="lang-pill">
+          <!-- Seletor de idioma em formato de pílula -->
           <button class="lang-btn active" data-lang="pt">PT</button>
+          <!-- Botão para Português (ativo por padrão) -->
           <button class="lang-btn" data-lang="en">EN</button>
+          <!-- Botão para Inglês -->
           <button class="lang-btn" data-lang="es">ES</button>
+          <!-- Botão para Espanhol -->
         </div>
+        <!-- Fim lang-pill -->
         <button class="icon-btn" id="themeBtn">🌙</button>
+        <!-- Botão para alternar entre temas claro/escuro -->
         <button class="icon-btn" id="loginBtn">
+          <!-- Botão de perfil/login -->
           <svg
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             stroke-width="1.8"
           >
+            <!-- Ícone de usuário (SVG) -->
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <!-- Caminho do ícone: corpo -->
             <circle cx="12" cy="7" r="4" />
+            <!-- Caminho do ícone: cabeça -->
           </svg>
+          <!-- Fim do SVG -->
           <div class="avatar-inner" id="avatarEl"></div>
+          <!-- Área onde a foto do usuário ou iniciais aparecem após login -->
         </button>
+        <!-- Fim loginBtn -->
       </div>
+      <!-- Fim nav-ctrl -->
     </nav>
+    <!-- Fim do nav -->
 
     <!-- LOGIN MODAL -->
+    <!-- Comentário: Janela modal para login e cadastro de usuários -->
     <div class="overlay" id="loginOverlay">
+      <!-- Fundo escurecido que bloqueia a interação com a página -->
       <div class="modal">
+        <!-- Container central da janela modal -->
         <button class="modal-x" id="loginClose">✕</button>
+        <!-- Botão de fechar (X) -->
 
         <div class="modal-tabs">
+          <!-- Abas para alternar entre Login e Cadastro -->
           <button
             class="modal-tab active"
             data-tab="login"
             data-i18n="modal_tab_login"
           >
             Entrar
+            <!-- Texto da aba de login -->
           </button>
+          <!-- Fim aba login -->
           <button
             class="modal-tab"
             data-tab="register"
             data-i18n="modal_tab_register"
           >
             Cadastrar
+            <!-- Texto da aba de cadastro -->
           </button>
+          <!-- Fim aba cadastro -->
         </div>
+        <!-- Fim modal-tabs -->
 
         <div class="modal-alert" id="modalAlert"></div>
+        <!-- Área para exibir mensagens de erro ou sucesso -->
 
         <!-- TAB LOGIN -->
+        <!-- Comentário: Formulário de entrada para usuários existentes -->
         <div class="modal-tab-content active" id="tab-login">
+          <!-- Conteúdo da aba de login -->
           <div class="modal-tag" data-i18n="modal_login_tag">
             Acesso à conta
+            <!-- Rótulo de contexto -->
           </div>
+          <!-- Fim modal-tag -->
           <div class="modal-title" data-i18n-html="modal_login_title">
             BEM-VINDO<br />DE VOLTA
+            <!-- Título de boas-vindas com quebra de linha -->
           </div>
+          <!-- Fim modal-title -->
 
           <div class="field">
+            <!-- Campo de entrada: Email -->
             <label data-i18n="modal_label_email">Email</label>
+            <!-- Rótulo do campo -->
             <input
               type="email"
               id="loginEmail"
               data-i18n-placeholder="modal_ph_email"
               placeholder="seu@email.com"
             />
+            <!-- Entrada de email com suporte a i18n -->
           </div>
+          <!-- Fim field -->
           <div class="field">
+            <!-- Campo de entrada: Senha -->
             <label data-i18n="modal_label_pass">Senha</label>
+            <!-- Rótulo do campo -->
             <input
               type="password"
               id="loginPass"
               data-i18n-placeholder="modal_ph_pass"
               placeholder="••••••••"
             />
+            <!-- Entrada de senha (tipo password) -->
           </div>
+          <!-- Fim field -->
 
           <button class="btn-submit" id="loginSubmit">
+            <!-- Botão de envio do formulário de login -->
             <span id="loginBtnText" data-i18n="modal_btn_login">ENTRAR</span>
+            <!-- Texto do botão -->
             <span class="btn-spinner" id="loginSpinner" style="display: none"
               >⏳</span
             >
+            <!-- Indicador de carregamento (escondido por padrão) -->
           </button>
+          <!-- Fim btn-submit -->
 
           <div class="modal-div" data-i18n="modal_or">ou</div>
+          <!-- Divisor visual "ou" -->
 
           <button class="btn-google" id="googleLogin">
+            <!-- Botão de login social via Google -->
             <svg width="18" height="18" viewBox="0 0 24 24">
+              <!-- Ícone oficial do Google (SVG) -->
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
               />
+              <!-- Parte azul do logo -->
               <path
                 fill="#34A853"
                 d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
               />
+              <!-- Parte verde do logo -->
               <path
                 fill="#FBBC05"
                 d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
               />
+              <!-- Parte amarela do logo -->
               <path
                 fill="#EA4335"
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
+              <!-- Parte vermelha do logo -->
             </svg>
+            <!-- Fim do SVG -->
             <span data-i18n="modal_google_login">Continuar com Google</span>
+            <!-- Texto do botão social -->
           </button>
+          <!-- Fim btn-google -->
 
           <div class="modal-foot">
+            <!-- Rodapé da aba de login -->
             <span class="modal-link" id="forgotPass" data-i18n="modal_forgot"
               >Esqueci minha senha</span
             >
+            <!-- Link para recuperação de senha -->
           </div>
+          <!-- Fim modal-foot -->
         </div>
+        <!-- Fim tab-login -->
 
         <!-- TAB CADASTRO -->
+        <!-- Comentário: Formulário para criação de novas contas -->
         <div class="modal-tab-content" id="tab-register">
+          <!-- Conteúdo da aba de cadastro -->
           <div class="modal-tag" data-i18n="modal_register_tag">
             Criar conta
+            <!-- Rótulo de contexto -->
           </div>
+          <!-- Fim modal-tag -->
           <div class="modal-title" data-i18n-html="modal_register_title">
             COMECE<br />AGORA
+            <!-- Título motivador -->
           </div>
+          <!-- Fim modal-title -->
 
           <div class="field">
+            <!-- Campo: Nome Completo -->
             <label data-i18n="modal_label_name">Nome completo</label>
+            <!-- Rótulo -->
             <input
               type="text"
               id="registerName"
               data-i18n-placeholder="modal_ph_name"
               placeholder="Seu nome"
             />
+            <!-- Entrada de texto livre -->
           </div>
+          <!-- Fim field -->
           <div class="field">
+            <!-- Campo: Email -->
             <label data-i18n="modal_label_email">Email</label>
+            <!-- Rótulo -->
             <input
               type="email"
               id="registerEmail"
               data-i18n-placeholder="modal_ph_email_reg"
               placeholder="seu@email.com"
             />
+            <!-- Entrada de email -->
           </div>
+          <!-- Fim field -->
           <div class="field">
+            <!-- Campo: Senha -->
             <label data-i18n="modal_label_pass">Senha</label>
+            <!-- Rótulo -->
             <input
               type="password"
               id="registerPass"
               data-i18n-placeholder="modal_ph_pass"
               placeholder="••••••••"
             />
+            <!-- Entrada de senha -->
           </div>
+          <!-- Fim field -->
           <div class="field">
+            <!-- Campo: Confirmação de Senha -->
             <label data-i18n="modal_label_confirm">Confirmar senha</label>
+            <!-- Rótulo -->
             <input
               type="password"
               id="registerPassConfirm"
               data-i18n-placeholder="modal_ph_confirm"
               placeholder="Repita a senha"
             />
+            <!-- Entrada de confirmação (deve coincidir com a senha) -->
           </div>
+          <!-- Fim field -->
 
           <button class="btn-submit" id="registerSubmit">
+            <!-- Botão de criação de conta -->
             <span id="registerBtnText" data-i18n="modal_btn_register"
               >CRIAR CONTA GRÁTIS</span
             >
+            <!-- Texto do botão -->
             <span class="btn-spinner" id="registerSpinner" style="display: none"
               >⏳</span
             >
+            <!-- Spinner de carregamento -->
           </button>
+          <!-- Fim btn-submit -->
 
           <div class="modal-div" data-i18n="modal_or">ou</div>
+          <!-- Divisor "ou" -->
 
           <button class="btn-google" id="googleRegister">
+            <!-- Cadastro via Google -->
             <svg width="18" height="18" viewBox="0 0 24 24">
+              <!-- Ícone Google -->
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
               />
+              <!-- Caminhos do logo Google -->
               <path
                 fill="#34A853"
                 d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
@@ -216,13 +330,17 @@
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
+            <!-- Fim SVG -->
             <span data-i18n="modal_google_register">Cadastrar com Google</span>
+            <!-- Texto -->
           </button>
+          <!-- Fim btn-google -->
 
           <div
             class="modal-foot"
             style="font-size: 11px; color: var(--text3); margin-top: 12px"
           >
+            <!-- Rodapé com termos -->
             <span data-i18n="modal_terms"
               >Ao criar conta você concorda com os</span
             >
@@ -232,9 +350,12 @@
               >Termos de Uso</span
             >
           </div>
+          <!-- Fim modal-foot -->
         </div>
+        <!-- Fim tab-register -->
 
         <!-- TAB RESET SENHA -->
+        <!-- Comentário: Recuperação de senha -->
         <div class="modal-tab-content" id="tab-reset">
           <div class="modal-tag" data-i18n="modal_reset_tag">
             Recuperar acesso
@@ -279,10 +400,14 @@
             >
           </div>
         </div>
+        <!-- Fim tab-reset -->
       </div>
+      <!-- Fim modal -->
     </div>
+    <!-- Fim overlay -->
 
     <!-- CHIP POPUP -->
+    <!-- Comentário: Popup informativo (Chips) -->
     <div id="chip-overlay">
       <div class="chip-modal">
         <div class="chip-head">
@@ -296,8 +421,10 @@
         <div class="chip-body" id="cpBody"></div>
       </div>
     </div>
+    <!-- Fim chip-overlay -->
 
     <!-- HERO CAROUSEL -->
+    <!-- Comentário: Carrossel principal -->
     <section id="hero">
       <div class="carousel-track" id="cTrack">
         <!-- SLIDE 1 -->
@@ -474,8 +601,10 @@
         <div class="scroll-line"></div>
       </div>
     </section>
+    <!-- Fim hero -->
 
     <!-- SEÇÃO 01 — MENTE -->
+    <!-- Comentário: Pilar Mente -->
     <section class="sec" id="sec-mente">
       <div class="sec-inner">
         <div class="sec-grid">
@@ -519,16 +648,22 @@
               >
                 Respiração
               </button>
-              <button class="chip" data-chip="sono" data-i18n="chip_sono">
-                Sono &amp; Recuperação
+              <button
+                class="chip"
+                data-chip="recuperacao"
+                data-i18n="chip_recup"
+              >
+                Recuperação
               </button>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- Fim mente -->
 
     <!-- SEÇÃO 02 — FORÇA -->
+    <!-- Comentário: Pilar Força -->
     <section class="sec" id="sec-forca">
       <div class="sec-inner">
         <div class="sec-grid rev">
@@ -558,31 +693,33 @@
               <button
                 class="chip"
                 data-chip="hipertrofia"
-                data-i18n="chip_hipertrofia"
+                data-i18n="chip_hiper"
               >
                 Hipertrofia
               </button>
               <button
                 class="chip"
-                data-chip="forca-maxima"
-                data-i18n="chip_forca_maxima"
+                data-chip="explosao"
+                data-i18n="chip_explosao"
               >
-                Força Máxima
+                Explosão
               </button>
               <button
                 class="chip"
-                data-chip="composicao"
-                data-i18n="chip_composicao"
+                data-chip="resistencia"
+                data-i18n="chip_resist"
               >
-                Composição Corporal
+                Resistência Muscular
               </button>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- Fim forca -->
 
     <!-- SEÇÃO 03 — CARDIO -->
+    <!-- Comentário: Pilar Cardio -->
     <section class="sec" id="sec-cardio">
       <div class="sec-inner">
         <div class="sec-grid">
@@ -610,51 +747,52 @@
               <button class="chip" data-chip="hiit" data-i18n="chip_hiit">
                 HIIT
               </button>
-              <button
-                class="chip"
-                data-chip="resistencia"
-                data-i18n="chip_resistencia"
-              >
-                Resistência
+              <button class="chip" data-chip="liss" data-i18n="chip_liss">
+                LISS
               </button>
-              <button class="chip" data-chip="queima" data-i18n="chip_queima">
-                Queima de Gordura
+              <button class="chip" data-chip="vo2" data-i18n="chip_vo2">
+                VO2 Máximo
               </button>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- Fim cardio -->
 
     <!-- SEÇÃO 04 — FLEXIBILIDADE -->
-    <section class="sec" id="sec-flexi">
+    <!-- Comentário: Pilar Flexibilidade -->
+    <section class="sec" id="sec-flex">
       <div class="sec-inner">
         <div class="sec-grid rev">
           <div class="vis reveal-r">
-            <div class="vis-bg vis-flexi">
+            <div class="vis-bg vis-flex">
               <div class="vis-lines"></div>
               <div class="vis-glow"></div>
               <div class="vis-icon">🤸</div>
               <div class="vis-badge">
                 <div class="vis-bdot"></div>
-                <div class="vis-btxt" data-i18n="vis_flexi_badge">
-                  AMPLITUDE MAX
+                <div class="vis-btxt" data-i18n="vis_flex_badge">
+                  MOBILIDADE 85%
                 </div>
               </div>
             </div>
           </div>
           <div class="reveal-l">
-            <div class="sec-tag" data-i18n="sec_flexi_tag">
+            <div class="sec-tag" data-i18n="sec_flex_tag">
               04 — Flexibilidade
             </div>
-            <h2 class="sec-title" data-i18n-html="sec_flexi_title">
-              CORPO<br /><span class="acc">LIVRE</span>
+            <h2 class="sec-title" data-i18n-html="sec_flex_title">
+              LIBERDADE<br /><span class="acc">DE MOVIMENTO</span>
             </h2>
-            <p class="sec-body" data-i18n="sec_flexi_body">
-              Mobilidade e flexibilidade que previnem lesões e melhoram
-              performance. Rotinas guiadas por vídeo adaptadas ao seu nível.
+            <p class="sec-body" data-i18n="sec_flex_body">
+              Mobilidade é a base da performance. Protocolos de alongamento
+              dinâmico e liberação miofascial para prevenir lesões.
             </p>
             <div class="chips">
+              <button class="chip" data-chip="yoga" data-i18n="chip_yoga">
+                Yoga
+              </button>
               <button
                 class="chip"
                 data-chip="mobilidade"
@@ -669,16 +807,15 @@
               >
                 Alongamento
               </button>
-              <button class="chip" data-chip="yoga" data-i18n="chip_yoga">
-                Yoga &amp; Pilates
-              </button>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- Fim flex -->
 
     <!-- SEÇÃO 05 — RECUPERAÇÃO -->
+    <!-- Comentário: Pilar Recuperação -->
     <section class="sec" id="sec-recup">
       <div class="sec-inner">
         <div class="sec-grid">
@@ -736,8 +873,10 @@
         </div>
       </div>
     </section>
+    <!-- Fim recup -->
 
     <!-- FEATURES -->
+    <!-- Comentário: Grade de funcionalidades -->
     <section id="features">
       <div class="reveal">
         <div class="sec-tag" data-i18n="feat_tag">Funcionalidades</div>
@@ -799,15 +938,13 @@
         </div>
       </div>
     </section>
+    <!-- Fim features -->
 
     <!-- EARLY ACCESS -->
+    <!-- Comentário: Inscrição antecipada -->
     <section id="early">
       <div class="reveal">
-        <div
-          class="sec-tag"
-          style="justify-content: center"
-          data-i18n="early_tag"
-        >
+        <div class="sec-tag flex-center" data-i18n="early_tag">
           Early Access
         </div>
         <h2 class="early-title" data-i18n-html="early_title">
@@ -832,15 +969,17 @@
           ✓ Sem spam &nbsp; ✓ Cancele quando quiser &nbsp; ✓ Grátis
         </p>
         <div id="success-msg">
-          <p data-i18n="early_success_title">🎉 VOCÊ ESTÁ NA LISTA!</p>
+          <p data-i18n="early_success_title">🙌 VOCÊ ESTÁ NA LISTA!</p>
           <span data-i18n="early_success_sub"
             >Entraremos em contato com seu acesso exclusivo em breve.</span
           >
         </div>
       </div>
     </section>
+    <!-- Fim early -->
 
     <!-- FOOTER -->
+    <!-- Comentário: Rodapé -->
     <footer>
       <div class="foot-logo">CORE<span>LAB</span></div>
       <div class="foot-space"></div>
@@ -853,7 +992,9 @@
         © 2026 CoreLab Corporation — UNIP Limeira. Todos os direitos reservados.
       </div>
     </footer>
+    <!-- Fim footer -->
 
     <script type="module" src="js/main.js"></script>
+    <!-- Script principal modularizado -->
   </body>
 </html>

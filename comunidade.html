@@ -1,994 +1,132 @@
-<!doctype html>
+﻿<!doctype html>
+<!-- Comentário: Declaração do tipo de documento -->
 <html lang="pt-BR" data-theme="dark">
+  <!-- Comentário: Início do HTML com tema escuro -->
   <head>
+    <!-- Comentário: Cabeçalho -->
     <meta charset="UTF-8" />
+    <!-- Codificação -->
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!-- Responsividade -->
     <title>CoreLab — Comunidade Elite</title>
+    <!-- Título -->
     <link
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <style>
-      :root {
-        --green: #00ff87;
-        --green2: #00cc6a;
-        --red: #ff3b5c;
-        --orange: #ff8c42;
-        --blue: #4ecdc4;
-        --gold: #ffd700;
-        --purple: #9b5de5;
-        --bg: #080808;
-        --bg2: #0f0f0f;
-        --bg3: #161616;
-        --surf: #1a1a1a;
-        --border: rgba(255, 255, 255, 0.07);
-        --text: #f0f0f0;
-        --text2: #888;
-        --text3: #444;
-      }
-      [data-theme="light"] {
-        --bg: #f0f0ec;
-        --bg2: #e8e8e4;
-        --bg3: #dcdcd8;
-        --surf: #fff;
-        --border: rgba(0, 0, 0, 0.08);
-        --text: #0a0a0a;
-        --text2: #555;
-        --text3: #aaa;
-      }
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        font-family: "DM Sans", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        min-height: 100vh;
-      }
-      ::-webkit-scrollbar {
-        width: 4px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--green);
-        border-radius: 2px;
-      }
-      button {
-        cursor: pointer;
-        border: none;
-        background: none;
-        font-family: inherit;
-      }
-
-      /* TOPBAR */
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        background: rgba(8, 8, 8, 0.92);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--border);
-        padding: 0 24px;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-      [data-theme="light"] .topbar {
-        background: rgba(240, 240, 236, 0.92);
-      }
-      .topbar-logo {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 22px;
-        letter-spacing: 0.1em;
-      }
-      .topbar-logo span {
-        color: var(--green);
-      }
-      .topbar-space {
-        flex: 1;
-      }
-      .topbar-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 30px;
-        font-size: 13px;
-        color: var(--text2);
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.25s;
-      }
-      .topbar-btn:hover {
-        border-color: var(--green);
-        color: var(--green);
-      }
-      .theme-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 15px;
-        transition: all 0.25s;
-      }
-      .theme-btn:hover {
-        border-color: var(--green);
-      }
-      .notif-wrap {
-        position: relative;
-      }
-      .notif-badge {
-        position: absolute;
-        top: -2px;
-        right: -2px;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: var(--red);
-        font-size: 9px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-family: "Space Mono", monospace;
-      }
-
-      /* TABS */
-      .tabs {
-        position: sticky;
-        top: 64px;
-        z-index: 40;
-        background: var(--bg2);
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        padding: 0 24px;
-        overflow-x: auto;
-      }
-      .tab {
-        padding: 14px 20px;
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--text2);
-        cursor: pointer;
-        border-bottom: 2px solid transparent;
-        transition: all 0.2s;
-        white-space: nowrap;
-      }
-      .tab.active {
-        color: var(--green);
-        border-bottom-color: var(--green);
-      }
-      .tab:hover:not(.active) {
-        color: var(--text);
-      }
-
-      /* MAIN GRID */
-      .comm-wrap {
-        display: grid;
-        grid-template-columns: 1fr 320px;
-        min-height: calc(100vh - 110px);
-      }
-
-      /* FEED */
-      .feed {
-        padding: 24px;
-        border-right: 1px solid var(--border);
-      }
-      .tab-content {
-        display: none;
-      }
-      .tab-content.active {
-        display: block;
-      }
-
-      /* CREATE POST */
-      .create-post {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 16px;
-        margin-bottom: 24px;
-      }
-      .create-row {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-      }
-      .user-av {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--green), #00aa55);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 16px;
-        color: #000;
-        flex-shrink: 0;
-      }
-      .create-input {
-        flex: 1;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 30px;
-        padding: 10px 18px;
-        font-family: "DM Sans", sans-serif;
-        font-size: 14px;
-        color: var(--text);
-        outline: none;
-        transition: border-color 0.2s;
-      }
-      .create-input:focus {
-        border-color: var(--green);
-      }
-      .create-input::placeholder {
-        color: var(--text3);
-      }
-      .create-actions {
-        display: flex;
-        gap: 8px;
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px solid var(--border);
-        flex-wrap: wrap;
-      }
-      .create-act {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 7px 14px;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        font-size: 13px;
-        color: var(--text2);
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .create-act:hover {
-        border-color: var(--green);
-        color: var(--green);
-      }
-      .post-submit {
-        margin-left: auto;
-        padding: 8px 20px;
-        background: var(--green);
-        color: #000;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.25s;
-      }
-      .post-submit:hover {
-        background: var(--green2);
-      }
-
-      /* POST CARD */
-      .post {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 18px;
-        margin-bottom: 16px;
-        transition: border-color 0.2s;
-        animation: postIn 0.3s ease;
-      }
-      @keyframes postIn {
-        from {
-          opacity: 0;
-          transform: translateY(-8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .post:hover {
-        border-color: rgba(255, 255, 255, 0.12);
-      }
-      .post-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 14px;
-      }
-      .post-av {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 16px;
-        color: #000;
-        flex-shrink: 0;
-      }
-      .av-1 {
-        background: linear-gradient(135deg, var(--orange), #cc6a00);
-      }
-      .av-2 {
-        background: linear-gradient(135deg, var(--blue), #00999b);
-      }
-      .av-3 {
-        background: linear-gradient(135deg, var(--purple), #7a40c2);
-      }
-      .av-4 {
-        background: linear-gradient(135deg, var(--red), #cc2f4b);
-      }
-      .av-you {
-        background: linear-gradient(135deg, var(--green), #00aa55);
-      }
-      .post-meta {
-        flex: 1;
-      }
-      .post-name {
-        font-size: 14px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .post-badge {
-        background: rgba(0, 255, 135, 0.12);
-        border: 1px solid rgba(0, 255, 135, 0.2);
-        border-radius: 10px;
-        padding: 1px 8px;
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        color: var(--green);
-        letter-spacing: 0.05em;
-      }
-      .post-time {
-        font-size: 12px;
-        color: var(--text3);
-        margin-top: 1px;
-      }
-      .post-menu {
-        color: var(--text3);
-        font-size: 20px;
-        cursor: pointer;
-        padding: 4px;
-        line-height: 1;
-      }
-      .post-text {
-        font-size: 15px;
-        color: var(--text2);
-        line-height: 1.65;
-        font-weight: 300;
-        margin-bottom: 12px;
-      }
-      .post-text strong {
-        color: var(--text);
-        font-weight: 600;
-      }
-
-      /* WORKOUT CARD IN POST */
-      .post-workout {
-        background: rgba(0, 255, 135, 0.04);
-        border: 1px solid rgba(0, 255, 135, 0.15);
-        border-radius: 10px;
-        padding: 12px 14px;
-        margin-bottom: 12px;
-      }
-      .pw-title {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 16px;
-        letter-spacing: 0.05em;
-        color: var(--green);
-        margin-bottom: 8px;
-      }
-      .pw-stats {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-      }
-      .pw-s {
-        text-align: center;
-      }
-      .pw-val {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 24px;
-        color: var(--text);
-      }
-      .pw-label {
-        font-size: 11px;
-        color: var(--text2);
-      }
-
-      /* POST IMAGE GRID */
-      .post-imgs {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 12px;
-        height: 180px;
-      }
-      .post-img {
-        background: var(--bg2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 40px;
-        color: var(--text3);
-      }
-      .post-img:first-child {
-        grid-row: 1/-1;
-      }
-
-      /* POST ACTIONS */
-      .post-actions {
-        display: flex;
-        align-items: center;
-        border-top: 1px solid var(--border);
-        padding-top: 12px;
-      }
-      .post-action {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        padding: 8px 14px;
-        color: var(--text2);
-        cursor: pointer;
-        font-size: 14px;
-        border-radius: 8px;
-        transition: all 0.2s;
-        flex: 1;
-        justify-content: center;
-      }
-      .post-action:hover {
-        background: rgba(255, 255, 255, 0.04);
-        color: var(--text);
-      }
-      .post-action.liked {
-        color: var(--red);
-      }
-      .post-action svg {
-        width: 18px;
-        height: 18px;
-      }
-      .post-action.liked svg {
-        fill: var(--red);
-      }
-
-      /* CHALLENGE CARDS */
-      .challenge {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 18px;
-        margin-bottom: 16px;
-        cursor: pointer;
-        transition: all 0.3s;
-        position: relative;
-        overflow: hidden;
-      }
-      .challenge::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-      }
-      .challenge.fire::before {
-        background: linear-gradient(90deg, var(--red), var(--orange));
-      }
-      .challenge.crown::before {
-        background: linear-gradient(90deg, var(--gold), var(--orange));
-      }
-      .challenge.bolt::before {
-        background: linear-gradient(90deg, var(--green), var(--blue));
-      }
-      .challenge.star::before {
-        background: linear-gradient(90deg, var(--purple), var(--blue));
-      }
-      .challenge:hover {
-        border-color: rgba(0, 255, 135, 0.3);
-        transform: translateY(-2px);
-      }
-      .ch-header {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        margin-bottom: 12px;
-      }
-      .ch-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        flex-shrink: 0;
-      }
-      .icon-fire {
-        background: rgba(255, 59, 92, 0.12);
-      }
-      .icon-crown {
-        background: rgba(255, 215, 0, 0.12);
-      }
-      .icon-bolt {
-        background: rgba(0, 255, 135, 0.08);
-      }
-      .icon-star {
-        background: rgba(155, 93, 229, 0.12);
-      }
-      .ch-meta {
-        flex: 1;
-      }
-      .ch-name {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 20px;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
-      }
-      .ch-creator {
-        font-size: 12px;
-        color: var(--text2);
-      }
-      .ch-prize {
-        text-align: right;
-      }
-      .ch-prize-val {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 18px;
-        color: var(--gold);
-      }
-      .ch-prize-label {
-        font-size: 11px;
-        color: var(--text3);
-      }
-      .ch-desc {
-        font-size: 14px;
-        color: var(--text2);
-        line-height: 1.5;
-        margin-bottom: 14px;
-        font-weight: 300;
-      }
-      .ch-stats {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 14px;
-        flex-wrap: wrap;
-      }
-      .ch-stat {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        color: var(--text2);
-      }
-      .ch-prog-header {
-        display: flex;
-        justify-content: space-between;
-        font-size: 12px;
-        color: var(--text2);
-        margin-bottom: 6px;
-      }
-      .ch-prog-bar {
-        height: 6px;
-        background: var(--border);
-        border-radius: 3px;
-        overflow: hidden;
-        margin-bottom: 14px;
-      }
-      .ch-prog-fill {
-        height: 100%;
-        border-radius: 3px;
-      }
-      .ch-footer {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-      .ch-join {
-        flex: 1;
-        padding: 10px;
-        background: var(--green);
-        color: #000;
-        border-radius: 10px;
-        font-weight: 700;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.25s;
-        text-align: center;
-      }
-      .ch-join:hover {
-        background: var(--green2);
-      }
-      .ch-join.joined {
-        background: transparent;
-        color: var(--green);
-        border: 1px solid var(--green);
-      }
-      .ch-share {
-        width: 40px;
-        height: 40px;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .ch-share:hover {
-        border-color: var(--green);
-      }
-
-      /* LEADERBOARD */
-      .lb-box {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        overflow: hidden;
-        margin-bottom: 16px;
-      }
-      .lb-header {
-        padding: 16px 18px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .lb-title {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 18px;
-        letter-spacing: 0.05em;
-      }
-      .lb-filter {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        letter-spacing: 0.15em;
-        color: var(--green);
-        cursor: pointer;
-      }
-      .lb-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 18px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        transition: background 0.2s;
-      }
-      .lb-item:hover {
-        background: rgba(255, 255, 255, 0.02);
-      }
-      .lb-item:last-child {
-        border-bottom: none;
-      }
-      .lb-rank {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 20px;
-        width: 28px;
-        text-align: center;
-        color: var(--text3);
-      }
-      .lb-rank.gold {
-        color: var(--gold);
-      }
-      .lb-rank.silver {
-        color: #c0c0c0;
-      }
-      .lb-rank.bronze {
-        color: #cd7f32;
-      }
-      .lb-av {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 14px;
-        color: #000;
-        flex-shrink: 0;
-      }
-      .lb-info {
-        flex: 1;
-      }
-      .lb-name {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 1px;
-      }
-      .lb-detail {
-        font-size: 12px;
-        color: var(--text2);
-      }
-      .lb-score {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 22px;
-        color: var(--green);
-      }
-      .lb-item.you {
-        background: rgba(0, 255, 135, 0.04);
-        border-left: 2px solid var(--green);
-      }
-
-      /* RIGHT PANEL */
-      .right-panel {
-        padding: 20px;
-        background: var(--bg2);
-      }
-      .panel-section {
-        margin-bottom: 24px;
-      }
-      .panel-title {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 16px;
-        letter-spacing: 0.08em;
-        margin-bottom: 12px;
-        color: var(--text2);
-      }
-      .online-list {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .online-user {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .online-user:hover {
-        background: var(--bg3);
-      }
-      .ou-av {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 14px;
-        color: #000;
-        position: relative;
-        flex-shrink: 0;
-      }
-      .ou-dot {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--green);
-        border: 2px solid var(--bg2);
-      }
-      .ou-info {
-        flex: 1;
-      }
-      .ou-name {
-        font-size: 13px;
-        font-weight: 600;
-      }
-      .ou-status {
-        font-size: 11px;
-        color: var(--text2);
-      }
-      .ou-follow {
-        padding: 4px 12px;
-        background: rgba(0, 255, 135, 0.08);
-        border: 1px solid rgba(0, 255, 135, 0.2);
-        border-radius: 16px;
-        font-size: 11px;
-        color: var(--green);
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .ou-follow:hover {
-        background: var(--green);
-        color: #000;
-      }
-      .ou-follow.following {
-        background: var(--surf);
-        border-color: var(--border);
-        color: var(--text2);
-      }
-
-      .achievements {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .ach {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 8px 10px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .ach:hover {
-        border-color: var(--gold);
-        transform: translateY(-1px);
-      }
-      .ach-icon {
-        font-size: 20px;
-      }
-      .ach-name {
-        font-size: 12px;
-        font-weight: 600;
-      }
-      .ach-date {
-        font-size: 10px;
-        color: var(--text3);
-      }
-      .ach.locked {
-        opacity: 0.4;
-        filter: grayscale(1);
-      }
-
-      .my-ch-list {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .my-ch {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 10px 12px;
-      }
-      .my-ch-name {
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 6px;
-      }
-      .my-ch-bar {
-        height: 4px;
-        background: var(--border);
-        border-radius: 2px;
-        overflow: hidden;
-      }
-      .my-ch-fill {
-        height: 100%;
-        background: var(--green);
-        border-radius: 2px;
-      }
-      .my-ch-bottom {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 4px;
-        font-size: 11px;
-        color: var(--text2);
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 900px) {
-        .comm-wrap {
-          grid-template-columns: 1fr;
-        }
-        .right-panel {
-          display: none;
-        }
-      }
-      @media (max-width: 500px) {
-        .feed {
-          padding: 12px;
-        }
-        .create-actions {
-          gap: 4px;
-        }
-        .create-act {
-          font-size: 11px;
-          padding: 6px 10px;
-        }
-      }
-    </style>
+    <!-- Fontes -->
+    <link rel="stylesheet" href="css/global.css" />
+    <!-- Estilos globais -->
+    <link rel="stylesheet" href="css/comunidade.css" />
+    <!-- Estilos específicos da comunidade -->
   </head>
   <body>
     <div class="topbar">
+      <!-- Comentário: Barra superior -->
       <div class="topbar-logo">CORE<span>LAB</span></div>
+      <!-- Logo -->
       <div class="topbar-space"></div>
-      <div class="notif-wrap">
-        <button class="theme-btn">🔔<span class="notif-badge">3</span></button>
-      </div>
+      <!-- Espaçador -->
+      <button class="topbar-btn green" id="createCommBtn">
+        <!-- Botão criar comunidade -->
+        + Nova Comunidade
+      </button>
       <button class="theme-btn" id="themeBtn">🌙</button>
+      <!-- Alternador de tema -->
       <a href="index.html" class="topbar-btn">← Voltar</a>
+      <!-- Link voltar -->
     </div>
 
     <div class="tabs">
+      <!-- Comentário: Navegação por abas -->
       <div class="tab active" data-tab="feed">🏠 Feed</div>
+      <!-- Aba Feed -->
+      <div class="tab" data-tab="communities">🌐 Comunidades</div>
+      <!-- Aba Comunidades -->
       <div class="tab" data-tab="challenges">🏆 Desafios</div>
+      <!-- Aba Desafios -->
       <div class="tab" data-tab="leaderboard">📊 Ranking</div>
+      <!-- Aba Ranking -->
     </div>
 
     <div class="comm-wrap">
-      <!-- FEED -->
+      <!-- Comentário: Container do conteúdo das abas -->
       <div class="feed">
+        <!-- Container do feed -->
         <!-- FEED TAB -->
+        <!-- Comentário: Seção da aba Feed -->
         <div class="tab-content active" id="tab-feed">
+          <!-- Conteúdo ativo do feed -->
           <div class="create-post">
+            <!-- Caixa de criação de postagem -->
             <div class="create-row">
-              <div class="user-av av-you">LB</div>
+              <!-- Linha superior da criação -->
+              <div class="user-av av-you" id="myAvatar">?</div>
+              <!-- Avatar do usuário logado -->
               <input
                 class="create-input"
                 type="text"
                 id="postInput"
                 placeholder="Compartilhe seu treino, conquista ou motivação..."
               />
+              <!-- Campo de entrada -->
             </div>
             <div class="create-actions">
-              <button class="create-act">🏋️ Treino</button>
-              <button class="create-act">📸 Foto</button>
-              <button class="create-act">🏆 Conquista</button>
-              <button class="create-act">📊 PR</button>
-              <button class="post-submit" onclick="createPost()">
+              <!-- Botões de tipo de postagem -->
+              <button class="create-act" onclick="setPostType('🏋️ Treino')">
+                🏋️ Treino
+                <!-- Treino -->
+              </button>
+              <button class="create-act" onclick="setPostType('📸 Foto')">
+                📸 Foto
+                <!-- Foto -->
+              </button>
+              <button class="create-act" onclick="setPostType('🏆 Conquista')">
+                🏆 Conquista
+                <!-- Conquista -->
+              </button>
+              <button class="create-act" onclick="setPostType('📊 PR')">
+                📊 PR
+                <!-- Recorde Pessoal -->
+              </button>
+              <button
+                class="post-submit"
+                id="publishBtn"
+                onclick="doCreatePost()"
+              >
                 Publicar
+                <!-- Botão publicar -->
               </button>
             </div>
           </div>
-
           <div id="posts-container">
+            <!-- Grade de postagens -->
             <div class="post">
+              <!-- Exemplo de postagem estática 1 -->
               <div class="post-header">
+                <!-- Cabeçalho do post -->
                 <div class="post-av av-1">RJ</div>
+                <!-- Iniciais -->
                 <div class="post-meta">
+                  <!-- Meta dados do post -->
                   <div class="post-name">
                     Rafael Júnior <span class="post-badge">PRO</span>
+                    <!-- Nome e badge -->
                   </div>
                   <div class="post-time">há 12 minutos</div>
+                  <!-- Tempo -->
                 </div>
-                <div class="post-menu">···</div>
               </div>
               <div class="post-text">
+                <!-- Texto do post -->
                 🔥 <strong>NOVO RECORDE PESSOAL!</strong> Supino plano — 160kg x
                 3 repetições! 6 meses atrás nem conseguia 120kg. O processo
-                nunca mente. 💪 #CoreLab #PR #Supino
-              </div>
-              <div class="post-workout">
-                <div class="pw-title">📊 Treino de Hoje — Peito & Tríceps</div>
-                <div class="pw-stats">
-                  <div class="pw-s">
-                    <div class="pw-val">74min</div>
-                    <div class="pw-label">Duração</div>
-                  </div>
-                  <div class="pw-s">
-                    <div class="pw-val">8</div>
-                    <div class="pw-label">Exercícios</div>
-                  </div>
-                  <div class="pw-s">
-                    <div class="pw-val">3.840kg</div>
-                    <div class="pw-label">Volume</div>
-                  </div>
-                  <div class="pw-s">
-                    <div class="pw-val">680kcal</div>
-                    <div class="pw-label">Queimadas</div>
-                  </div>
-                </div>
+                nunca mente. 💪
               </div>
               <div class="post-actions">
-                <div class="post-action" onclick="toggleLike(this)">
+                <!-- Ações (like/comentar) -->
+                <div class="post-action" onclick="toggleLikeStatic(this)">
+                  <!-- Curtir -->
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -1002,6 +140,7 @@
                   <span>247</span>
                 </div>
                 <div class="post-action">
+                  <!-- Comentar -->
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -1010,29 +149,13 @@
                   >
                     <path
                       d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                    />
-                  </svg>
-                  <span>32</span>
-                </div>
-                <div class="post-action">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="18" cy="5" r="3" />
-                    <circle cx="6" cy="12" r="3" />
-                    <circle cx="18" cy="19" r="3" />
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                  </svg>
-                  <span>Compartilhar</span>
+                    /></svg
+                  ><span>32</span>
                 </div>
               </div>
             </div>
-
             <div class="post">
+              <!-- Exemplo de postagem estática 2 -->
               <div class="post-header">
                 <div class="post-av av-2">MC</div>
                 <div class="post-meta">
@@ -1041,21 +164,13 @@
                   </div>
                   <div class="post-time">há 1 hora</div>
                 </div>
-                <div class="post-menu">···</div>
               </div>
               <div class="post-text">
-                Completei o <strong>Desafio 30 Dias HIIT</strong>! 🎯 Nunca
-                pensei que conseguiria, mas a comunidade CoreLab me manteve
-                motivada. -4.2kg em 30 dias e ainda ganhei músculo. A ciência
-                funciona! 🙌
-              </div>
-              <div class="post-imgs">
-                <div class="post-img">📸</div>
-                <div class="post-img">💪</div>
-                <div class="post-img">🏆</div>
+                Completei o <strong>Desafio 30 Dias HIIT</strong>! 🎯 -4.2kg em
+                30 dias e ainda ganhei músculo. A ciência funciona! 🙌
               </div>
               <div class="post-actions">
-                <div class="post-action liked" onclick="toggleLike(this)">
+                <div class="post-action liked" onclick="toggleLikeStatic(this)">
                   <svg
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -1077,84 +192,86 @@
                   >
                     <path
                       d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                    />
-                  </svg>
-                  <span>87</span>
-                </div>
-                <div class="post-action">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="18" cy="5" r="3" />
-                    <circle cx="6" cy="12" r="3" />
-                    <circle cx="18" cy="19" r="3" />
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                  </svg>
-                  <span>Compartilhar</span>
+                    /></svg
+                  ><span>87</span>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="post">
-              <div class="post-header">
-                <div class="post-av av-3">TS</div>
-                <div class="post-meta">
-                  <div class="post-name">Thiago Santos</div>
-                  <div class="post-time">há 3 horas</div>
+        <!-- COMMUNITIES TAB -->
+        <!-- Comentário: Seção da aba Comunidades -->
+        <div class="tab-content" id="tab-communities">
+          <!-- Listagem de comunidades -->
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 20px;
+              flex-wrap: wrap;
+              gap: 10px;
+            "
+          >
+            <div class="comm-section-title" style="margin-bottom: 0">
+              🌐 Comunidades
+              <!-- Título -->
+            </div>
+            <button class="topbar-btn green" onclick="openCreateComm()">
+              + Criar nova
+              <!-- Botão abrir modal -->
+            </button>
+          </div>
+          <div id="myCommSection" style="margin-bottom: 28px">
+            <!-- Comunidades do usuário -->
+            <div
+              style="
+                font-family: &quot;Space Mono&quot;, monospace;
+                font-size: 9px;
+                letter-spacing: 0.3em;
+                text-transform: uppercase;
+                color: var(--text3);
+                margin-bottom: 12px;
+              "
+            >
+              Minhas Comunidades
+              <!-- Rótulo -->
+            </div>
+            <div id="myCommList">
+              <!-- Preenchido via JS -->
+              <div class="empty-comm">
+                <!-- Estado vazio -->
+                <div class="empty-comm-icon">🌐</div>
+                <div class="empty-comm-title">NENHUMA COMUNIDADE</div>
+                <div class="empty-comm-sub">
+                  Crie ou entre em uma comunidade para começar
                 </div>
-                <div class="post-menu">···</div>
               </div>
-              <div class="post-text">
-                Dia de mobilidade e recuperação. Às vezes o treino mais
-                importante é aquele que você não faz. 🧘 O Coach IA me lembrou
-                que hoje era dia de descanso ativo — obrigado pela inteligência
-                artificial! 😂 #RecuperaçãoAtiva #CoreLab
-              </div>
-              <div class="post-actions">
-                <div class="post-action" onclick="toggleLike(this)">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                    />
-                  </svg>
-                  <span>89</span>
-                </div>
-                <div class="post-action">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                    />
-                  </svg>
-                  <span>14</span>
-                </div>
-                <div class="post-action">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <circle cx="18" cy="5" r="3" />
-                    <circle cx="6" cy="12" r="3" />
-                    <circle cx="18" cy="19" r="3" />
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                  </svg>
-                  <span>Compartilhar</span>
+            </div>
+          </div>
+          <div>
+            <div
+              style="
+                font-family: &quot;Space Mono&quot;, monospace;
+                font-size: 9px;
+                letter-spacing: 0.3em;
+                text-transform: uppercase;
+                color: var(--text3);
+                margin-bottom: 12px;
+              "
+            >
+              Descobrir Comunidades
+              <!-- Rótulo descobrir -->
+            </div>
+            <div id="allCommList">
+              <!-- Preenchido via JS -->
+              <div class="empty-comm">
+                <!-- Estado carregando -->
+                <div class="empty-comm-icon">🔍</div>
+                <div class="empty-comm-title">CARREGANDO...</div>
+                <div class="empty-comm-sub">
+                  Buscando comunidades disponíveis
                 </div>
               </div>
             </div>
@@ -1162,32 +279,43 @@
         </div>
 
         <!-- CHALLENGES TAB -->
+        <!-- Comentário: Seção da aba Desafios -->
         <div class="tab-content" id="tab-challenges">
+          <!-- Listagem de desafios ativos -->
           <div class="challenge fire">
+            <!-- Desafio 1 -->
             <div class="ch-header">
+              <!-- Cabeçalho do desafio -->
               <div class="ch-icon icon-fire">🔥</div>
+              <!-- Ícone -->
               <div class="ch-meta">
+                <!-- Informações -->
                 <div class="ch-name">Desafio 30 Dias HIIT</div>
                 <div class="ch-creator">Por @CoreLab_Official</div>
               </div>
               <div class="ch-prize">
+                <!-- Prêmio -->
                 <div class="ch-prize-val">🏅 PRO</div>
                 <div class="ch-prize-label">Badge exclusivo</div>
               </div>
             </div>
             <div class="ch-desc">
+              <!-- Descrição -->
               Complete 30 sessões de HIIT em 30 dias consecutivos. Mínimo de 20
-              minutos por sessão. O desafio que muda corpos e mentalidades.
+              minutos por sessão.
             </div>
             <div class="ch-stats">
+              <!-- Estatísticas -->
               <div class="ch-stat">👥 2.847 participantes</div>
               <div class="ch-stat">📅 18 dias restantes</div>
-              <div class="ch-stat">⭐ 4.9 (341 avaliações)</div>
+              <div class="ch-stat">⭐ 4.9</div>
             </div>
             <div class="ch-prog-header">
+              <!-- Header do progresso -->
               <span>Seu progresso</span><span>14/30 dias</span>
             </div>
             <div class="ch-prog-bar">
+              <!-- Barra de progresso -->
               <div
                 class="ch-prog-fill"
                 style="
@@ -1197,14 +325,15 @@
               ></div>
             </div>
             <div class="ch-footer">
+              <!-- Rodapé com botão participar -->
               <div class="ch-join joined" onclick="toggleJoin(this)">
                 ✓ Participando
               </div>
               <div class="ch-share">↗</div>
             </div>
           </div>
-
           <div class="challenge crown">
+            <!-- Desafio 2 -->
             <div class="ch-header">
               <div class="ch-icon icon-crown">👑</div>
               <div class="ch-meta">
@@ -1217,13 +346,13 @@
               </div>
             </div>
             <div class="ch-desc">
-              Quem aumentar mais o 1RM total (supino + agachamento + terra) em 8
-              semanas vence. Comprovação via vídeo obrigatória.
+              Quem aumentar mais o 1RM total em 8 semanas vence. Comprovação via
+              vídeo obrigatória.
             </div>
             <div class="ch-stats">
               <div class="ch-stat">👥 428 participantes</div>
               <div class="ch-stat">📅 34 dias restantes</div>
-              <div class="ch-stat">⭐ 4.7 (89 avaliações)</div>
+              <div class="ch-stat">⭐ 4.7</div>
             </div>
             <div class="ch-prog-header">
               <span>Seu progresso</span><span>+28kg acumulados</span>
@@ -1248,8 +377,8 @@
               <div class="ch-share">↗</div>
             </div>
           </div>
-
           <div class="challenge bolt">
+            <!-- Desafio 3 -->
             <div class="ch-header">
               <div class="ch-icon icon-bolt">⚡</div>
               <div class="ch-meta">
@@ -1263,20 +392,20 @@
             </div>
             <div class="ch-desc">
               Treino antes das 7h da manhã durante 21 dias. Check-in com selfie
-              obrigatório. Prove que você consegue acordar cedo.
+              obrigatório.
             </div>
             <div class="ch-stats">
               <div class="ch-stat">👥 1.204 participantes</div>
               <div class="ch-stat">📅 Começa em 2 dias</div>
-              <div class="ch-stat">⭐ 4.8 (203 avaliações)</div>
+              <div class="ch-stat">⭐ 4.8</div>
             </div>
             <div class="ch-footer">
               <div class="ch-join" onclick="toggleJoin(this)">Participar</div>
               <div class="ch-share">↗</div>
             </div>
           </div>
-
           <div class="challenge star">
+            <!-- Desafio 4 -->
             <div class="ch-header">
               <div class="ch-icon icon-star">🧘</div>
               <div class="ch-meta">
@@ -1290,12 +419,12 @@
             </div>
             <div class="ch-desc">
               30 dias de mindfulness: meditação diária de 10 min + diário de
-              bem-estar. Para os que querem performance mental além da física.
+              bem-estar.
             </div>
             <div class="ch-stats">
               <div class="ch-stat">👥 892 participantes</div>
               <div class="ch-stat">📅 Contínuo</div>
-              <div class="ch-stat">⭐ 4.9 (156 avaliações)</div>
+              <div class="ch-stat">⭐ 4.9</div>
             </div>
             <div class="ch-footer">
               <div class="ch-join" onclick="toggleJoin(this)">Participar</div>
@@ -1305,128 +434,93 @@
         </div>
 
         <!-- LEADERBOARD TAB -->
+        <!-- Comentário: Seção da aba Ranking -->
         <div class="tab-content" id="tab-leaderboard">
+          <!-- Ranking competitivo -->
           <div class="lb-box">
+            <!-- Box do ranking -->
             <div class="lb-header">
-              <div class="lb-title">🏆 RANKING GERAL — ABRIL 2026</div>
+              <!-- Cabeçalho -->
+              <div class="lb-title">🏆 RANKING GERAL</div>
+              <!-- Título -->
               <div class="lb-filter">MENSAL ▾</div>
+              <!-- Filtro -->
             </div>
-            <div class="lb-item">
-              <div class="lb-rank gold">1</div>
-              <span>🥇</span>
-              <div
-                class="lb-av"
-                style="
-                  background: linear-gradient(135deg, var(--gold), #cc9900);
-                "
-              >
-                RJ
-              </div>
-              <div class="lb-info">
-                <div class="lb-name">Rafael Júnior</div>
-                <div class="lb-detail">28 treinos • 21 dias consecutivos</div>
-              </div>
-              <div class="lb-score">9.840</div>
-            </div>
-            <div class="lb-item">
-              <div class="lb-rank silver">2</div>
-              <span>🥈</span>
-              <div
-                class="lb-av"
-                style="background: linear-gradient(135deg, #c0c0c0, #888)"
-              >
-                MC
-              </div>
-              <div class="lb-info">
-                <div class="lb-name">Marina Costa</div>
-                <div class="lb-detail">25 treinos • 18 dias consecutivos</div>
-              </div>
-              <div class="lb-score">8.920</div>
-            </div>
-            <div class="lb-item">
-              <div class="lb-rank bronze">3</div>
-              <span>🥉</span>
-              <div
-                class="lb-av"
-                style="background: linear-gradient(135deg, #cd7f32, #8b5a1a)"
-              >
-                TS
-              </div>
-              <div class="lb-info">
-                <div class="lb-name">Thiago Santos</div>
-                <div class="lb-detail">24 treinos • 15 dias consecutivos</div>
-              </div>
-              <div class="lb-score">8.340</div>
-            </div>
-            <div class="lb-item">
-              <div class="lb-rank">4</div>
-              <span>&nbsp;&nbsp;</span>
-              <div
-                class="lb-av"
-                style="
-                  background: linear-gradient(135deg, var(--purple), #7a40c2);
-                "
-              >
-                AL
-              </div>
-              <div class="lb-info">
-                <div class="lb-name">Ana Lima</div>
-                <div class="lb-detail">22 treinos • 14 dias consecutivos</div>
-              </div>
-              <div class="lb-score">7.880</div>
-            </div>
-            <div class="lb-item">
-              <div class="lb-rank">5</div>
-              <span>&nbsp;&nbsp;</span>
-              <div
-                class="lb-av"
-                style="
-                  background: linear-gradient(135deg, var(--blue), #00999b);
-                "
-              >
-                PR
-              </div>
-              <div class="lb-info">
-                <div class="lb-name">Pedro Rocha</div>
-                <div class="lb-detail">21 treinos • 13 dias consecutivos</div>
-              </div>
-              <div class="lb-score">7.240</div>
-            </div>
-            <div class="lb-item you">
-              <div class="lb-rank" style="color: var(--green)">12</div>
-              <span>⭐</span>
-              <div
-                class="lb-av"
-                style="
-                  background: linear-gradient(135deg, var(--green), #00aa55);
-                "
-              >
-                LB
-              </div>
-              <div class="lb-info">
-                <div class="lb-name">
-                  Luis Beckman
-                  <span style="color: var(--green); font-size: 11px"
-                    >(Você)</span
-                  >
+            <div id="leaderboardList">
+              <!-- Itens do ranking -->
+              <div class="lb-item">
+                <!-- Rank 1 -->
+                <div class="lb-rank gold">1</div>
+                <span>🥇</span>
+                <div
+                  class="lb-av"
+                  style="
+                    background: linear-gradient(135deg, var(--gold), #cc9900);
+                  "
+                >
+                  RJ
                 </div>
-                <div class="lb-detail">19 treinos • 21 dias consecutivos</div>
+                <div class="lb-info">
+                  <div class="lb-name">Rafael Júnior</div>
+                  <div class="lb-detail">28 treinos • 21 dias consecutivos</div>
+                </div>
+                <div class="lb-score">9.840</div>
               </div>
-              <div class="lb-score" style="color: var(--green)">6.240</div>
+              <div class="lb-item">
+                <!-- Rank 2 -->
+                <div class="lb-rank silver">2</div>
+                <span>🥈</span>
+                <div
+                  class="lb-av"
+                  style="background: linear-gradient(135deg, #c0c0c0, #888)"
+                >
+                  MC
+                </div>
+                <div class="lb-info">
+                  <div class="lb-name">Marina Costa</div>
+                  <div class="lb-detail">25 treinos • 18 dias consecutivos</div>
+                </div>
+                <div class="lb-score">8.920</div>
+              </div>
+              <div class="lb-item">
+                <!-- Rank 3 -->
+                <div class="lb-rank bronze">3</div>
+                <span>🥉</span>
+                <div
+                  class="lb-av"
+                  style="background: linear-gradient(135deg, #cd7f32, #8b5a1a)"
+                >
+                  TS
+                </div>
+                <div class="lb-info">
+                  <div class="lb-name">Thiago Santos</div>
+                  <div class="lb-detail">24 treinos • 15 dias consecutivos</div>
+                </div>
+                <div class="lb-score">8.340</div>
+              </div>
+              <div class="lb-item" id="myLbRow" style="display: none"></div>
+              <!-- Linha do usuário logado (exibida via JS) -->
             </div>
           </div>
         </div>
       </div>
 
       <!-- RIGHT PANEL -->
+      <!-- Comentário: Painel lateral direito -->
       <div class="right-panel">
+        <!-- Sidebar lateral de widgets -->
         <div class="panel-section">
-          <div class="panel-title">🟢 ONLINE AGORA (847)</div>
+          <!-- Widget: Usuários online -->
+          <div class="panel-title">🟢 ONLINE AGORA</div>
+          <!-- Título -->
           <div class="online-list">
+            <!-- Lista de usuários -->
             <div class="online-user">
+              <!-- Usuário 1 -->
               <div class="ou-av av-1">
                 RJ
                 <div class="ou-dot"></div>
+                <!-- Dot verde status -->
               </div>
               <div class="ou-info">
                 <div class="ou-name">Rafael Júnior</div>
@@ -1434,9 +528,11 @@
               </div>
               <button class="ou-follow following" onclick="toggleFollow(this)">
                 Seguindo
+                <!-- Botão de follow -->
               </button>
             </div>
             <div class="online-user">
+              <!-- Usuário 2 -->
               <div class="ou-av av-2">
                 MC
                 <div class="ou-dot"></div>
@@ -1450,6 +546,7 @@
               </button>
             </div>
             <div class="online-user">
+              <!-- Usuário 3 -->
               <div class="ou-av av-3">
                 AL
                 <div class="ou-dot"></div>
@@ -1462,26 +559,16 @@
                 Seguir
               </button>
             </div>
-            <div class="online-user">
-              <div class="ou-av av-4">
-                PR
-                <div class="ou-dot"></div>
-              </div>
-              <div class="ou-info">
-                <div class="ou-name">Pedro Rocha</div>
-                <div class="ou-status">Planejando treino</div>
-              </div>
-              <button class="ou-follow" onclick="toggleFollow(this)">
-                Seguir
-              </button>
-            </div>
           </div>
         </div>
-
         <div class="panel-section">
+          <!-- Widget: Conquistas -->
           <div class="panel-title">🏅 SUAS CONQUISTAS</div>
+          <!-- Título -->
           <div class="achievements">
+            <!-- Ícones de conquistas -->
             <div class="ach">
+              <!-- Conquista 1 -->
               <div class="ach-icon">🔥</div>
               <div>
                 <div class="ach-name">Sequência 21d</div>
@@ -1489,6 +576,7 @@
               </div>
             </div>
             <div class="ach">
+              <!-- Conquista 2 -->
               <div class="ach-icon">💪</div>
               <div>
                 <div class="ach-name">1° PR</div>
@@ -1496,40 +584,31 @@
               </div>
             </div>
             <div class="ach">
+              <!-- Conquista 3 -->
               <div class="ach-icon">🏆</div>
               <div>
                 <div class="ach-name">Top 10%</div>
                 <div class="ach-date">Fev 26</div>
               </div>
             </div>
-            <div class="ach">
-              <div class="ach-icon">⚡</div>
-              <div>
-                <div class="ach-name">50 Treinos</div>
-                <div class="ach-date">Mar 26</div>
-              </div>
-            </div>
             <div class="ach locked">
+              <!-- Conquista bloqueada -->
               <div class="ach-icon">👑</div>
               <div>
                 <div class="ach-name">Elite</div>
                 <div class="ach-date">Bloqueado</div>
               </div>
             </div>
-            <div class="ach locked">
-              <div class="ach-icon">💎</div>
-              <div>
-                <div class="ach-name">Lendário</div>
-                <div class="ach-date">Bloqueado</div>
-              </div>
-            </div>
           </div>
         </div>
-
         <div class="panel-section">
+          <!-- Widget: Desafios atuais -->
           <div class="panel-title">📌 SEUS DESAFIOS</div>
+          <!-- Título -->
           <div class="my-ch-list">
+            <!-- Lista mini de desafios -->
             <div class="my-ch">
+              <!-- Desafio 1 mini -->
               <div class="my-ch-name">🔥 30 Dias HIIT</div>
               <div class="my-ch-bar">
                 <div class="my-ch-fill" style="width: 47%"></div>
@@ -1540,6 +619,7 @@
               </div>
             </div>
             <div class="my-ch">
+              <!-- Desafio 2 mini -->
               <div class="my-ch-name">👑 Battleground Força</div>
               <div class="my-ch-bar">
                 <div
@@ -1557,181 +637,439 @@
       </div>
     </div>
 
+    <!-- MODAL CRIAR COMUNIDADE -->
+    <!-- Comentário: Janela modal para criação de novas comunidades -->
+    <div class="modal-overlay" id="createCommOverlay">
+      <!-- Overlay de fundo escurecido -->
+      <div class="modal-box">
+        <!-- Caixa da modal -->
+        <button class="modal-close" onclick="closeCreateComm()">✕</button>
+        <!-- Botão fechar -->
+        <div class="modal-tag">Nova Comunidade</div>
+        <!-- Tag decorativa -->
+        <div class="modal-title">CRIAR<br />COMUNIDADE</div>
+        <!-- Título da modal -->
+        <div class="modal-alert" id="commAlert"></div>
+        <!-- Alerta de erro/sucesso -->
+        <div class="form-group">
+          <!-- Grupo do formulário: Ícone -->
+          <label class="form-label">Ícone da comunidade</label>
+          <select class="form-select" id="comm-icon">
+            <option value="🏋️">🏋️ Musculação</option>
+            <option value="🔥">🔥 HIIT</option>
+            <option value="🧘">🧘 🔥oga & Bem-estar</option>
+            <option value="🏃">🏃 Corrida</option>
+            <option value="🚴">🚴 Ciclismo</option>
+            <option value="🥊">🥊 Artes Marciais</option>
+            <option value="🏊">🏊 Natação</option>
+            <option value="⚽">⚽ Esportes</option>
+            <option value="🥗">🥗 Nutrição</option>
+            <option value="💪">💪 Força</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Nome -->
+          <label class="form-label">Nome da comunidade</label>
+          <input
+            class="form-input"
+            id="comm-name"
+            placeholder="Ex: Atletas de Limeira"
+          />
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Descrição -->
+          <label class="form-label">Descrição</label>
+          <textarea
+            class="form-textarea"
+            id="comm-desc"
+            placeholder="Descreva o objetivo da sua comunidade..."
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Categoria -->
+          <label class="form-label">Categoria</label>
+          <select class="form-select" id="comm-category">
+            <option>Musculação</option>
+            <option>Cardio</option>
+            <option>Nutrição</option>
+            <option>Bem-estar</option>
+            <option>Esportes</option>
+            <option>Iniciantes</option>
+            <option>Avançados</option>
+            <option>Regional</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Privacidade -->
+          <label class="form-label">Privacidade</label>
+          <select class="form-select" id="comm-privacy">
+            <option value="public">🌐 Pública — qualquer um pode entrar</option>
+            <option value="private">🔒 Privada — somente por convite</option>
+          </select>
+        </div>
+        <button
+          class="btn-primary"
+          id="createCommSubmit"
+          onclick="submitCreateComm()"
+        >
+          CRIAR COMUNIDADE
+          <!-- Botão de submissão -->
+        </button>
+      </div>
+    </div>
+
     <script type="module">
-      import { onAuthChange, logout } from "./js/auth.js";
+      // Comentário: Lógica da Comunidade
+      import { onAuthChange } from "./js/auth.js"; // Importa monitor de login
       import {
-        createPost,
+        // Importa funções de banco de dados
+        createPost as fbCreatePost,
         subscribeToPosts,
         toggleLikePost,
         getUserProfile,
         formatTimestamp,
       } from "./js/db.js";
+      import { db } from "./js/firebase-config.js"; // Importa config do Firebase
+      import {
+        // Importa métodos do Firestore
+        collection,
+        addDoc,
+        doc,
+        updateDoc,
+        arrayUnion,
+        arrayRemove,
+        onSnapshot,
+        query,
+        orderBy,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-      /* ====================================================
-   AUTH GUARD
-==================================================== */
-      let currentUser = null;
-      let currentProfile = null;
-      let unsubscribePosts = null;
+      let currentUser = null, // Usuário logado
+        currentProfile = null, // Perfil do usuário
+        postType = "", // Tipo de postagem selecionado
+        unsubPosts = null; // Função para remover listener de posts
 
       onAuthChange(async (user) => {
-        currentUser = user;
+        // Monitor de autenticação
         if (!user) {
-          window.location.href = "index.html";
+          window.location.href = "index.html"; // Redireciona se offline
           return;
         }
-
-        currentProfile = await getUserProfile(user.uid);
-        updateUserAvatar();
-
-        // Inicia listener de posts em tempo real
-        startPostsListener();
+        currentUser = user;
+        currentProfile = await getUserProfile(user.uid); // Busca perfil
+        updateAvatar(); // Atualiza iniciais na tela
+        updateLeaderboard(); // Atualiza linha do usuário no ranking
+        startPostsListener(); // Inicia fluxo de posts real-time
+        loadCommunities(); // Inicia fluxo de comunidades real-time
       });
 
-      /* ====================================================
-   ATUALIZA AVATAR DO USUÁRIO
-==================================================== */
-      function updateUserAvatar() {
+      function updateAvatar() {
+        // Sincroniza iniciais do usuário nos avatares "você"
         if (!currentProfile) return;
         const initials = (currentProfile.name || "U")
           .substring(0, 2)
           .toUpperCase();
-        document.querySelectorAll(".user-av, .av-you").forEach((el) => {
+        document.querySelectorAll("#myAvatar, .av-you").forEach((el) => {
           el.textContent = initials;
         });
       }
 
-      /* ====================================================
-   POSTS EM TEMPO REAL
-==================================================== */
-      function startPostsListener() {
-        if (unsubscribePosts) unsubscribePosts();
+      function updateLeaderboard() {
+        // Renderiza a posição do usuário no ranking
+        if (!currentProfile) return;
+        const row = document.getElementById("myLbRow");
+        const name = currentProfile.name || "Você";
+        const initials = name.substring(0, 2).toUpperCase();
+        const xp = currentProfile.xp || 0,
+          tw = currentProfile.totalWorkouts || 0,
+          str = currentProfile.streak || 0;
+        row.style.display = "flex";
+        row.className = "lb-item you";
+        row.innerHTML = `<div class="lb-rank" style="color:var(--green)">—</div><span>⭐</span>
+    <div class="lb-av" style="background:linear-gradient(135deg,var(--green),#00aa55)">${initials}</div>
+    <div class="lb-info"><div class="lb-name">${name} <span style="color:var(--green);font-size:11px">(Você)</span></div>
+    <div class="lb-detail">${tw} treinos • ${str} dias consecutivos</div></div>
+    <div class="lb-score" style="color:var(--green)">${xp.toLocaleString("pt-BR")}</div>`;
+      }
 
-        unsubscribePosts = subscribeToPosts((posts) => {
-          if (posts.length > 0) renderPosts(posts);
+      function startPostsListener() {
+        // Assina mudanças na coleção de posts
+        if (unsubPosts) unsubPosts();
+        unsubPosts = subscribeToPosts((posts) => {
+          if (posts.length > 0) renderRealPosts(posts);
         }, 20);
       }
 
-      function renderPosts(posts) {
+      function renderRealPosts(posts) {
+        // Insere posts do Firebase no topo da lista
         const container = document.getElementById("posts-container");
-        if (!container) return;
-
-        // Mantém posts estáticos de demonstração e adiciona reais no topo
-        const realPosts = posts.map((post) => buildPostHTML(post)).join("");
-
-        // Insere posts reais antes dos estáticos
-        const staticPosts = container.innerHTML;
-        container.innerHTML = realPosts + staticPosts;
+        const staticHTML = container.innerHTML;
+        container.innerHTML =
+          posts.map((p) => buildPostHTML(p)).join("") + staticHTML;
       }
 
       function buildPostHTML(post) {
-        const initials = post.userInitials || "U";
-        const time = formatTimestamp(post.createdAt);
+        // Gera o HTML para um card de postagem
+        const initials = post.userInitials || "U",
+          time = formatTimestamp(post.createdAt);
         const likesCount = post.likesCount || 0;
         const isLiked = currentUser && post.likes?.includes(currentUser.uid);
-
-        return `
-    <div class="post" data-post-id="${post.id}">
-      <div class="post-header">
-        <div class="post-av av-you">${initials}</div>
-        <div class="post-meta">
-          <div class="post-name">${post.userName || "Usuário"}</div>
-          <div class="post-time">${time}</div>
-        </div>
+        const isOwn = currentUser && post.userId === currentUser.uid;
+        return `<div class="post" data-post-id="${post.id}">
+    <div class="post-header">
+      <div class="post-av av-you">${initials}</div>
+      <div class="post-meta">
+        <div class="post-name">${escHtml(post.userName || "Usuário")}${isOwn ? '<span class="post-badge">VOCÊ</span>' : ""}</div>
+        <div class="post-time">${time}</div>
       </div>
-      <div class="post-text">${escHtml(post.text)}</div>
-      <div class="post-actions">
-        <div class="post-action ${isLiked ? "liked" : ""}"
-          onclick="handleLike(this, '${post.id}')">
-          <svg viewBox="0 0 24 24" fill="${isLiked ? "currentColor" : "none"}"
-            stroke="currentColor" stroke-width="2">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
-              l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06
-              L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-          <span>${likesCount}</span>
-        </div>
-        <div class="post-action">
-          <svg viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5
-              a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-          <span>0</span>
-        </div>
+    </div>
+    <div class="post-text">${escHtml(post.text)}</div>
+    <div class="post-actions">
+      <div class="post-action ${isLiked ? "liked" : ""}" onclick="window.handleLike(this,'${post.id}')">
+        <svg viewBox="0 0 24 24" fill="${isLiked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg><span>${likesCount}</span>
       </div>
-    </div>`;
+      <div class="post-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>0</span></div>
+    </div>
+  </div>`;
       }
 
       function escHtml(t) {
+        // Escapa HTML para segurança
         return String(t)
           .replace(/&/g, "&amp;")
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;");
       }
 
-      /* ====================================================
-   CURTIR POST
-==================================================== */
-      window.handleLike = async function (el, postId) {
+      window.handleLike = async (el, postId) => {
+        // Gerencia curtidas via API global
         if (!currentUser) {
-          alert("Faça login para curtir posts!");
+          alert("Faça login para curtir!");
           return;
         }
         const liked = await toggleLikePost(postId, currentUser.uid);
         el.classList.toggle("liked", liked);
-        const svg = el.querySelector("svg");
-        svg.setAttribute("fill", liked ? "currentColor" : "none");
-        const count = el.querySelector("span");
-        count.textContent = parseInt(count.textContent) + (liked ? 1 : -1);
+        el.querySelector("svg").setAttribute(
+          "fill",
+          liked ? "currentColor" : "none",
+        );
+        const span = el.querySelector("span");
+        span.textContent = parseInt(span.textContent) + (liked ? 1 : -1);
       };
 
-      /* ====================================================
-   CRIAR POST
-==================================================== */
-      window.createPost = async function () {
+      window.setPostType = (type) => {
+        // Define o prefixo do post (Treino, Foto, etc)
+        postType = type;
+      };
+
+      window.doCreatePost = async () => {
+        // Cria nova postagem no Firestore
         if (!currentUser) {
           alert("Faça login para publicar!");
           return;
         }
-
         const input = document.getElementById("postInput");
-        const text = input.value.trim();
-        if (!text) return;
-
-        const btn = document.querySelector(".post-submit");
-        btn.textContent = "⏳ Publicando...";
+        const raw = input.value.trim();
+        if (!raw) return;
+        const text = postType ? `${postType}: ${raw}` : raw;
+        const btn = document.getElementById("publishBtn");
+        btn.textContent = "⏳";
         btn.disabled = true;
-
         try {
-          await createPost(currentUser.uid, { text, type: "text" });
+          await fbCreatePost(currentUser.uid, { text, type: "text" });
           input.value = "";
-        } catch (err) {
+          postType = "";
+        } catch (e) {
           alert("Erro ao publicar. Tente novamente.");
-          console.error(err);
         } finally {
           btn.textContent = "Publicar";
           btn.disabled = false;
         }
       };
 
-      /* ====================================================
-   THEME
-==================================================== */
-      let dark = true;
-      document.getElementById("themeBtn").onclick = () => {
-        dark = !dark;
-        document.documentElement.setAttribute(
-          "data-theme",
-          dark ? "dark" : "light",
+      async function loadCommunities() {
+        // Escuta mudanças na coleção de comunidades
+        const ref = collection(db, "communities");
+        onSnapshot(
+          ref,
+          (snap) => {
+            const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+            // Ordena no cliente (mais recentes primeiro) para evitar índice composto
+            all.sort((a, b) => {
+              const da = a.createdAt?.toDate
+                ? a.createdAt.toDate()
+                : new Date(a.createdAt || 0);
+              const db2 = b.createdAt?.toDate
+                ? b.createdAt.toDate()
+                : new Date(b.createdAt || 0);
+              return db2 - da;
+            });
+            renderCommunities(all);
+          },
+          (err) => console.error("loadCommunities erro:", err),
         );
-        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
+      }
+
+      function renderCommunities(communities) {
+        // Separa e renderiza comunidades (minhas vs outras)
+        if (!currentUser) return;
+        const uid = currentUser.uid;
+        const mine = communities.filter(
+          (c) => c.adminId === uid || c.members?.includes(uid),
+        );
+        const others = communities.filter(
+          (c) => c.adminId !== uid && !c.members?.includes(uid),
+        );
+        const myList = document.getElementById("myCommList");
+        const allList = document.getElementById("allCommList");
+        myList.innerHTML =
+          mine.length === 0
+            ? `<div class="empty-comm"><div class="empty-comm-icon">🌐</div><div class="empty-comm-title">NENHUMA COMUNIDADE</div><div class="empty-comm-sub">Crie ou entre em uma comunidade para começar</div></div>`
+            : mine.map((c) => buildCommCard(c, uid)).join("");
+        allList.innerHTML =
+          others.length === 0
+            ? `<div class="empty-comm"><div class="empty-comm-icon">🔍</div><div class="empty-comm-title">NENHUMA ENCONTRADA</div><div class="empty-comm-sub">Seja o primeiro a criar uma comunidade!</div></div>`
+            : others.map((c) => buildCommCard(c, uid)).join("");
+      }
+
+      function buildCommCard(c, uid) {
+        // Gera HTML para o card de uma comunidade
+        const isAdmin = c.adminId === uid,
+          isMember = c.members?.includes(uid);
+        const count = (c.members?.length || 0) + 1;
+        let btnClass = "comm-join",
+          btnText = "Entrar";
+        if (isAdmin) {
+          btnClass += " admin";
+          btnText = "👑 Admin";
+        } else if (isMember) {
+          btnClass += " member";
+          btnText = "✓ Membro";
+        }
+        return `<div class="comm-card">
+    <div class="comm-card-header">
+      <div class="comm-icon">${c.icon || "🌐"}</div>
+      <div class="comm-info"><div class="comm-name">${escHtml(c.name)}</div><div class="comm-desc">${escHtml(c.description || "")}</div></div>
+      ${isAdmin ? '<span class="comm-badge admin">ADMIN</span>' : isMember ? '<span class="comm-badge member">MEMBRO</span>' : ""}
+    </div>
+    <div class="comm-stats">
+      <div class="comm-stat">👥 ${count} membro${count !== 1 ? "s" : ""}</div>
+      <div class="comm-stat">📂 ${escHtml(c.category || "Geral")}</div>
+      <div class="comm-stat">${c.privacy === "private" ? "🔒 Privada" : "🌐 Pública"}</div>
+    </div>
+    <div class="comm-footer">
+      <div class="${btnClass}" onclick="window.handleCommAction('${c.id}',${isAdmin},${isMember})">${btnText}</div>
+    </div>
+  </div>`;
+      }
+
+      window.handleCommAction = async (commId, isAdmin, isMember) => {
+        // Gerencia entrada/saída de comunidades
+        if (!currentUser) {
+          alert("Faça login!");
+          return;
+        }
+        if (isAdmin) {
+          alert("Você é o administrador desta comunidade.");
+          return;
+        }
+        const ref = doc(db, "communities", commId);
+        if (isMember) {
+          if (!confirm("Sair desta comunidade?")) return;
+          await updateDoc(ref, { members: arrayRemove(currentUser.uid) });
+        } else {
+          await updateDoc(ref, { members: arrayUnion(currentUser.uid) });
+          alert("Você entrou na comunidade! 🎉");
+        }
       };
 
-      /* ====================================================
-   TABS
-==================================================== */
+      window.openCreateComm = () => {
+        // Abre modal de criação
+        document.getElementById("createCommOverlay").classList.add("open");
+        document.body.style.overflow = "hidden";
+      };
+      window.closeCreateComm = () => {
+        // Fecha modal de criação
+        document.getElementById("createCommOverlay").classList.remove("open");
+        document.body.style.overflow = "";
+        const a = document.getElementById("commAlert");
+        a.className = "modal-alert";
+        a.textContent = "";
+      };
+      document
+        .getElementById("createCommOverlay")
+        .addEventListener("click", (e) => {
+          // Fecha modal ao clicar fora
+          if (e.target === document.getElementById("createCommOverlay"))
+            window.closeCreateComm();
+        });
+
+      document.getElementById("createCommBtn").onclick = () => {
+        // Atalho para abrir modal na aba certa
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((c) => c.classList.remove("active"));
+        document
+          .querySelector('[data-tab="communities"]')
+          .classList.add("active");
+        document.getElementById("tab-communities").classList.add("active");
+        window.openCreateComm();
+      };
+
+      window.submitCreateComm = async () => {
+        // Envia novos dados de comunidade para o Firebase
+        if (!currentUser) {
+          alert("Faça login!");
+          return;
+        }
+        const name = document.getElementById("comm-name").value.trim();
+        const desc = document.getElementById("comm-desc").value.trim();
+        const icon = document.getElementById("comm-icon").value;
+        const category = document.getElementById("comm-category").value;
+        const privacy = document.getElementById("comm-privacy").value;
+        const alertEl = document.getElementById("commAlert");
+        if (!name) {
+          alertEl.textContent = "Nome da comunidade é obrigatório.";
+          alertEl.className = "modal-alert err";
+          return;
+        }
+        const btn = document.getElementById("createCommSubmit");
+        btn.disabled = true;
+        btn.textContent = "Criando...";
+        try {
+          await addDoc(collection(db, "communities"), {
+            name,
+            description: desc,
+            icon,
+            category,
+            privacy,
+            adminId: currentUser.uid,
+            adminName: currentProfile?.name || "Admin",
+            members: [],
+            createdAt: serverTimestamp(),
+          });
+          alertEl.textContent = "✅ Comunidade criada com sucesso!";
+          alertEl.className = "modal-alert ok";
+          document.getElementById("comm-name").value = "";
+          document.getElementById("comm-desc").value = "";
+          setTimeout(() => window.closeCreateComm(), 1800);
+        } catch (err) {
+          console.error("Erro ao criar comunidade:", err);
+          alertEl.textContent = "Erro ao criar comunidade: " + err.message;
+          alertEl.className = "modal-alert err";
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "CRIAR COMUNIDADE";
+        }
+      };
+
       document.querySelectorAll(".tab").forEach((tab) => {
+        // Switch de abas
         tab.onclick = () => {
           document
             .querySelectorAll(".tab")
@@ -1746,34 +1084,42 @@
         };
       });
 
-      /* ====================================================
-   LIKE POSTS ESTÁTICOS
-==================================================== */
-      window.toggleLike = function (el) {
+      let dark = true; // Lógica de tema claro/escuro
+      document.getElementById("themeBtn").onclick = () => {
+        dark = !dark;
+        document.documentElement.setAttribute(
+          "data-theme",
+          dark ? "dark" : "light",
+        );
+        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
+      };
+
+      window.toggleLikeStatic = (el) => {
+        // Handler para curtidas estáticas (exemplo)
         el.classList.toggle("liked");
-        const count = el.querySelector("span");
-        const cur = parseInt(count.textContent) || 0;
-        count.textContent = el.classList.contains("liked") ? cur + 1 : cur - 1;
-        const svg = el.querySelector("svg");
+        const svg = el.querySelector("svg"),
+          span = el.querySelector("span"),
+          cur = parseInt(span.textContent) || 0;
         svg.setAttribute(
           "fill",
           el.classList.contains("liked") ? "currentColor" : "none",
         );
+        span.textContent = el.classList.contains("liked") ? cur + 1 : cur - 1;
       };
-
-      /* ====================================================
-   FOLLOW / JOIN / LIKE ESTÁTICOS
-==================================================== */
-      window.toggleFollow = function (btn) {
-        const following = btn.classList.toggle("following");
-        btn.textContent = following ? "Seguindo" : "Seguir";
+      window.toggleFollow = (btn) => {
+        // Handler para seguir usuários
+        const f = btn.classList.toggle("following");
+        btn.textContent = f ? "Seguindo" : "Seguir";
       };
-
-      window.toggleJoin = function (btn) {
-        const isJoined = btn.classList.contains("joined");
-        btn.classList.toggle("joined", !isJoined);
-        btn.textContent = isJoined ? "Participar" : "✓ Participando";
+      window.toggleJoin = (btn) => {
+        // Handler para participar de desafios
+        const j = btn.classList.contains("joined");
+        btn.classList.toggle("joined", !j);
+        btn.textContent = j ? "Participar" : "✓ Participando";
       };
     </script>
+    <!-- Fim do script -->
   </body>
+  <!-- Fim body -->
 </html>
+<!-- Fim html -->
