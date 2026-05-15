@@ -1,0 +1,1294 @@
+<!doctype html> <!-- Comentário: Declaração de tipo de documento HTML5 -->
+<html lang="pt-BR" data-theme="dark"> <!-- Elemento raiz com idioma e tema padrão escuro -->
+  <head> <!-- Cabeçalho do documento -->
+    <meta charset="UTF-8" /> <!-- Codificação UTF-8 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" /> <!-- Responsividade -->
+    <title>CoreLab — Dashboard de Performance</title> <!-- Título da página -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    /> <!-- Importação de fontes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script> <!-- Biblioteca Chart.js para gráficos -->
+    <link rel="stylesheet" href="css/global.css" /> <!-- Estilos globais -->
+    <link rel="stylesheet" href="css/dashboard.css" /> <!-- Estilos específicos do Dashboard -->
+  </head> <!-- Fim head -->
+  <body> <!-- Início do corpo -->
+    <div class="topbar"> <!-- Barra superior do dashboard -->
+      <div class="topbar-logo">CORE<span>LAB</span></div> <!-- Logo -->
+      <div class="topbar-sep"></div> <!-- Separador visual -->
+      <div class="topbar-title">Dashboard de Performance</div> <!-- Título da página atual -->
+      <div class="topbar-space"></div> <!-- Espaçador flexível -->
+      <div class="topbar-live"> <!-- Indicador de status "Ao Vivo" -->
+        <div class="live-dot"></div> <!-- Ponto pulsante -->
+        AO VIVO <!-- Texto -->
+      </div> <!-- Fim topbar-live -->
+      <button class="theme-btn" id="themeBtn">🌙</button> <!-- Alternador de tema -->
+      <button
+        class="topbar-btn dash-logout-btn"
+        id="dashLogoutBtn"
+        title="Sair da conta"
+      > <!-- Botão de logout -->
+        🚪 Sair <!-- Ícone e texto -->
+      </button> <!-- Fim logout -->
+      <a href="index.html" class="topbar-btn">← Voltar</a> <!-- Link de retorno para a landing page -->
+    </div> <!-- Fim topbar -->
+
+    <div class="dash-wrap"> <!-- Container principal do layout do dashboard -->
+      <div class="sidebar"> <!-- Barra lateral de navegação -->
+        <div class="profile-card"> <!-- Cartão de perfil do usuário -->
+          <div class="profile-av" id="profileAv">CL</div> <!-- Avatar (iniciais ou foto) -->
+          <div class="profile-name" id="profileName">Carregando...</div> <!-- Nome do usuário -->
+          <div class="profile-level" id="profileLevel">NÍVEL 1 — INICIANTE</div> <!-- Nível de experiência -->
+          <div class="xp-bar-wrap"> <!-- Container da barra de XP -->
+            <div class="xp-labels"> <!-- Rótulos de XP -->
+              <span>XP</span><span id="xpLabel">0 / 1000</span> <!-- Texto XP e valores -->
+            </div> <!-- Fim xp-labels -->
+            <div class="xp-bar"> <!-- Barra de progresso de XP -->
+              <div class="xp-fill" id="xpFill" style="width: 0%"></div> <!-- Preenchimento da barra -->
+            </div> <!-- Fim xp-bar -->
+          </div> <!-- Fim xp-bar-wrap -->
+        </div> <!-- Fim profile-card -->
+        <div class="sidebar-section">Principal</div> <!-- Seção da barra lateral -->
+        <div class="sidebar-item active" data-page="overview"> <!-- Item: Visão Geral (Ativo) -->
+          <div class="sidebar-icon">📊</div> <!-- Ícone -->
+          Visão Geral <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="workouts"> <!-- Item: Treinos -->
+          <div class="sidebar-icon">🏋️</div> <!-- Ícone -->
+          Treinos <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="body"> <!-- Item: Corpo -->
+          <div class="sidebar-icon">⚖️</div> <!-- Ícone -->
+          Corpo <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="cardio"> <!-- Item: Cardio -->
+          <div class="sidebar-icon">❤️</div> <!-- Ícone -->
+          Cardio <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="goals"> <!-- Item: Metas -->
+          <div class="sidebar-icon">🎯</div> <!-- Ícone -->
+          Metas <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-section">Saúde</div> <!-- Seção Saúde -->
+        <div class="sidebar-item" data-page="sleep"> <!-- Item: Sono -->
+          <div class="sidebar-icon">🌙</div> <!-- Ícone -->
+          Sono <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="nutrition"> <!-- Item: Nutrição -->
+          <div class="sidebar-icon">🥗</div> <!-- Ícone -->
+          Nutrição <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="profile"> <!-- Item: Perfil -->
+          <div class="sidebar-icon">👤</div> <!-- Ícone -->
+          Perfil <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+      </div> <!-- Fim sidebar -->
+
+      <div class="dash-main"> <!-- Área principal de conteúdo do dashboard -->
+        <!-- VISÃO GERAL --> <!-- Comentário: Página de resumo estatístico -->
+        <div class="dash-page active" id="page-overview"> <!-- Container da página Overview -->
+          <div class="page-header"> <!-- Cabeçalho da página -->
+            <div>
+              <div class="page-tag">Dashboard</div> <!-- Tag de categoria -->
+              <div class="page-title">VISÃO GERAL</div> <!-- Título da página -->
+            </div>
+          </div> <!-- Fim page-header -->
+          <div class="kpi-grid"> <!-- Grade de KPIs (Indicadores Chave de Performance) -->
+            <div class="kpi g"> <!-- KPI: Treinos (Verde) -->
+              <div class="kpi-icon">🔥</div> <!-- Ícone de fogo (streak) -->
+              <div class="kpi-val" id="kpi-workouts">0</div> <!-- Valor total de treinos -->
+              <div class="kpi-label">Treinos totais</div> <!-- Rótulo -->
+              <div class="kpi-delta up" id="kpi-streak">⟳ Carregando...</div> <!-- Status de consistência -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi o"> <!-- KPI: Calorias (Laranja) -->
+              <div class="kpi-icon">⚡</div> <!-- Ícone de raio -->
+              <div class="kpi-val" id="kpi-calories">0</div> <!-- Valor de calorias -->
+              <div class="kpi-label">kcal queimadas (total)</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ Acumulado</div> <!-- Indicador de crescimento -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi b"> <!-- KPI: Duração (Azul) -->
+              <div class="kpi-icon">⏱️</div> <!-- Ícone de cronômetro -->
+              <div class="kpi-val" id="kpi-duration">0min</div> <!-- Valor de tempo -->
+              <div class="kpi-label">Tempo de treino (total)</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ Acumulado</div> <!-- Indicador -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi p"> <!-- KPI: Volume (Roxo) -->
+              <div class="kpi-icon">💪</div> <!-- Ícone de força -->
+              <div class="kpi-val" id="kpi-volume">0kg</div> <!-- Valor de peso total -->
+              <div class="kpi-label">Volume total</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ Acumulado</div> <!-- Indicador -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi g"> <!-- KPI: XP (Verde) -->
+              <div class="kpi-icon">🏆</div> <!-- Ícone de troféu -->
+              <div class="kpi-val" id="kpi-xp">0</div> <!-- Valor de XP -->
+              <div class="kpi-label">XP acumulado</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ +100 por treino</div> <!-- Explicação do ganho -->
+            </div> <!-- Fim kpi -->
+          </div> <!-- Fim kpi-grid -->
+          <div class="chart-grid"> <!-- Grade de gráficos estatísticos -->
+            <div class="chart-box"> <!-- Box do gráfico de Volume -->
+              <div class="chart-title">Volume de Treino</div> <!-- Título do gráfico -->
+              <div class="chart-sub">Carga total por sessão (kg)</div> <!-- Subtítulo explicativo -->
+              <div class="chart-wrap" id="volumeChartWrap"> <!-- Container onde o Canvas do Chart.js é injetado -->
+                <div class="empty-state"> <!-- Estado vazio (exibido se não houver dados) -->
+                  <div class="empty-icon">📊</div> <!-- Ícone de gráfico vazio -->
+                  <div class="empty-title">SEM DADOS</div> <!-- Título -->
+                  <div class="empty-sub">
+                    Registre treinos para ver o gráfico <!-- Instrução ao usuário -->
+                  </div> <!-- Fim empty-sub -->
+                </div> <!-- Fim empty-state -->
+              </div> <!-- Fim chart-wrap -->
+            </div> <!-- Fim chart-box -->
+            <div class="chart-box"> <!-- Box do gráfico de Distribuição Muscular -->
+              <div class="chart-title">Distribuição Muscular</div> <!-- Título -->
+              <div class="chart-sub">Grupos musculares trabalhados</div> <!-- Subtítulo -->
+              <div class="chart-wrap" id="muscleChartWrap"> <!-- Container do gráfico de rosca/pizza -->
+                <div class="empty-state"> <!-- Estado vazio -->
+                  <div class="empty-icon">💪</div> <!-- Ícone -->
+                  <div class="empty-title">SEM DADOS</div> <!-- Título -->
+                  <div class="empty-sub">
+                    Registre treinos para ver a distribuição <!-- Instrução -->
+                  </div> <!-- Fim empty-sub -->
+                </div> <!-- Fim empty-state -->
+              </div> <!-- Fim chart-wrap -->
+            </div> <!-- Fim chart-box -->
+          </div> <!-- Fim chart-grid -->
+          <div class="table-box"> <!-- Box da tabela de histórico -->
+            <div class="chart-title">Histórico Recente</div> <!-- Título -->
+            <div class="chart-sub">Últimas sessões registradas</div> <!-- Subtítulo -->
+            <table class="dash-table"> <!-- Tabela de dados -->
+              <thead> <!-- Cabeçalho da tabela -->
+                <tr>
+                  <th>Data</th> <!-- Coluna Data -->
+                  <th>Treino</th> <!-- Coluna Nome do Treino -->
+                  <th>Duração</th> <!-- Coluna Duração -->
+                  <th>Volume</th> <!-- Coluna Peso total -->
+                  <th>Calorias</th> <!-- Coluna Calorias -->
+                </tr>
+              </thead> <!-- Fim thead -->
+              <tbody id="workoutTableBody"> <!-- Corpo da tabela (preenchido via JavaScript) -->
+                <tr>
+                  <td
+                    colspan="5"
+                    style="
+                      text-align: center;
+                      padding: 32px;
+                      color: var(--text3);
+                    "
+                  > <!-- Célula única para estado vazio inicial -->
+                    Nenhum treino registrado ainda
+                  </td>
+                </tr>
+              </tbody> <!-- Fim tbody -->
+            </table> <!-- Fim table -->
+          </div> <!-- Fim table-box -->
+        </div> <!-- Fim page-overview -->
+
+        <!-- TREINOS --> <!-- Comentário: Página para registro de sessões de treino -->
+        <div class="dash-page" id="page-workouts"> <!-- Container da página de treinos -->
+          <div class="page-header"> <!-- Cabeçalho -->
+            <div>
+              <div class="page-tag">Registrar</div> <!-- Tag -->
+              <div class="page-title">TREINOS</div> <!-- Título -->
+            </div>
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Cartão contendo o formulário de registro -->
+            <div class="form-card-title">🏋️ Registrar Nova Sessão</div> <!-- Título do formulário -->
+            <div class="form-grid"> <!-- Grade de campos do formulário -->
+              <div class="form-group"> <!-- Grupo de campo: Nome do Treino -->
+                <label class="form-label">Nome do Treino</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-name"
+                  placeholder="Ex: Peito & Tríceps"
+                /> <!-- Entrada de texto -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Grupo de campo: Duração -->
+                <label class="form-label">Duração (min)</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-duration"
+                  type="number"
+                  min="1"
+                  placeholder="60"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Grupo de campo: Volume -->
+                <label class="form-label">Volume (kg)</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-volume"
+                  type="number"
+                  min="0"
+                  placeholder="2400"
+                /> <!-- Entrada numérica de carga total -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Grupo de campo: Calorias -->
+                <label class="form-label">Calorias queimadas</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-calories"
+                  type="number"
+                  min="0"
+                  placeholder="480"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Grupo muscular principal</label>
+                <select class="form-select" id="w-muscle">
+                  <option value="Peito">Peito</option>
+                  <option value="Costas">Costas</option>
+                  <option value="Pernas">Pernas</option>
+                  <option value="Ombros">Ombros</option>
+                  <option value="Bíceps">Bíceps</option>
+                  <option value="Tríceps">Tríceps</option>
+                  <option value="Core">Core</option>
+                  <option value="Full Body">Full Body</option>
+                  <option value="Cardio">Cardio</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Observações</label
+                ><input
+                  class="form-input"
+                  id="w-notes"
+                  placeholder="Como foi o treino?"
+                />
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="w-save">SALVAR TREINO</button>
+              <span class="form-feedback" id="w-feedback"></span>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi g">
+              <div class="kpi-icon">📈</div>
+              <div class="kpi-val" id="wk-total">0</div>
+              <div class="kpi-label">Treinos totais</div>
+            </div>
+            <div class="kpi o">
+              <div class="kpi-icon">⏱️</div>
+              <div class="kpi-val" id="wk-avgDur">0min</div>
+              <div class="kpi-label">Duração média</div>
+            </div>
+            <div class="kpi b">
+              <div class="kpi-icon">🔥</div>
+              <div class="kpi-val" id="wk-totalCal">0</div>
+              <div class="kpi-label">kcal totais</div>
+            </div>
+            <div class="kpi p">
+              <div class="kpi-icon">💪</div>
+              <div class="kpi-val" id="wk-totalVol">0kg</div>
+              <div class="kpi-label">Volume total</div>
+            </div>
+          </div>
+          <div class="chart-grid-3">
+            <div class="chart-box">
+              <div class="chart-title">Volume por Sessão</div>
+              <div class="chart-sub">kg por treino</div>
+              <div class="chart-wrap"><canvas id="wVolChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">Calorias por Sessão</div>
+              <div class="chart-sub">kcal queimadas</div>
+              <div class="chart-wrap"><canvas id="wCalChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">Grupos Musculares</div>
+              <div class="chart-sub">Distribuição de treinos</div>
+              <div class="chart-wrap"><canvas id="wMuscleChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CORPO -->
+        <div class="dash-page" id="page-body">
+          <div class="page-header">
+            <div>
+              <div class="page-tag">Composição</div>
+              <div class="page-title">CORPO</div>
+            </div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title">⚖️ Registrar Medidas Corporais</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Peso (kg)</label
+                ><input
+                  class="form-input"
+                  id="b-weight"
+                  type="number"
+                  step="0.1"
+                  placeholder="80.5"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">% Gordura</label
+                ><input
+                  class="form-input"
+                  id="b-fat"
+                  type="number"
+                  step="0.1"
+                  placeholder="15.0"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cintura (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-waist"
+                  type="number"
+                  placeholder="84"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Peito (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-chest"
+                  type="number"
+                  placeholder="102"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bíceps (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-biceps"
+                  type="number"
+                  placeholder="38"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Coxa (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-thigh"
+                  type="number"
+                  placeholder="60"
+                />
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="b-save">SALVAR MEDIDAS</button>
+              <span class="form-feedback" id="b-feedback"></span>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi g">
+              <div class="kpi-icon">⚖️</div>
+              <div class="kpi-val" id="bk-weight">—</div>
+              <div class="kpi-label">Peso atual (kg)</div>
+            </div>
+            <div class="kpi b">
+              <div class="kpi-icon">🔬</div>
+              <div class="kpi-val" id="bk-fat">—</div>
+              <div class="kpi-label">% Gordura atual</div>
+            </div>
+            <div class="kpi p">
+              <div class="kpi-icon">💪</div>
+              <div class="kpi-val" id="bk-lean">—</div>
+              <div class="kpi-label">Massa magra (kg)</div>
+            </div>
+            <div class="kpi o">
+              <div class="kpi-icon">📏</div>
+              <div class="kpi-val" id="bk-waist">—</div>
+              <div class="kpi-label">Cintura (cm)</div>
+            </div>
+          </div>
+          <div class="chart-grid">
+            <div class="chart-box">
+              <div class="chart-title">Evolução do Peso</div>
+              <div class="chart-sub">kg ao longo do tempo</div>
+              <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">Composição Corporal</div>
+              <div class="chart-sub">Última medição</div>
+              <div class="chart-wrap"><canvas id="bodyCompChart"></canvas></div>
+            </div>
+          </div>
+          <div class="body-grid">
+            <div class="body-metric">
+              <div class="bm-label">Cintura</div>
+              <div class="bm-val">
+                <span id="bm-waist">—</span><span class="bm-unit"> cm</span>
+              </div>
+            </div>
+            <div class="body-metric">
+              <div class="bm-label">Peito</div>
+              <div class="bm-val">
+                <span id="bm-chest">—</span><span class="bm-unit"> cm</span>
+              </div>
+            </div>
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="b-save">SALVAR MEDIDAS</button> <!-- Botão salvar -->
+              <span class="form-feedback" id="b-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
+          <div class="kpi-grid"> <!-- Grade de indicadores de corpo -->
+            <div class="kpi g"> <!-- KPI: Peso -->
+              <div class="kpi-icon">⚖️</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-weight">—</div> <!-- Valor -->
+              <div class="kpi-label">Peso atual (kg)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi b"> <!-- KPI: Gordura -->
+              <div class="kpi-icon">🔬</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-fat">—</div> <!-- Valor -->
+              <div class="kpi-label">% Gordura atual</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi p"> <!-- KPI: Massa magra -->
+              <div class="kpi-icon">💪</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-lean">—</div> <!-- Valor -->
+              <div class="kpi-label">Massa magra (kg)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi o"> <!-- KPI: Cintura -->
+              <div class="kpi-icon">📏</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-waist">—</div> <!-- Valor -->
+              <div class="kpi-label">Cintura (cm)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+          </div> <!-- Fim kpi-grid -->
+          <div class="chart-grid"> <!-- Grade de gráficos de corpo -->
+            <div class="chart-box"> <!-- Gráfico: Peso -->
+              <div class="chart-title">Evolução do Peso</div> <!-- Título -->
+              <div class="chart-sub">kg ao longo do tempo</div> <!-- Subtítulo -->
+              <div class="chart-wrap"><canvas id="weightChart"></canvas></div> <!-- Canvas -->
+            </div> <!-- Fim chart-box -->
+            <div class="chart-box"> <!-- Gráfico: Composição -->
+              <div class="chart-title">Composição Corporal</div> <!-- Título -->
+              <div class="chart-sub">Última medição</div> <!-- Subtítulo -->
+              <div class="chart-wrap"><canvas id="bodyCompChart"></canvas></div> <!-- Canvas -->
+            </div> <!-- Fim chart-box -->
+          </div> <!-- Fim chart-grid -->
+          <div class="body-grid"> <!-- Grade de métricas individuais -->
+            <div class="body-metric"> <!-- Item: Cintura -->
+              <div class="bm-label">Cintura</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-waist">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+            <div class="body-metric"> <!-- Item: Peito -->
+              <div class="bm-label">Peito</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-chest">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+            <div class="body-metric"> <!-- Item: Bíceps -->
+              <div class="bm-label">Bíceps</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-biceps">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+            <div class="body-metric"> <!-- Item: Coxa -->
+              <div class="bm-label">Coxa</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-thigh">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+          </div> <!-- Fim body-grid -->
+        </div> <!-- Fim page-body -->
+
+        <!-- CARDIO --> <!-- Comentário: Registro e análise de atividades aeróbicas -->
+        <div class="dash-page" id="page-cardio"> <!-- Container cardio -->
+          <div class="page-header"> <!-- Cabeçalho -->
+            <div>
+              <div class="page-tag">Cardiovascular</div> <!-- Tag -->
+              <div class="page-title">CARDIO</div> <!-- Título -->
+            </div>
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Formulário cardio -->
+            <div class="form-card-title">❤️ Registrar Sessão de Cardio</div> <!-- Título -->
+            <div class="form-grid"> <!-- Grade de campos -->
+              <div class="form-group"> <!-- Campo tipo -->
+                <label class="form-label">Tipo</label> <!-- Rótulo -->
+                <select class="form-select" id="c-type"> <!-- Seletor -->
+                  <option>HIIT</option> <!-- Opção -->
+                  <option>LISS</option> <!-- Opção -->
+                  <option>Corrida</option> <!-- Opção -->
+                  <option>Ciclismo</option> <!-- Opção -->
+                  <option>Natação</option> <!-- Opção -->
+                  <option>Caminhada</option> <!-- Opção -->
+                  <option>Outro</option> <!-- Opção -->
+                </select> <!-- Fim select -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo duração -->
+                <label class="form-label">Duração (min)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-duration"
+                  type="number"
+                  min="1"
+                  placeholder="28"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo calorias -->
+                <label class="form-label">Calorias queimadas</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-calories"
+                  type="number"
+                  placeholder="320"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo FC média -->
+                <label class="form-label">FC Média (bpm)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-avghr"
+                  type="number"
+                  placeholder="145"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo FC máxima -->
+                <label class="form-label">FC Máxima (bpm)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-maxhr"
+                  type="number"
+                  placeholder="172"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo distância -->
+                <label class="form-label">Distância (km)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-distance"
+                  type="number"
+                  step="0.1"
+                  placeholder="5.0"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="c-save">SALVAR CARDIO</button> <!-- Botão -->
+              <span class="form-feedback" id="c-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
+          <div class="kpi-grid"> <!-- Grade de indicadores -->
+            <div class="kpi r"> <!-- KPI: FC -->
+              <div class="kpi-icon">❤️</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-avghr">—</div> <!-- Valor -->
+              <div class="kpi-label">FC média geral (bpm)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi o"> <!-- KPI: Distância -->
+              <div class="kpi-icon">🏃</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-distance">—</div> <!-- Valor -->
+              <div class="kpi-label">km acumulados</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi b"> <!-- KPI: Duração -->
+              <div class="kpi-icon">⏱️</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-duration">—</div> <!-- Valor -->
+              <div class="kpi-label">Minutos de cardio</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi g"> <!-- KPI: Calorias -->
+              <div class="kpi-icon">🔥</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-calories">—</div> <!-- Valor -->
+              <div class="kpi-label">kcal cardio total</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+          </div> <!-- Fim kpi-grid -->
+          <div class="chart-grid"> <!-- Grade de gráficos -->
+            <div class="chart-box"> <!-- Gráfico: FC -->
+              <div class="chart-title">FC Média por Sessão</div> <!-- Título -->
+              <div class="chart-sub">Batimentos por minuto</div> <!-- Subtítulo -->
+              <div class="chart-wrap"><canvas id="hrChart"></canvas></div> <!-- Canvas -->
+            </div> <!-- Fim chart-box -->
+            <div class="chart-box"> <!-- Gráfico: Tipos -->
+              <div class="chart-title">Tipos de Cardio</div> <!-- Título -->
+              <div class="chart-sub">Distribuição de modalidades</div> <!-- Subtítulo -->
+              <div class="chart-wrap">
+                <canvas id="cardioTypeChart"></canvas> <!-- Canvas -->
+              </div> <!-- Fim chart-wrap -->
+            </div> <!-- Fim chart-box -->
+          </div> <!-- Fim chart-grid -->
+        </div> <!-- Fim page-cardio -->
+
+        <!-- METAS --> <!-- Comentário: Monitoramento de objetivos pessoais -->
+        <div class="dash-page" id="page-goals"> <!-- Container metas -->
+          <div class="page-header"> <!-- Cabeçalho -->
+            <div>
+              <div class="page-tag">Objetivos</div> <!-- Tag -->
+              <div class="page-title">METAS</div> <!-- Título -->
+            </div>
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Formulário metas -->
+            <div class="form-card-title">🎯 Adicionar Nova Meta</div> <!-- Título -->
+            <div class="form-grid"> <!-- Grade de campos -->
+              <div class="form-group"> <!-- Campo ícone -->
+                <label class="form-label">Ícone</label> <!-- Rótulo -->
+                <select class="form-select" id="g-icon"> <!-- Seletor -->
+                  <option>💪</option> <!-- Opção -->
+                  <option>⚖️</option> <!-- Opção -->
+                  <option>❤️</option> <!-- Opção -->
+                  <option>🏃</option> <!-- Opção -->
+                  <option>🔥</option> <!-- Opção -->
+                  <option>🏋️</option> <!-- Opção -->
+                  <option>🧘</option> <!-- Opção -->
+                  <option>🥗</option> <!-- Opção -->
+                  <option>💧</option> <!-- Opção -->
+                  <option>🎯</option> <!-- Opção -->
+                </select> <!-- Fim select -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group grid-col-span-2"> <!-- Campo nome -->
+                <label class="form-label">Nome da Meta</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-name"
+                  placeholder="Ex: Supino de 100kg"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo valor atual -->
+                <label class="form-label">Valor Atual</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-current"
+                  type="number"
+                  placeholder="80"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo valor alvo -->
+                <label class="form-label">Valor Alvo</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-target"
+                  type="number"
+                  placeholder="100"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo unidade -->
+                <label class="form-label">Unidade</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-unit"
+                  placeholder="kg, %, min, km..."
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo prazo -->
+                <label class="form-label">Prazo</label <!-- Rótulo -->
+                ><input class="form-input" id="g-deadline" type="date" /> <!-- Data -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="g-save">ADICIONAR META</button> <!-- Botão -->
+              <span class="form-feedback" id="g-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
+          <div class="chart-box"> <!-- Box metas -->
+            <div class="chart-title">Metas Ativas</div> <!-- Título -->
+            <div class="chart-sub">Progresso em relação às metas definidas</div> <!-- Subtítulo -->
+            <div id="goalsList" class="mt-16"> <!-- Lista dinâmica -->
+              <div class="empty-state"> <!-- Estado vazio -->
+                <div class="empty-icon">🎯</div> <!-- Ícone -->
+                <div class="empty-title">SEM METAS</div> <!-- Título -->
+                <div class="empty-sub">Adicione sua primeira meta acima</div> <!-- Subtítulo -->
+              </div> <!-- Fim empty-state -->
+            </div> <!-- Fim goalsList -->
+          </div> <!-- Fim chart-box -->
+        </div> <!-- Fim page-goals -->
+
+        <!-- SONO --> <!-- Comentário: Registro de sono e recuperação -->
+        <div class="dash-page" id="page-sleep"> <!-- Container sono -->
+          <div class="page-header"> <!-- Cabeçalho -->
+            <div>
+              <div class="page-tag">Recuperação</div> <!-- Tag -->
+              <div class="page-title">SONO</div> <!-- Título -->
+            </div>
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Formulário sono -->
+            <div class="form-card-title">🌙 Registrar Noite de Sono</div> <!-- Título -->
+            <div class="form-grid"> <!-- Grade de campos -->
+              <div class="form-group"> <!-- Campo horas -->
+                <label class="form-label">Horas dormidas</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-hours"
+                  type="number"
+                  step="0.5"
+                  min="1"
+                  max="12"
+                  placeholder="7.5"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo qualidade -->
+                <label class="form-label">Qualidade (1–10)</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-quality"
+                  type="number"
+                  min="1"
+                  max="10"
+                  placeholder="8"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo hora dormir -->
+                <label class="form-label">Dormiu às</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-bedtime"
+                  type="time"
+                  value="23:00"
+                /> <!-- Time -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo hora acordar -->
+                <label class="form-label">Acordou às</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-wake"
+                /> <!-- Time -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="sl-save">SALVAR SONO</button> <!-- Botão -->
+              <span class="form-feedback" id="sl-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
+          <div class="kpi-grid">
+            <div class="kpi b">
+              <div class="kpi-icon">🌙</div>
+              <div class="kpi-val" id="sk-avg">—</div>
+              <div class="kpi-label">Média de horas</div>
+            </div>
+            <div class="kpi g">
+              <div class="kpi-icon">✨</div>
+              <div class="kpi-val" id="sk-quality">—</div>
+              <div class="kpi-label">Qualidade média (1–10)</div>
+            </div>
+            <div class="kpi p">
+              <div class="kpi-icon">📅</div>
+              <div class="kpi-val" id="sk-total">—</div>
+              <div class="kpi-label">Noites registradas</div>
+            </div>
+            <div class="kpi o">
+              <div class="kpi-icon">⚡</div>
+              <div class="kpi-val" id="sk-best">—</div>
+              <div class="kpi-label">Melhor noite (h)</div>
+            </div>
+          </div>
+          <div class="chart-grid">
+            <div class="chart-box">
+              <div class="chart-title">Horas de Sono</div>
+              <div class="chart-sub">Últimas noites registradas</div>
+              <div class="chart-wrap"><canvas id="sleepChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">Qualidade do Sono</div>
+              <div class="chart-sub">Score 1–10 por noite</div>
+              <div class="chart-wrap">
+                <canvas id="sleepQualChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NUTRIÇÃO -->
+        <div class="dash-page" id="page-nutrition">
+          <div class="page-header">
+            <div>
+              <div class="page-tag">Alimentação</div>
+              <div class="page-title">NUTRIÇÃO</div>
+            </div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title">🥗 Registrar Ingestão do Dia</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Calorias (kcal)</label
+                ><input
+                  class="form-input"
+                  id="n-cal"
+                  type="number"
+                  placeholder="2800"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Proteína (g)</label
+                ><input
+                  class="form-input"
+                  id="n-protein"
+                  type="number"
+                  placeholder="180"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Carboidratos (g)</label
+                ><input
+                  class="form-input"
+                  id="n-carbs"
+                  type="number"
+                  placeholder="310"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gorduras (g)</label
+                ><input
+                  class="form-input"
+                  id="n-fats"
+                  type="number"
+                  placeholder="80"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Água (ml)</label
+                ><input
+                  class="form-input"
+                  id="n-water"
+                  type="number"
+                  placeholder="2500"
+                />
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="n-save">SALVAR NUTRIÇÃO</button>
+              <span class="form-feedback" id="n-feedback"></span>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi g">
+              <div class="kpi-icon">🔥</div>
+              <div class="kpi-val" id="nk-cal">—</div>
+              <div class="kpi-label">kcal (último registro)</div>
+            </div>
+            <div class="kpi b">
+              <div class="kpi-icon">🥩</div>
+              <div class="kpi-val" id="nk-protein">—</div>
+              <div class="kpi-label">Proteína média (g)</div>
+            </div>
+            <div class="kpi o">
+              <div class="kpi-icon">🍞</div>
+              <div class="kpi-val" id="nk-carbs">—</div>
+              <div class="kpi-label">Carbos médios (g)</div>
+            </div>
+            <div class="kpi p">
+              <div class="kpi-icon">💧</div>
+              <div class="kpi-val" id="nk-water">—</div>
+              <div class="kpi-label">Água média (ml)</div>
+            </div>
+          </div>
+          <div class="chart-grid">
+            <div class="chart-box">
+              <div class="chart-title">Ingestão Calórica</div>
+              <div class="chart-sub">kcal por dia registrado</div>
+              <div class="chart-wrap"><canvas id="calChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">Macros (último registro)</div>
+              <div class="chart-sub">Distribuição de macronutrientes</div>
+              <div class="chart-wrap"><canvas id="macroChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PERFIL -->
+        <div class="dash-page" id="page-profile">
+          <div class="page-header">
+            <div>
+              <div class="page-tag">Conta</div>
+              <div class="page-title">MEU PERFIL</div>
+            </div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title">👤 Editar Informações</div>
+            <div class="profile-edit-grid">
+              <div class="form-group">
+                <label class="form-label">Nome completo</label
+                ><input class="form-input" id="p-name" placeholder="Seu nome" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nível</label>
+                <select class="form-select" id="p-level">
+                  <option>Iniciante</option>
+                  <option>Intermediário</option>
+                  <option>Avançado</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Objetivo principal</label>
+                <select class="form-select" id="p-goal">
+                  <option>Hipertrofia</option>
+                  <option>Perda de gordura</option>
+                  <option>Resistência</option>
+                  <option>Força máxima</option>
+                  <option>Saúde geral</option>
+                  <option>Recomposição corporal</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Dias disponíveis/semana</label>
+                <select class="form-select" id="p-days">
+                  <option>2-3 dias</option>
+                  <option>4 dias</option>
+                  <option>5-6 dias</option>
+                  <option>7 dias</option>
+                </select>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="p-save">SALVAR PERFIL</button>
+              <span class="form-feedback" id="p-feedback"></span>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi g">
+              <div class="kpi-icon">🏆</div>
+              <div class="kpi-val" id="pk-workouts">0</div>
+              <div class="kpi-label">Treinos totais</div>
+            </div>
+            <div class="kpi o">
+              <div class="kpi-icon">🎯</div>
+              <div class="kpi-val" id="pk-goals">0</div>
+              <div class="kpi-label">Metas concluídas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+ // Lógica do Dashboard
+      import { onAuthChange, logout } from "./js/auth.js"; // Importa monitor de login
+      import { // Importa funções de banco de dados
+        saveWorkoutEntry,
+        subscribeWorkouts,
+        saveBodyMeasurement,
+        subscribeBodyMeasurements,
+        saveCardioEntry,
+        subscribeCardioRecords,
+        saveSleepEntry,
+        subscribeSleepRecords,
+        saveNutritionEntry,
+        subscribeNutritionRecords,
+        saveGoal,
+        subscribeGoals,
+        deleteGoal,
+        subscribeProfile,
+        updateUserProfile,
+        formatDate,
+      } from "./js/dashboard-data.js";
+
+      // Cores do sistema
+      const GRN = "#00FF87",
+        RED = "#FF3B5C",
+        ORG = "#FF8C42",
+        BLU = "#4ECDC4",
+        PRP = "#9B5DE5",
+        GRID = "rgba(255,255,255,0.06)",
+        TXT = "#888";
+      
+      const charts = {}; // Cache de gráficos
+
+      // Função auxiliar para criar/destruir gráficos
+      function mkChart(id, config) {
+        if (charts[id]) {
+          charts[id].destroy();
+          delete charts[id];
+        }
+        const el = document.getElementById(id);
+        if (!el) return;
+        charts[id] = new Chart(el, config);
+      }
+
+      // Opções padrão para gráficos de linha/barra
+      function baseOpts(legend = false) {
+        return {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: legend,
+              labels: { color: TXT, font: { size: 11 }, padding: 12 },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: GRID },
+              ticks: { color: TXT, font: { size: 10 } },
+            },
+            y: {
+              grid: { color: GRID },
+              ticks: { color: TXT, font: { size: 10 } },
+            },
+          },
+        };
+      }
+
+      let uid = null; // ID do usuário
+      let unsubs = []; // Funções de cancelamento de inscrições
+
+      // Cancela todos os listeners ativos
+      function cancelAllSubscriptions() {
+        unsubs.forEach((fn) => {
+          try { fn(); } catch (e) {}
+        });
+        unsubs = [];
+      }
+
+      // Monitor de autenticação
+      onAuthChange(async (user) => {
+        cancelAllSubscriptions(); // Limpa listeners anteriores
+        if (!user) {
+          uid = null;
+          window.location.href = "index.html"; // Redireciona se não logado
+          return;
+        }
+        uid = user.uid;
+
+        // Inscrições em tempo real
+        unsubs.push(subscribeProfile(uid, renderProfileUI));
+        unsubs.push(subscribeWorkouts(uid, (w) => {
+          renderWorkoutsKPIs(w);
+          renderWorkoutsCharts(w);
+          renderWorkoutsTable(w);
+          renderOverviewKPIs(w);
+        }));
+        unsubs.push(subscribeBodyMeasurements(uid, renderBodyUI));
+        unsubs.push(subscribeCardioRecords(uid, renderCardioUI));
+        unsubs.push(subscribeSleepRecords(uid, renderSleepUI));
+        unsubs.push(subscribeNutritionRecords(uid, renderNutritionUI));
+        unsubs.push(subscribeGoals(uid, renderGoalsUI));
+      });
+
+      // Renderização do Perfil
+      function renderProfileUI(p) {
+        const name = p.name || "Atleta CoreLab";
+        const initials = name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+        const xp = p.xp || 0;
+        const level = Math.floor(xp / 1000) + 1;
+        const xpPct = ((xp % 1000) / 10).toFixed(0);
+
+        document.getElementById("profileAv").textContent = initials;
+        document.getElementById("profileName").textContent = name;
+        document.getElementById("profileLevel").textContent = `NÍVEL ${level} — ${p.level || "INICIANTE"}`;
+        document.getElementById("xpLabel").textContent = `${xp} XP`;
+        document.getElementById("xpFill").style.width = xpPct + "%";
+
+        // Campos do formulário
+        if(document.getElementById("p-name")) document.getElementById("p-name").value = p.name || "";
+        if(document.getElementById("p-level")) document.getElementById("p-level").value = p.level || "Iniciante";
+        if(document.getElementById("p-goal")) document.getElementById("p-goal").value = p.goal || "Hipertrofia";
+        if(document.getElementById("p-days")) document.getElementById("p-days").value = p.daysPerWeek || "4 dias";
+
+        // KPIs do perfil
+        document.getElementById("pk-workouts").textContent = p.totalWorkouts || 0;
+        document.getElementById("pk-streak").textContent = p.streak || 0;
+        document.getElementById("pk-xp").textContent = xp;
+        document.getElementById("pk-level").textContent = level;
+      }
+
+      // Renderização de KPIs Gerais
+      function renderOverviewKPIs(workouts) {
+        const total = workouts.length;
+        const calories = workouts.reduce((s, w) => s + (Number(w.calories) || 0), 0);
+        const duration = workouts.reduce((s, w) => s + (Number(w.duration) || 0), 0);
+        const volume = workouts.reduce((s, w) => s + (Number(w.volume) || 0), 0);
+
+        document.getElementById("kpi-workouts").textContent = total;
+        document.getElementById("kpi-calories").textContent = calories.toLocaleString("pt-BR");
+        document.getElementById("kpi-duration").textContent = duration >= 60 ? `${Math.floor(duration/60)}h${duration%60}m` : `${duration}min`;
+        document.getElementById("kpi-volume").textContent = volume >= 1000 ? `${(volume/1000).toFixed(1)}t` : `${volume}kg`;
+      }
+
+      // Renderização de KPIs de Treino
+      function renderWorkoutsKPIs(workouts) {
+        document.getElementById("wk-total").textContent = workouts.length;
+        // Adicionar lógica de volume médio se necessário
+      }
+
+      // Renderização de Gráficos de Treino
+      function renderWorkoutsCharts(workouts) {
+        const recent = workouts.slice(0, 10).reverse();
+        mkChart("workoutVolumeChart", {
+          type: "line",
+          data: {
+            labels: recent.map(w => formatDate(w.completedAt)),
+            datasets: [{
+              label: "Volume (kg)",
+              data: recent.map(w => w.volume),
+              borderColor: GRN,
+              tension: 0.4,
+              fill: true,
+              backgroundColor: "rgba(0,255,135,0.1)"
+            }]
+          },
+          options: baseOpts()
+        });
+      }
+
+      // Renderização de Tabela de Treinos
+      function renderWorkoutsTable(workouts) {
+        const rows = workouts.map(w => `
+          <tr>
+            <td>${formatDate(w.completedAt)}</td>
+            <td>${w.name}</td>
+            <td>${w.duration} min</td>
+            <td>${w.volume} kg</td>
+            <td>${w.calories} kcal</td>
+          </tr>
+        `).join("");
+        document.getElementById("workoutTableBody").innerHTML = rows || '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text3)">Nenhum treino encontrado</td></tr>';
+      }
+
+      // Renderização de Medidas Corporais
+      function renderBodyUI(entries) {
+        if(!entries.length) return;
+        const last = entries[entries.length - 1];
+        document.getElementById("bk-weight").textContent = last.weight + " kg";
+        document.getElementById("bk-fat").textContent = last.fatPct + " %";
+        // Adicionar gráfico de peso
+      }
+
+      // Renderização de Cardio
+      function renderCardioUI(entries) {
+        const totalDist = entries.reduce((s, e) => s + (Number(e.distance) || 0), 0);
+        document.getElementById("ck-distance").textContent = totalDist.toFixed(1);
+        // Adicionar mais KPIs de cardio
+      }
+
+      // Renderização de Sono
+      function renderSleepUI(entries) {
+        if(!entries.length) return;
+        const avg = (entries.reduce((s, e) => s + (Number(e.hours) || 0), 0) / entries.length).toFixed(1);
+        document.getElementById("sk-avg").textContent = avg;
+      }
+
+      // Renderização de Nutrição
+      function renderNutritionUI(entries) {
+        if(!entries.length) return;
+        const last = entries[entries.length - 1];
+        document.getElementById("nk-cal").textContent = last.calories;
+      }
+
+      // Renderização de Metas
+      function renderGoalsUI(goals) {
+        const list = document.getElementById("goalsList");
+        if(!goals.length) {
+          list.innerHTML = '<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-title">SEM METAS</div></div>';
+          return;
+        }
+        list.innerHTML = goals.map(g => {
+          const pct = Math.min(100, (g.current / g.target) * 100).toFixed(0);
+          const w = pct + "%";
+          const bg = g.color;
+          const s = "style";
+          return `
+            <div class="goal-item">
+              <div class="goal-info">
+                <span class="goal-icon">${g.icon}</span>
+                <span class="goal-name">${g.name}</span>
+                <span class="goal-val">${g.current}/${g.target} ${g.unit}</span>
+              </div>
+              <div class="goal-bar"><div class="goal-fill" ${s}="width:${w}; background:${bg}"></div></div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // Handlers de Salvar Dados
+      document.getElementById("p-save").onclick = async () => {
+        const data = {
+          name: document.getElementById("p-name").value,
+          level: document.getElementById("p-level").value,
+          goal: document.getElementById("p-goal").value,
+          daysPerWeek: document.getElementById("p-days").value
+        };
+        const btn = document.getElementById("p-save");
+        btn.disabled = true;
+        await updateUserProfile(uid, data);
+        btn.disabled = false;
+        alert("Perfil atualizado!");
+      };
+
+      document.getElementById("w-save").onclick = async () => {
+        const data = {
+          name: document.getElementById("w-name").value,
+          duration: document.getElementById("w-duration").value,
+          volume: document.getElementById("w-volume").value,
+          calories: document.getElementById("w-calories").value
+        };
+        await saveWorkoutEntry(uid, data);
+        alert("Treino salvo!");
+      };
+
+      // Handler de Logout
+      document.getElementById("dashLogoutBtn").onclick = () => logout();
+
+      // Alternador de abas (sidebar)
+      document.querySelectorAll(".sidebar-item").forEach((item) => {
+        item.onclick = () => {
+          document.querySelectorAll(".sidebar-item").forEach((i) => i.classList.remove("active"));
+          document.querySelectorAll(".dash-page").forEach((p) => p.classList.remove("active"));
+          item.classList.add("active");
+          const page = document.getElementById("page-" + item.dataset.page);
+          if(page) page.classList.add("active");
+        };
+      });
+
+      // Tema claro/escuro
+      let dark = true;
+      document.getElementById("themeBtn").onclick = () => {
+        dark = !dark;
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
+      };
+    </script> <!-- Fim do script -->
+  </body> <!-- Fim body -->
+</html> <!-- Fim html -->
+

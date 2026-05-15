@@ -1,0 +1,1274 @@
+.section-tag {
+  /* Pequena etiqueta de identificação de seção */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 9px; /* Texto mini */
+  letter-spacing: 0.3em; /* Bem espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text3); /* Cor discreta */
+  margin-bottom: 12px; /* Espaço inferior */
+} /* Fim de .section-tag */
+.topbar {
+  /* Barra superior fixa da comunidade */
+  position: sticky; /* Fixa no topo ao rolar */
+  top: 0; /* Alinhada ao topo */
+  z-index: 50; /* Acima de outros elementos */
+  background: rgba(8, 8, 8, 0.92); /* Fundo escuro semi-transparente */
+  backdrop-filter: blur(20px); /* Efeito de desfoque */
+  border-bottom: 1px solid var(--border); /* Linha divisória inferior */
+  padding: 0 24px; /* Espaçamento lateral */
+  height: 64px; /* Altura fixa */
+  display: flex; /* Alinhamento horizontal */
+  align-items: center; /* Centraliza verticalmente */
+  gap: 14px; /* Espaço entre os itens da barra */
+} /* Fim de .topbar */
+[data-theme="light"] .topbar {
+  /* Ajuste da topbar no modo claro */
+  background: rgba(240, 240, 236, 0.92); /* Fundo claro */
+} /* Fim topbar clara */
+.topbar-logo {
+  /* Estilo do logo na comunidade */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 22px; /* Tamanho de destaque */
+  letter-spacing: 0.1em; /* Espaçamento de marca */
+} /* Fim de .topbar-logo */
+.topbar-logo span {
+  /* Parte colorida do logo */
+  color: var(--green); /* Verde neon */
+} /* Fim span logo */
+.topbar-space {
+  /* Espaçador flexível */
+  flex: 1; /* Empurra itens para a direita */
+} /* Fim de .topbar-space */
+.topbar-btn {
+  /* Botão de ação padrão da topbar */
+  display: flex; /* Alinhamento interno */
+  align-items: center; /* Centro vertical */
+  gap: 8px; /* Espaçamento */
+  padding: 8px 16px; /* Tamanho confortável */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 30px; /* Formato pílula */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  text-decoration: none; /* Sem sublinhado */
+  transition: all 0.25s; /* Transição suave */
+  cursor: pointer; /* Mãozinha */
+} /* Fim de .topbar-btn */
+.topbar-btn:hover {
+  /* Hover no botão padrão */
+  border-color: var(--green); /* Borda verde */
+  color: var(--green); /* Texto verde */
+} /* Fim do hover botão padrão */
+.topbar-btn.green {
+  /* Botão de destaque verde (ex: Ver Meu Perfil) */
+  background: var(--green); /* Fundo verde neon */
+  color: #000; /* Texto preto */
+  border-color: var(--green); /* Borda verde */
+  font-weight: 600; /* Semi-negrito */
+} /* Fim do botão verde */
+.topbar-btn.green:hover {
+  /* Hover no botão verde */
+  background: var(--green2); /* Verde mais intenso */
+} /* Fim do hover botão verde */
+.theme-btn {
+  /* Botão de troca de tema (lua/sol) */
+  width: 36px; /* Redondo */
+  height: 36px; /* Redondo */
+  border-radius: 50%; /* Círculo */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  display: flex; /* Centraliza emoji */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  cursor: pointer; /* Mãozinha */
+  font-size: 15px; /* Tamanho do emoji */
+  transition: all 0.25s; /* Transição */
+} /* Fim de .theme-btn */
+.theme-btn:hover {
+  /* Hover no botão de tema */
+  border-color: var(--green); /* Borda verde */
+} /* Fim do hover tema */
+.tabs {
+  /* Barra de abas (Feed, Comunidades, etc.) */
+  position: sticky; /* Fixa ao rolar (abaixo da topbar) */
+  top: 64px; /* Logo abaixo da topbar */
+  z-index: 40; /* Abaixo da topbar mas acima do conteúdo */
+  background: var(--bg2); /* Fundo secundário */
+  border-bottom: 1px solid var(--border); /* Linha divisória */
+  display: flex; /* Abas lado a lado */
+  padding: 0 24px; /* Espaçamento lateral */
+  overflow-x: auto; /* Scroll horizontal em telas pequenas */
+} /* Fim de .tabs */
+.tab {
+  /* Aba individual */
+  padding: 14px 20px; /* Espaçamento de clique */
+  font-size: 14px; /* Texto legível */
+  font-weight: 600; /* Semi-negrito */
+  color: var(--text2); /* Cor de suporte */
+  cursor: pointer; /* Mãozinha */
+  border-bottom: 2px solid transparent; /* Borda indicadora (inativa) */
+  transition: all 0.2s; /* Transição suave */
+  white-space: nowrap; /* Não quebra texto */
+} /* Fim de .tab */
+.tab.active {
+  /* Estilo da aba selecionada */
+  color: var(--green); /* Texto verde neon */
+  border-bottom-color: var(--green); /* Borda verde neon ativada */
+} /* Fim da aba ativa */
+.tab:hover:not(.active) {
+  /* Hover em abas não selecionadas */
+  color: var(--text); /* Texto clareia */
+} /* Fim do hover aba */
+.comm-wrap {
+  /* Container principal que divide feed e painel lateral */
+  display: grid; /* Grade */
+  grid-template-columns: 1fr 320px; /* Feed flexível e lateral fixa de 320px */
+  min-height: calc(100vh - 110px); /* Ocupa altura restante da tela */
+} /* Fim de .comm-wrap */
+.feed {
+  /* Área de postagens e conteúdo principal */
+  padding: 24px; /* Espaçamento interno */
+  border-right: 1px solid var(--border); /* Divisória lateral */
+} /* Fim de .feed */
+.tab-content {
+  /* Conteúdo de cada aba */
+  display: none; /* Escondido por padrão */
+} /* Fim de .tab-content */
+.tab-content.active {
+  /* Mostra o conteúdo da aba ativa */
+  display: block; /* Visível */
+} /* Fim do conteúdo ativo */
+.create-post {
+  /* Bloco de criação de nova postagem */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 16px; /* Espaçamento interno */
+  margin-bottom: 24px; /* Distância do feed abaixo */
+} /* Fim de .create-post */
+.create-row {
+  /* Linha do campo de texto com avatar */
+  display: flex; /* Lado a lado */
+  gap: 12px; /* Espaçamento */
+  align-items: center; /* Centro vertical */
+} /* Fim de .create-row */
+.user-av {
+  /* Avatar circular do usuário logado */
+  width: 40px; /* Médio */
+  height: 40px; /* Médio */
+  border-radius: 50%; /* Círculo */
+  background: linear-gradient(135deg, var(--green), #00aa55); /* Verde neon */
+  display: flex; /* Centralização interna */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 16px; /* Letra do avatar */
+  color: #000; /* Texto preto */
+  flex-shrink: 0; /* Não deixa o avatar esmagar */
+} /* Fim de .user-av */
+.create-input {
+  /* Campo de digitação do post */
+  flex: 1; /* Ocupa largura máxima */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 30px; /* Formato pílula */
+  padding: 10px 18px; /* Confortável para digitar */
+  font-size: 14px; /* Texto legível */
+  color: var(--text); /* Texto claro */
+  outline: none; /* Sem brilho */
+  transition: border-color 0.2s; /* Transição suave */
+} /* Fim de .create-input */
+.create-input:focus {
+  /* Quando clica para escrever */
+  border-color: var(--green); /* Borda fica verde */
+} /* Fim do foco input */
+.create-input::placeholder {
+  /* Texto de instrução no campo */
+  color: var(--text3); /* Cor discreta */
+} /* Fim placeholder input */
+.create-actions {
+  /* Área de botões e ferramentas de postagem */
+  display: flex; /* Alinhamento horizontal */
+  gap: 8px; /* Espaçamento */
+  margin-top: 12px; /* Distância da linha de texto */
+  padding-top: 12px; /* Espaçamento interno */
+  border-top: 1px solid var(--border); /* Divisória interna */
+  flex-wrap: wrap; /* Quebra linha em telas pequenas */
+} /* Fim de .create-actions */
+.create-act {
+  /* Botão individual de ferramenta (ex: Imagem, Enquete) */
+  display: flex; /* Ícone e texto alinhados */
+  align-items: center; /* Centro vertical */
+  gap: 6px; /* Espaçamento interno */
+  padding: 7px 14px; /* Tamanho compacto */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 20px; /* Cantos arredondados */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text2); /* Suave */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .create-act */
+.create-act:hover {
+  /* Hover na ferramenta */
+  border-color: var(--green); /* Borda verde */
+  color: var(--green); /* Texto verde */
+} /* Fim do hover ferramenta */
+.post-submit {
+  /* Botão de publicar post */
+  margin-left: auto; /* Empurra para a extrema direita */
+  padding: 8px 20px; /* Tamanho destaque */
+  background: var(--green); /* Fundo verde neon */
+  color: #000; /* Texto preto */
+  border-radius: 20px; /* Redondo */
+  font-weight: 600; /* Negrito */
+  font-size: 13px; /* Texto legível */
+  transition: all 0.25s; /* Transição */
+} /* Fim de .post-submit */
+.post-submit:hover {
+  /* Hover no botão publicar */
+  background: var(--green2); /* Verde mais intenso */
+} /* Fim do hover publicar */
+.post-submit:disabled {
+  /* Botão de publicar desativado */
+  opacity: 0.5; /* Transparente */
+  cursor: not-allowed; /* Proibido */
+} /* Fim publicar desativado */
+.post {
+  /* Card individual de postagem no feed */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 18px; /* Espaçamento interno */
+  margin-bottom: 16px; /* Distância para o próximo post */
+  transition: border-color 0.2s; /* Transição suave de borda */
+  animation: postIn 0.3s ease; /* Animação de entrada (surgimento) */
+} /* Fim de .post */
+@keyframes postIn {
+  /* Definição da animação de entrada de post */
+  from {
+    /* Início */
+    opacity: 0; /* Invisível */
+    transform: translateY(-8px); /* Vem de cima */
+  } /* Fim do estado 1 */
+  to {
+    /* Fim */
+    opacity: 1; /* Visível */
+    transform: translateY(0); /* Posição normal */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes postIn */
+.post:hover {
+  /* Hover no card do post */
+  border-color: rgba(255, 255, 255, 0.12); /* Borda levemente destacada */
+} /* Fim do hover post */
+.post-header {
+  /* Cabeçalho do post (Avatar + Nome + Data) */
+  display: flex; /* Lado a lado */
+  align-items: center; /* Centro vertical */
+  gap: 12px; /* Espaçamento */
+  margin-bottom: 14px; /* Distância do conteúdo de texto */
+} /* Fim de .post-header */
+.post-av {
+  /* Avatar circular do autor do post */
+  width: 42px; /* Tamanho médio */
+  height: 42px; /* Tamanho médio */
+  border-radius: 50%; /* Círculo */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 16px; /* Letra do avatar */
+  color: #000; /* Texto preto */
+  flex-shrink: 0; /* Não esmaga */
+} /* Fim de .post-av */
+.av-1 {
+  /* Cor para avatar tipo 1 */
+  background: linear-gradient(135deg, var(--orange), #cc6a00); /* Laranja */
+} /* Fim av-1 */
+.av-2 {
+  /* Cor para avatar tipo 2 */
+  background: linear-gradient(135deg, var(--blue), #00999b); /* Azul */
+} /* Fim av-2 */
+.av-3 {
+  /* Cor para avatar tipo 3 */
+  background: linear-gradient(135deg, var(--purple), #7a40c2); /* Roxo */
+} /* Fim av-3 */
+.av-4 {
+  /* Cor para avatar tipo 4 */
+  background: linear-gradient(135deg, var(--red), #cc2f4b); /* Vermelho */
+} /* Fim av-4 */
+.av-you {
+  /* Cor para o SEU avatar (logado) */
+  background: linear-gradient(135deg, var(--green), #00aa55); /* Verde neon */
+} /* Fim av-you */
+.post-meta {
+  /* Informações de texto no cabeçalho */
+  flex: 1; /* Ocupa o espaço central */
+} /* Fim de .post-meta */
+.post-name {
+  /* Nome do autor do post */
+  font-size: 14px; /* Legível */
+  font-weight: 600; /* Negrito */
+  display: flex; /* Alinha selo de verificado/cargo */
+  align-items: center; /* Centro vertical */
+  gap: 6px; /* Espaçamento */
+} /* Fim de .post-name */
+.post-badge {
+  /* Pequeno rótulo de cargo ou status (ex: ADM) */
+  background: rgba(0, 255, 135, 0.12); /* Verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde */
+  border-radius: 10px; /* Redondo */
+  padding: 1px 8px; /* Compacto */
+  font-family: "Space Mono", monospace; /* Técnico */
+  font-size: 9px; /* Mini */
+  color: var(--green); /* Texto verde */
+} /* Fim de .post-badge */
+.post-time {
+  /* Tempo desde a publicação (ex: 5 min atrás) */
+  font-size: 12px; /* Pequeno */
+  color: var(--text3); /* Discreto */
+  margin-top: 1px; /* Ajuste fino de posição */
+} /* Fim de .post-time */
+.post-text {
+  /* O conteúdo de texto do post */
+  font-size: 15px; /* Tamanho ideal de leitura */
+  color: var(--text2); /* Cor suave */
+  line-height: 1.65; /* Bom espaçamento entre linhas */
+  font-weight: 300; /* Leve */
+  margin-bottom: 12px; /* Distância das ações */
+} /* Fim de .post-text */
+.post-text strong {
+  /* Destaque dentro do texto do post */
+  color: var(--text); /* Mais claro */
+  font-weight: 600; /* Negrito */
+} /* Fim strong no texto */
+.post-actions {
+  /* Barra de botões de interação (Curtir, Comentar) */
+  display: flex; /* Lado a lado */
+  align-items: center; /* Centro vertical */
+  border-top: 1px solid var(--border); /* Divisória interna superior */
+  padding-top: 12px; /* Distância da linha */
+} /* Fim de .post-actions */
+.post-action {
+  /* Botão individual de interação */
+  display: flex; /* Ícone e texto alinhados */
+  align-items: center; /* Centro vertical */
+  gap: 7px; /* Espaçamento */
+  padding: 8px 14px; /* Área de clique */
+  color: var(--text2); /* Suave */
+  cursor: pointer; /* Mãozinha */
+  font-size: 14px; /* Legível */
+  border-radius: 8px; /* Cantos suaves */
+  transition: all 0.2s; /* Transição rápida */
+  flex: 1; /* Divide espaço igualmente com outros botões */
+  justify-content: center; /* Centraliza conteúdo */
+} /* Fim de .post-action */
+.post-action:hover {
+  /* Hover no botão de interação */
+  background: rgba(255, 255, 255, 0.04); /* Fundo sutil */
+  color: var(--text); /* Clareia texto */
+} /* Fim do hover ação */
+.post-action.liked {
+  /* Estado de post curtido */
+  color: var(--red); /* Vermelho de coração */
+} /* Fim curtido */
+.post-action svg {
+  /* Ícone da interação */
+  width: 18px; /* Médio */
+  height: 18px; /* Médio */
+} /* Fim svg ação */
+.post-action.liked svg {
+  /* Preenchimento do coração quando curtido */
+  fill: var(--red); /* Vermelho sólido */
+} /* Fim preenchimento curtir */
+
+.comm-section-title {
+  /* Título da seção (ex: Minhas Comunidades) */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 24px; /* Tamanho grande */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-bottom: 16px; /* Espaço inferior */
+  display: flex; /* Alinha ícone e texto */
+  align-items: center; /* Centro vertical */
+  gap: 12px; /* Espaçamento entre ícone e texto */
+} /* Fim de .comm-section-title */
+.comm-card {
+  /* Card de uma comunidade individual */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 18px; /* Espaçamento interno */
+  margin-bottom: 14px; /* Distância entre cards */
+  transition: all 0.3s; /* Transição suave de efeitos */
+  cursor: pointer; /* Mãozinha */
+  position: relative; /* Para o detalhe de cor no topo */
+  overflow: hidden; /* Corta excessos */
+} /* Fim de .comm-card */
+.comm-card::before {
+  /* Detalhe colorido no topo do card */
+  content: ""; /* Necessário */
+  position: absolute; /* Fixa no topo */
+  top: 0; /* Alinhado ao topo */
+  left: 0; /* Alinhado à esquerda */
+  right: 0; /* Alinhado à direita */
+  height: 3px; /* Espessura fina */
+  background: linear-gradient(
+    90deg,
+    var(--green),
+    var(--blue)
+  ); /* Gradiente moderno */
+} /* Fim de .comm-card::before */
+.comm-card:hover {
+  /* Hover no card da comunidade */
+  border-color: rgba(0, 255, 135, 0.3); /* Borda brilha em verde */
+  transform: translateY(-2px); /* Sobe levemente */
+} /* Fim de .comm-card:hover */
+.comm-card-header {
+  /* Cabeçalho do card (Ícone + Info) */
+  display: flex; /* Lado a lado */
+  align-items: center; /* Centro vertical */
+  gap: 14px; /* Espaçamento */
+  margin-bottom: 12px; /* Distância do conteúdo abaixo */
+} /* Fim de .comm-card-header */
+.comm-icon {
+  /* Ícone da comunidade (ex: 🏋️) */
+  width: 52px; /* Tamanho fixo */
+  height: 52px; /* Tamanho fixo */
+  border-radius: 14px; /* Cantos suaves */
+  font-size: 26px; /* Ícone grande */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  background: rgba(0, 255, 135, 0.08); /* Verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.15); /* Borda verde */
+  flex-shrink: 0; /* Não esmaga */
+} /* Fim de .comm-icon */
+.comm-info {
+  /* Container das informações básicas */
+  flex: 1; /* Ocupa largura restante */
+} /* Fim de .comm-info */
+.comm-name {
+  /* Nome da comunidade */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 20px; /* Médio */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-bottom: 3px; /* Espaço para descrição */
+} /* Fim de .comm-name */
+.comm-desc {
+  /* Descrição curta da comunidade */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  font-weight: 300; /* Leve */
+} /* Fim de .comm-desc */
+.comm-stats {
+  /* Estatísticas da comunidade (Membros, Posts) */
+  display: flex; /* Lado a lado */
+  gap: 16px; /* Espaçamento entre estatísticas */
+  flex-wrap: wrap; /* Quebra linha se necessário */
+  margin-bottom: 12px; /* Distância do rodapé */
+} /* Fim de .comm-stats */
+.comm-stat {
+  /* Estatística individual */
+  font-size: 12px; /* Texto mini */
+  color: var(--text2); /* Suave */
+  display: flex; /* Alinha ícone e valor */
+  align-items: center; /* Centro vertical */
+  gap: 4px; /* Espaçamento */
+} /* Fim de .comm-stat */
+.comm-footer {
+  /* Rodapé do card da comunidade */
+  display: flex; /* Alinhamento flexível */
+  gap: 10px; /* Espaçamento */
+  align-items: center; /* Centro vertical */
+} /* Fim de .comm-footer */
+.comm-join {
+  /* Botão de participar/entrar */
+  flex: 1; /* Ocupa largura máxima disponível */
+  padding: 9px; /* Tamanho compacto */
+  background: var(--green); /* Verde neon */
+  color: #000; /* Texto preto */
+  border-radius: 10px; /* Cantos arredondados */
+  font-weight: 700; /* Negrito forte */
+  font-size: 13px; /* Texto legível */
+  text-align: center; /* Centralizado */
+  transition: all 0.25s; /* Transição suave */
+} /* Fim de .comm-join */
+.comm-join:hover {
+  /* Hover no botão de participar */
+  background: var(--green2); /* Verde mais intenso */
+} /* Fim de .comm-join:hover */
+.comm-join.member {
+  /* Estado de já ser membro */
+  background: transparent; /* Sem fundo sólido */
+  color: var(--green); /* Texto verde */
+  border: 1px solid var(--green); /* Borda verde */
+} /* Fim estado membro */
+.comm-join.admin {
+  /* Estado de ser administrador */
+  background: rgba(255, 215, 0, 0.1); /* Dourado transparente */
+  color: var(--gold); /* Texto dourado */
+  border: 1px solid rgba(255, 215, 0, 0.3); /* Borda dourada */
+} /* Fim estado admin */
+.comm-badge {
+  /* Selo de cargo dentro da comunidade */
+  padding: 4px 12px; /* Tamanho compacto */
+  border-radius: 20px; /* Redondo */
+  font-family: "Space Mono", monospace; /* Técnica */
+  font-size: 9px; /* Mini */
+  letter-spacing: 0.1em; /* Espaçado */
+} /* Fim de .comm-badge */
+.comm-badge.admin {
+  /* Selo de administrador */
+  background: rgba(255, 215, 0, 0.1); /* Dourado transparente */
+  color: var(--gold); /* Dourado */
+  border: 1px solid rgba(255, 215, 0, 0.2); /* Borda dourada */
+} /* Fim badge admin */
+.comm-badge.member {
+  /* Selo de membro comum */
+  background: rgba(0, 255, 135, 0.08); /* Verde transparente */
+  color: var(--green); /* Verde */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde */
+} /* Fim badge membro */
+.empty-comm {
+  /* Estado exibido quando não há comunidades */
+  text-align: center; /* Texto centralizado */
+  padding: 48px 24px; /* Espaçamento generoso */
+  display: flex; /* Organização vertical */
+  flex-direction: column; /* Itens em coluna */
+  align-items: center; /* Centro horizontal */
+  gap: 12px; /* Espaço entre elementos */
+} /* Fim de .empty-comm */
+.empty-comm-icon {
+  /* Ícone do estado vazio */
+  font-size: 48px; /* Tamanho grande */
+  opacity: 0.4; /* Bem transparente */
+} /* Fim de .empty-comm-icon */
+.empty-comm-title {
+  /* Título do estado vazio */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 22px; /* Médio */
+  color: var(--text2); /* Suave */
+} /* Fim de .empty-comm-title */
+.empty-comm-sub {
+  /* Subtítulo explicativo do estado vazio */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text3); /* Discreto */
+  max-width: 260px; /* Limita largura de leitura */
+  line-height: 1.6; /* Espaçamento de linha */
+} /* Fim de .empty-comm-sub */
+.challenge {
+  /* Card de desafio da comunidade */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 18px; /* Espaçamento interno */
+  margin-bottom: 16px; /* Distância entre desafios */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.3s; /* Transição suave */
+  position: relative; /* Para o topo colorido */
+  overflow: hidden; /* Corta excessos */
+} /* Fim de .challenge */
+.challenge::before {
+  /* Linha colorida no topo do desafio */
+  content: ""; /* Necessário */
+  position: absolute; /* Fixa no topo */
+  top: 0; /* Alinhado ao topo */
+  left: 0; /* Alinhado à esquerda */
+  right: 0; /* Alinhado à direita */
+  height: 3px; /* Espessura fina */
+} /* Fim de .challenge::before */
+.challenge.fire::before {
+  /* Desafio intenso/quente */
+  background: linear-gradient(
+    90deg,
+    var(--red),
+    var(--orange)
+  ); /* Vermelho ao laranja */
+} /* Fim desafio fire */
+.challenge.crown::before {
+  /* Desafio de elite/campeonato */
+  background: linear-gradient(90deg, var(--gold), var(--orange)); /* Dourado */
+} /* Fim desafio crown */
+.challenge.bolt::before {
+  /* Desafio de velocidade/energia */
+  background: linear-gradient(
+    90deg,
+    var(--green),
+    var(--blue)
+  ); /* Verde ao azul */
+} /* Fim desafio bolt */
+.challenge.star::before {
+  /* Desafio especial/destaque */
+  background: linear-gradient(
+    90deg,
+    var(--purple),
+    var(--blue)
+  ); /* Roxo ao azul */
+} /* Fim desafio star */
+.challenge:hover {
+  /* Hover no card de desafio */
+  border-color: rgba(0, 255, 135, 0.3); /* Borda brilha verde */
+  transform: translateY(-2px); /* Sobe levemente */
+} /* Fim de .challenge:hover */
+.ch-header {
+  /* Cabeçalho do desafio */
+  display: flex; /* Lado a lado */
+  align-items: flex-start; /* Alinha ao topo */
+  gap: 12px; /* Espaçamento */
+  margin-bottom: 12px; /* Distância da descrição */
+} /* Fim de .ch-header */
+.ch-icon {
+  /* Ícone temático do desafio */
+  width: 48px; /* Tamanho fixo */
+  height: 48px; /* Tamanho fixo */
+  border-radius: 12px; /* Cantos arredondados */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 24px; /* Ícone grande */
+  flex-shrink: 0; /* Não esmaga */
+} /* Fim de .ch-icon */
+.icon-fire {
+  /* Estilo ícone de fogo */
+  background: rgba(255, 59, 92, 0.12); /* Vermelho transparente */
+} /* Fim icon-fire */
+.icon-crown {
+  /* Estilo ícone de coroa */
+  background: rgba(255, 215, 0, 0.12); /* Dourado transparente */
+} /* Fim icon-crown */
+.icon-bolt {
+  /* Estilo ícone de raio */
+  background: rgba(0, 255, 135, 0.08); /* Verde transparente */
+} /* Fim icon-bolt */
+.icon-star {
+  /* Estilo ícone de estrela */
+  background: rgba(155, 93, 229, 0.12); /* Roxo transparente */
+} /* Fim icon-star */
+.ch-meta {
+  /* Informações de texto do desafio */
+  flex: 1; /* Ocupa largura central */
+} /* Fim de .ch-meta */
+.ch-name {
+  /* Nome do desafio */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 20px; /* Médio */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-bottom: 4px; /* Espaço para o criador */
+} /* Fim de .ch-name */
+.ch-creator {
+  /* Nome de quem criou o desafio */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text2); /* Suave */
+} /* Fim de .ch-creator */
+.ch-prize {
+  /* Bloco de premiação */
+  text-align: right; /* Alinhado à direita */
+} /* Fim de .ch-prize */
+.ch-prize-val {
+  /* Valor do prêmio (ex: 500 XP) */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 18px; /* Médio */
+  color: var(--gold); /* Dourado */
+} /* Fim de .ch-prize-val */
+.ch-prize-label {
+  /* Rótulo da premiação */
+  font-size: 11px; /* Texto mini */
+  color: var(--text3); /* Discreto */
+} /* Fim de .ch-prize-label */
+.ch-desc {
+  /* Descrição detalhada do desafio */
+  font-size: 14px; /* Texto legível */
+  color: var(--text2); /* Suave */
+  line-height: 1.5; /* Espaçamento de linha */
+  margin-bottom: 14px; /* Distância das estatísticas */
+  font-weight: 300; /* Leve */
+} /* Fim de .ch-desc */
+.ch-stats {
+  /* Estatísticas do desafio (Participantes, Tempo) */
+  display: flex; /* Lado a lado */
+  gap: 20px; /* Espaçamento entre estatísticas */
+  margin-bottom: 14px; /* Distância da barra de progresso */
+  flex-wrap: wrap; /* Quebra linha se necessário */
+} /* Fim de .ch-stats */
+.ch-stat {
+  /* Estatística individual do desafio */
+  display: flex; /* Alinha ícone e texto */
+  align-items: center; /* Centro vertical */
+  gap: 6px; /* Espaçamento */
+  font-size: 13px; /* Texto legível */
+  color: var(--text2); /* Suave */
+} /* Fim de .ch-stat */
+.ch-prog-header {
+  /* Cabeçalho da barra de progresso */
+  display: flex; /* Extremidades */
+  justify-content: space-between; /* Um na esquerda, outro na direita */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text2); /* Suave */
+  margin-bottom: 6px; /* Distância da barra física */
+} /* Fim de .ch-prog-header */
+.ch-prog-bar {
+  /* Fundo da barra de progresso do desafio */
+  height: 6px; /* Espessura média */
+  background: var(--border); /* Neutro */
+  border-radius: 3px; /* Cantos arredondados */
+  overflow: hidden; /* Corta excesso */
+  margin-bottom: 14px; /* Distância do rodapé */
+} /* Fim de .ch-prog-bar */
+.ch-prog-fill {
+  /* Preenchimento colorido da barra */
+  height: 100%; /* Altura total */
+  border-radius: 3px; /* Cantos arredondados */
+} /* Fim de .ch-prog-fill */
+.ch-footer {
+  /* Rodapé do desafio */
+  display: flex; /* Lado a lado */
+  gap: 10px; /* Espaçamento */
+  align-items: center; /* Centro vertical */
+} /* Fim de .ch-footer */
+.ch-join {
+  /* Botão de participar do desafio */
+  flex: 1; /* Ocupa largura máxima disponível */
+  padding: 10px; /* Tamanho confortável */
+  background: var(--green); /* Verde neon */
+  color: #000; /* Texto preto */
+  border-radius: 10px; /* Cantos suaves */
+  font-weight: 700; /* Negrito forte */
+  font-size: 14px; /* Texto legível */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.25s; /* Transição suave */
+  text-align: center; /* Centralizado */
+} /* Fim de .ch-join */
+.ch-join:hover {
+  /* Hover no botão de participar */
+  background: var(--green2); /* Verde mais intenso */
+} /* Fim de .ch-join:hover */
+.ch-join.joined {
+  /* Estado de já estar participando */
+  background: transparent; /* Sem fundo sólido */
+  color: var(--green); /* Verde */
+  border: 1px solid var(--green); /* Borda verde */
+} /* Fim estado participando */
+.ch-share {
+  /* Botão de compartilhar desafio */
+  width: 40px; /* Redondo */
+  height: 40px; /* Redondo */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 10px; /* Cantos arredondados */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 16px; /* Tamanho do ícone */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .ch-share */
+.ch-share:hover {
+  /* Hover no compartilhar */
+  border-color: var(--green); /* Borda verde */
+} /* Fim do hover share */
+.lb-box {
+  /* Caixa do ranking (Leaderboard) */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  overflow: hidden; /* Corta itens que vazarão */
+  margin-bottom: 16px; /* Distância inferior */
+} /* Fim de .lb-box */
+.lb-header {
+  /* Cabeçalho do ranking */
+  padding: 16px 18px; /* Espaçamento interno */
+  border-bottom: 1px solid var(--border); /* Divisória inferior */
+  display: flex; /* Lado a lado */
+  align-items: center; /* Centro vertical */
+  justify-content: space-between; /* Título na esquerda, filtro na direita */
+} /* Fim de .lb-header */
+.lb-title {
+  /* Título do ranking (ex: Ranking Semanal) */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 18px; /* Médio */
+  letter-spacing: 0.05em; /* Espaçado */
+} /* Fim de .lb-title */
+.lb-filter {
+  /* Filtro do ranking (ex: GLOBAL) */
+  font-family: "Space Mono", monospace; /* Técnica */
+  font-size: 9px; /* Mini */
+  letter-spacing: 0.15em; /* Espaçado */
+  color: var(--green); /* Verde neon */
+  cursor: pointer; /* Mãozinha */
+} /* Fim de .lb-filter */
+.lb-item {
+  /* Item individual do ranking (Usuário) */
+  display: flex; /* Alinhamento horizontal */
+  align-items: center; /* Centro vertical */
+  gap: 12px; /* Espaçamento entre foto, nome e score */
+  padding: 12px 18px; /* Espaçamento interno */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04); /* Divisória sutil */
+  transition: background 0.2s; /* Transição suave */
+} /* Fim de .lb-item */
+.lb-item:hover {
+  /* Hover na linha do ranking */
+  background: rgba(255, 255, 255, 0.02); /* Destaque leve */
+} /* Fim do hover no item */
+.lb-item:last-child {
+  /* Remove divisória do último item */
+  border-bottom: none; /* Sem borda */
+} /* Fim do último item */
+.lb-rank {
+  /* Posição no ranking (1, 2, 3...) */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 20px; /* Médio */
+  width: 28px; /* Largura fixa para alinhamento vertical */
+  text-align: center; /* Centralizado */
+  color: var(--text3); /* Cor discreta por padrão */
+} /* Fim de .lb-rank */
+.lb-rank.gold {
+  /* Estilo para o 1º lugar */
+  color: var(--gold); /* Dourado */
+} /* Fim rank gold */
+.lb-rank.silver {
+  /* Estilo para o 2º lugar */
+  color: #c0c0c0; /* Prata */
+} /* Fim rank silver */
+.lb-rank.bronze {
+  /* Estilo para o 3º lugar */
+  color: #cd7f32; /* Bronze */
+} /* Fim rank bronze */
+.lb-av {
+  /* Avatar do usuário no ranking */
+  width: 36px; /* Pequeno */
+  height: 36px; /* Pequeno */
+  border-radius: 50%; /* Círculo */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 14px; /* Letra pequena */
+  color: #000; /* Preto */
+  flex-shrink: 0; /* Não esmaga */
+} /* Fim de .lb-av */
+.lb-info {
+  /* Container de nome e nível no ranking */
+  flex: 1; /* Ocupa o espaço central */
+} /* Fim de .lb-info */
+.lb-name {
+  /* Nome do usuário no ranking */
+  font-size: 14px; /* Legível */
+  font-weight: 600; /* Negrito */
+  margin-bottom: 1px; /* Espaço para detalhe */
+} /* Fim de .lb-name */
+.lb-detail {
+  /* Detalhe abaixo do nome (ex: Nível 15) */
+  font-size: 12px; /* Pequeno */
+  color: var(--text2); /* Suave */
+} /* Fim de .lb-detail */
+.lb-score {
+  /* Pontuação no ranking */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 22px; /* Médio-grande */
+  color: var(--green); /* Verde neon */
+} /* Fim de .lb-score */
+.lb-item.you {
+  /* Estilo para a SUA posição no ranking */
+  background: rgba(0, 255, 135, 0.04); /* Fundo levemente esverdeado */
+  border-left: 2px solid var(--green); /* Borda lateral verde de destaque */
+} /* Fim do item "você" */
+.right-panel {
+  /* Painel lateral direito (Amigos, Online, etc.) */
+  padding: 20px; /* Espaçamento interno */
+  background: var(--bg2); /* Fundo secundário */
+} /* Fim de .right-panel */
+.panel-section {
+  /* Seção dentro do painel lateral */
+  margin-bottom: 24px; /* Distância entre seções */
+} /* Fim de .panel-section */
+.panel-title {
+  /* Título da seção lateral */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 16px; /* Compacto */
+  letter-spacing: 0.08em; /* Espaçado */
+  margin-bottom: 12px; /* Distância para a lista */
+  color: var(--text2); /* Suave */
+} /* Fim de .panel-title */
+.online-list {
+  /* Lista de usuários online */
+  display: flex; /* Alinhamento vertical */
+  flex-direction: column; /* Em coluna */
+  gap: 8px; /* Espaçamento entre usuários */
+} /* Fim de .online-list */
+.online-user {
+  /* Item de usuário online individual */
+  display: flex; /* Lado a lado */
+  align-items: center; /* Centro vertical */
+  gap: 10px; /* Espaçamento interno */
+  padding: 8px; /* Confortável */
+  border-radius: 10px; /* Cantos suaves */
+  cursor: pointer; /* Mãozinha */
+  transition: background 0.2s; /* Transição suave */
+} /* Fim de .online-user */
+.online-user:hover {
+  /* Hover no usuário online */
+  background: var(--bg3); /* Fundo terciário */
+} /* Fim do hover no usuário online */
+.ou-av {
+  /* Avatar do usuário online */
+  width: 36px; /* Pequeno */
+  height: 36px; /* Pequeno */
+  border-radius: 50%; /* Círculo */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 14px; /* Letra pequena */
+  color: #000; /* Preto */
+  position: relative; /* Para o ponto de status */
+  flex-shrink: 0; /* Não esmaga */
+} /* Fim de .ou-av */
+.ou-dot {
+  /* Ponto indicador de status online */
+  position: absolute; /* Fixa sobre o avatar */
+  bottom: 0; /* Canto inferior */
+  right: 0; /* Canto direito */
+  width: 10px; /* Pequeno */
+  height: 10px; /* Pequeno */
+  border-radius: 50%; /* Círculo */
+  background: var(--green); /* Verde neon (online) */
+  border: 2px solid var(--bg2); /* Borda para separar do avatar */
+} /* Fim de .ou-dot */
+.ou-info {
+  /* Container de nome e status */
+  flex: 1; /* Ocupa o centro */
+} /* Fim de .ou-info */
+.ou-name {
+  /* Nome do usuário online */
+  font-size: 13px; /* Compacto */
+  font-weight: 600; /* Negrito */
+} /* Fim de .ou-name */
+.ou-status {
+  /* Texto de status (ex: Treinando agora) */
+  font-size: 11px; /* Mini */
+  color: var(--text2); /* Suave */
+} /* Fim de .ou-status */
+.ou-follow {
+  /* Botão de seguir na lista lateral */
+  padding: 4px 12px; /* Compacto */
+  background: rgba(0, 255, 135, 0.08); /* Verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde */
+  border-radius: 16px; /* Redondo */
+  font-size: 11px; /* Mini */
+  color: var(--green); /* Verde */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .ou-follow */
+.ou-follow:hover {
+  /* Hover no botão de seguir */
+  background: var(--green); /* Verde sólido */
+  color: #000; /* Texto preto */
+} /* Fim do hover seguir */
+.ou-follow.following {
+  /* Estado de já seguindo */
+  background: var(--surf); /* Superfície */
+  border-color: var(--border); /* Borda padrão */
+  color: var(--text2); /* Texto suave */
+} /* Fim seguindo */
+
+.achievements {
+  /* Seção de conquistas no perfil/lateral */
+  display: flex; /* Alinhamento horizontal */
+  flex-wrap: wrap; /* Quebra linha */
+  gap: 8px; /* Espaçamento entre ícones */
+} /* Fim de .achievements */
+.ach {
+  /* Card de conquista individual */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 10px; /* Cantos arredondados */
+  padding: 8px 10px; /* Compacto */
+  display: flex; /* Alinha ícone e texto */
+  align-items: center; /* Centro vertical */
+  gap: 8px; /* Espaçamento interno */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .ach */
+.ach:hover {
+  /* Hover na conquista */
+  border-color: var(--gold); /* Borda fica dourada */
+  transform: translateY(-1px); /* Sobe levemente */
+} /* Fim do hover conquista */
+.ach-icon {
+  /* Ícone da conquista (emoji) */
+  font-size: 20px; /* Médio */
+} /* Fim de .ach-icon */
+.ach-name {
+  /* Nome da conquista */
+  font-size: 12px; /* Pequeno */
+  font-weight: 600; /* Negrito */
+} /* Fim de .ach-name */
+.ach-date {
+  /* Data em que foi conquistada */
+  font-size: 10px; /* Mini */
+  color: var(--text3); /* Discreto */
+} /* Fim de .ach-date */
+.ach.locked {
+  /* Conquista ainda não desbloqueada */
+  opacity: 0.4; /* Transparente */
+  filter: grayscale(1); /* Cinza */
+} /* Fim conquista bloqueada */
+.my-ch-list {
+  /* Lista de "Meus Desafios" em andamento */
+  display: flex; /* Alinhamento vertical */
+  flex-direction: column; /* Em coluna */
+  gap: 8px; /* Espaçamento entre desafios */
+} /* Fim de .my-ch-list */
+.my-ch {
+  /* Card de desafio pessoal */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 10px; /* Cantos arredondados */
+  padding: 10px 12px; /* Compacto */
+} /* Fim de .my-ch */
+.my-ch-name {
+  /* Nome do desafio pessoal */
+  font-size: 13px; /* Pequeno */
+  font-weight: 600; /* Negrito */
+  margin-bottom: 6px; /* Espaço para a barra */
+} /* Fim de .my-ch-name */
+.my-ch-bar {
+  /* Fundo da mini barra de progresso */
+  height: 4px; /* Bem fina */
+  background: var(--border); /* Neutra */
+  border-radius: 2px; /* Redonda */
+  overflow: hidden; /* Corta excesso */
+} /* Fim de .my-ch-bar */
+.my-ch-fill {
+  /* Preenchimento da mini barra */
+  height: 100%; /* Altura total */
+  background: var(--green); /* Verde neon */
+  border-radius: 2px; /* Redonda */
+} /* Fim de .my-ch-fill */
+.my-ch-bottom {
+  /* Rodapé do mini desafio (ex: 5/10) */
+  display: flex; /* Extremidades */
+  justify-content: space-between; /* Um em cada ponta */
+  margin-top: 4px; /* Distância da barra */
+  font-size: 11px; /* Mini */
+  color: var(--text2); /* Suave */
+} /* Fim de .my-ch-bottom */
+.modal-overlay {
+  /* Fundo do modal de criação de post/comunidade */
+  position: fixed; /* Fixa na tela toda */
+  inset: 0; /* Cobre tudo */
+  z-index: 200; /* Acima de quase tudo */
+  background: rgba(0, 0, 0, 0.8); /* Preto transparente */
+  backdrop-filter: blur(12px); /* Desfoque de fundo */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  opacity: 0; /* Invisível por padrão */
+  pointer-events: none; /* Não aceita cliques */
+  transition: opacity 0.3s; /* Transição de surgimento */
+  padding: 20px; /* Espaçamento mobile */
+} /* Fim overlay modal */
+.modal-overlay.open {
+  /* Estado aberto do modal */
+  opacity: 1; /* Visível */
+  pointer-events: all; /* Aceita cliques */
+} /* Fim overlay aberto */
+.modal-box {
+  /* Caixa real do conteúdo do modal */
+  background: var(--bg2); /* Fundo secundário */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 20px; /* Cantos arredondados */
+  padding: 32px; /* Espaçamento interno generoso */
+  width: min(480px, 100%); /* Responsivo, máximo 480px */
+  transform: translateY(20px); /* Começa um pouco abaixo */
+  transition: transform 0.35s; /* Transição de subida */
+  position: relative; /* Para o botão de fechar */
+  max-height: 90vh; /* Não vaza da tela */
+  overflow-y: auto; /* Scroll interno se necessário */
+} /* Fim de .modal-box */
+.modal-overlay.open .modal-box {
+  /* Animação da caixa quando abre */
+  transform: translateY(0); /* Sobe para posição normal */
+} /* Fim animação box */
+.modal-close {
+  /* Botão de fechar (X) */
+  position: absolute; /* Fixa no canto */
+  top: 16px; /* Topo */
+  right: 16px; /* Direita */
+  width: 32px; /* Redondo */
+  height: 32px; /* Redondo */
+  border-radius: 50%; /* Círculo */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 14px; /* Tamanho do X */
+  color: var(--text2); /* Suave */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .modal-close */
+.modal-close:hover {
+  /* Hover no botão de fechar */
+  background: var(--red); /* Fica vermelho */
+  color: #fff; /* X fica branco */
+  border-color: var(--red); /* Borda vermelha */
+} /* Fim do hover fechar */
+.modal-tag {
+  /* Etiqueta superior do modal */
+  font-family: "Space Mono", monospace; /* Técnica */
+  font-size: 10px; /* Mini */
+  letter-spacing: 0.3em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--green); /* Verde neon */
+  margin-bottom: 8px; /* Distância do título */
+} /* Fim de .modal-tag */
+.modal-title {
+  /* Título principal do modal */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 32px; /* Grande */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-bottom: 24px; /* Distância para o formulário */
+  line-height: 1; /* Compacto */
+} /* Fim de .modal-title */
+.form-group {
+  /* Grupo de campo e rótulo */
+  margin-bottom: 16px; /* Distância entre campos */
+} /* Fim de .form-group */
+.form-label {
+  /* Rótulo do campo (Label) */
+  display: block; /* Ocupa linha toda */
+  font-size: 11px; /* Mini */
+  font-weight: 600; /* Negrito */
+  letter-spacing: 0.08em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text2); /* Suave */
+  margin-bottom: 6px; /* Distância do input */
+} /* Fim de .form-label */
+.form-input {
+  /* Campo de texto do formulário */
+  width: 100%; /* Largura total */
+  padding: 11px 14px; /* Confortável */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 10px; /* Cantos suaves */
+  color: var(--text); /* Texto claro */
+  font-size: 14px; /* Legível */
+  outline: none; /* Sem brilho */
+  transition: border-color 0.2s; /* Transição suave */
+} /* Fim de .form-input */
+.form-input:focus {
+  /* Quando clica no campo */
+  border-color: var(--green); /* Borda brilha verde */
+} /* Fim do foco input */
+.form-input::placeholder {
+  /* Texto guia no campo */
+  color: var(--text3); /* Discreto */
+} /* Fim placeholder input */
+.form-select {
+  /* Menu de seleção */
+  width: 100%; /* Largura total */
+  padding: 11px 14px; /* Confortável */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 10px; /* Cantos suaves */
+  color: var(--text); /* Texto claro */
+  font-size: 14px; /* Legível */
+  outline: none; /* Sem brilho */
+  cursor: pointer; /* Mãozinha */
+} /* Fim de .form-select */
+.form-select:focus {
+  /* Foco no select */
+  border-color: var(--green); /* Borda verde */
+} /* Fim do foco select */
+.form-textarea {
+  /* Campo de texto longo */
+  width: 100%; /* Largura total */
+  padding: 11px 14px; /* Confortável */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 10px; /* Cantos suaves */
+  color: var(--text); /* Texto claro */
+  font-size: 14px; /* Legível */
+  outline: none; /* Sem brilho */
+  resize: vertical; /* Permite aumentar altura */
+  min-height: 80px; /* Altura mínima */
+  transition: border-color 0.2s; /* Transição suave */
+} /* Fim de .form-textarea */
+.form-textarea:focus {
+  /* Foco no textarea */
+  border-color: var(--green); /* Borda verde */
+} /* Fim do foco textarea */
+.btn-primary {
+  /* Botão principal de ação do modal */
+  width: 100%; /* Largura total */
+  padding: 13px; /* Espaçoso */
+  background: var(--green); /* Verde neon */
+  color: #000; /* Texto preto */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 20px; /* Grande */
+  letter-spacing: 0.08em; /* Espaçado */
+  border-radius: 10px; /* Cantos suaves */
+  transition: all 0.25s; /* Transição suave */
+  margin-top: 8px; /* Distância do formulário */
+} /* Fim de .btn-primary */
+.btn-primary:hover {
+  /* Hover no botão principal */
+  background: var(--green2); /* Verde intenso */
+  transform: translateY(-1px); /* Sobe levemente */
+} /* Fim do hover primary */
+.btn-primary:disabled {
+  /* Botão principal desativado */
+  opacity: 0.5; /* Transparente */
+  cursor: not-allowed; /* Proibido */
+  transform: none; /* Sem movimento */
+} /* Fim primary desativado */
+
+.modal-alert {
+  /* Alerta de feedback dentro do modal */
+  padding: 10px 14px; /* Compacto */
+  border-radius: 10px; /* Cantos suaves */
+  font-size: 13px; /* Texto pequeno */
+  margin-bottom: 14px; /* Distância do conteúdo abaixo */
+  display: none; /* Escondido por padrão */
+} /* Fim de .modal-alert */
+.modal-alert.ok {
+  /* Alerta de sucesso */
+  display: block; /* Visível */
+  background: rgba(0, 255, 135, 0.08); /* Verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde */
+  color: var(--green); /* Texto verde */
+} /* Fim alerta ok */
+.modal-alert.err {
+  /* Alerta de erro */
+  display: block; /* Visível */
+  background: rgba(255, 59, 92, 0.1); /* Vermelho transparente */
+  border: 1px solid rgba(255, 59, 92, 0.3); /* Borda vermelha */
+  color: var(--red); /* Texto vermelho */
+} /* Fim alerta erro */
+@media (max-width: 900px) {
+  /* Tablets e Telas Médias */
+  .comm-wrap {
+    /* Grade da comunidade */
+    grid-template-columns: 1fr; /* Remove a barra lateral */
+  } /* Fim wrap tablet */
+  .right-panel {
+    /* Esconde painel lateral */
+    display: none; /* Invisível */
+  } /* Fim painel tablet */
+} /* Fim media 900px */
+@media (max-width: 500px) {
+  /* Smartphones */
+  .feed {
+    /* Área de conteúdo principal */
+    padding: 12px; /* Padding reduzido */
+  } /* Fim feed mobile */
+  .create-actions {
+    /* Ações de criação de post */
+    gap: 4px; /* Espaçamento mínimo */
+  } /* Fim ações mobile */
+  .create-act {
+    /* Botões de ação individuais */
+    font-size: 11px; /* Texto mini */
+    padding: 6px 10px; /* Compacto */
+  } /* Fim act mobile */
+} /* Fim media 500px */
