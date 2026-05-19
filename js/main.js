@@ -1,4 +1,4 @@
-﻿/* ==================================================== // Início do bloco de cabeçalho de importações
+/* ==================================================== // Início do bloco de cabeçalho de importações
    IMPORTS — Firebase // Seção de importação de módulos do Firebase
 ==================================================== */ // Fim do bloco de cabeçalho
 import {
@@ -532,16 +532,17 @@ function createUserMenu(user) {
     document.body.appendChild(menu); // Anexa ao final do body para evitar conflitos de z-index
   } // Fim do if menu
 
-  menu.innerHTML = ` // Define a estrutura interna do menu
-    <div class="user-menu-header"> // Cabeçalho com dados do usuário
-      <div class="user-menu-name">${user.name || "Usuário"}</div> // Nome do usuário
-      <div class="user-menu-email">${user.email}</div> // Email do usuário
-    </div> // Fim do header
-    <a href="dashboard.html"  class="user-menu-item"><span class="user-menu-icon">📊</span>Meu Dashboard</a> // Link para métricas
-    <a href="chatbot.html"    class="user-menu-item"><span class="user-menu-icon">🤖</span>Coach IA</a> // Link para o chat de IA
-    <a href="comunidade.html" class="user-menu-item"><span class="user-menu-icon">🏆</span>Comunidade</a> // Link para a rede social
-    <div class="user-menu-item" id="switchAccountBtn"><span class="user-menu-icon">🔄</span>Trocar conta</div> // Botão de switch account
-    <div class="user-menu-item danger" id="logoutBtn"><span class="user-menu-icon">🚪</span>Sair</div>`; // Botão de logout
+  menu.innerHTML = `
+    <div class="user-menu-header">
+      <div class="user-menu-name">${user.name || "Usuário"}</div>
+      <div class="user-menu-email">${user.email}</div>
+    </div>
+    <a href="dashboard.html"  class="user-menu-item"><span class="user-menu-icon">📊</span>Meu Dashboard</a>
+    <a href="chatbot.html"    class="user-menu-item"><span class="user-menu-icon">🤖</span>Coach IA</a>
+    <a href="comunidade.html" class="user-menu-item"><span class="user-menu-icon">🏆</span>Comunidade</a>
+    <div class="user-menu-item" id="switchAccountBtn"><span class="user-menu-icon">🔄</span>Trocar conta</div>
+    <div class="user-menu-item danger" id="logoutBtn"><span class="user-menu-icon">🚪</span>Sair</div>`;
+
 
   document.getElementById("logoutBtn").onclick = async () => {
     // Evento de sair

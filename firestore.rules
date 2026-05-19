@@ -8,10 +8,10 @@ service cloud.firestore {
       allow write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // LEADS — qualquer um pode criar, só admin lê
+    // LEADS — qualquer um pode criar/atualizar (lastAttempt), só admin lê
     match /leads/{leadId} {
-      allow create: if true;
-      allow read, update, delete: if false;
+      allow create, update: if true;
+      allow read, delete: if false;
     }
 
     // TREINOS — cada usuário acessa só os seus
@@ -19,69 +19,21 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // MEDIDAS CORPORAIS — cada usuário acessa só as suas
-    match /body_measurements/{userId}/entries/{entryId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // SONO — cada usuário acessa só os seus
-    match /sleep_records/{userId}/entries/{entryId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // NUTRIÇÃO — cada usuário acessa só a sua
-    match /nutrition_records/{userId}/entries/{entryId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // CARDIO — cada usuário acessa só o seu
-    match /cardio_records/{userId}/entries/{entryId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // METAS — cada usuário acessa só as suas
-    match /goals/{userId}/items/{goalId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // HISTÓRICO DO CHAT — cada usuário acessa só o seu
-    match /chat_history/{userId}/messages/{messageId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // POSTS DA COMUNIDADE — logados leem, autor escreve, qualquer logado curte
+    // POSTS DA COMUNIDADE
     match /community_posts/{postId} {
       allow read: if request.auth != null;
-      allow create: if request.auth != null
-        && request.resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
       allow update: if request.auth != null
         && (resource.data.userId == request.auth.uid
-          || request.resource.data.diff(resource.data).affectedKeys()
-            .hasOnly(['likes', 'likesCount']));
-      allow delete: if request.auth != null
-        && resource.data.userId == request.auth.uid;
+          || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes', 'likesCount']));
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }
 
-    // COMUNIDADES — logados leem, logados criam, membros/admin atualizam
-    match /communities/{communityId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null
-        && request.resource.data.adminId == request.auth.uid;
-      allow update: if request.auth != null
-        && (resource.data.adminId == request.auth.uid
-          || request.resource.data.diff(resource.data).affectedKeys()
-            .hasOnly(['members']));
-      allow delete: if request.auth != null
-        && resource.data.adminId == request.auth.uid;
-    }
-
-    // DESAFIOS — logados leem, logados participam
+    // DESAFIOS
     match /challenges/{challengeId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null;
-      allow update: if request.auth != null
-        && request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['participants', 'participantsCount']);
+      allow update: if request.auth != null && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['participants', 'participantsCount']);
       allow delete: if false;
     }
   }

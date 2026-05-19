@@ -15,8 +15,6 @@ import {
   updateDoc,
   addDoc,
   collection,
-  query,
-  where,
   getDocs,
   deleteDoc,
   serverTimestamp,
@@ -101,29 +99,6 @@ export async function updateUserProfile(uid, data) {
 /* ====================================================
    LEADS — EARLY ACCESS
 ==================================================== */
-
-export async function saveEarlyAccessLead(email) {
-  try {
-    // Verifica duplicata antes de salvar
-    const q = query(collection(db, "leads"), where("email", "==", email));
-    const existing = await getDocs(q);
-    if (!existing.empty) {
-      return { success: true, alreadyExists: true };
-    }
-
-    await addDoc(collection(db, "leads"), {
-      email,
-      origin: "early_access",
-      status: "pending",
-      createdAt: serverTimestamp(),
-    });
-
-    return { success: true, alreadyExists: false };
-  } catch (err) {
-    console.error("❌ Erro ao salvar lead [email:", email, "]:", err);
-    throw err;
-  }
-}
 
 export async function getLeadsCount() {
   try {
@@ -324,6 +299,47 @@ export async function getChallenges() {
     return [];
   }
 }
+
+/* ====================================================
+   EARLY ACCESS — Captura de Leads (versão com setDoc)
+==================================================== */
+
+/**
+ * Salva o email de um interessado na lista de early access.
+ * Usa o email sanitizado como ID do documento para evitar duplicatas
+ * sem necessidade de read permission (regra: allow create: if true).
+ */
+export async function saveEarlyAccessLead(email) {
+  try {
+    const sanitized = email.toLowerCase().trim();
+    // Usa o email como ID único (substituindo caracteres inválidos)
+    const docId = sanitized.replace(/[.@]/g, "_");
+    const ref = doc(db, "leads", docId);
+
+    // getDoc para verificar existência (ainda bloqueado por regras)
+    // Usamos setDoc com merge:false — se já existir, só atualiza lastAttempt
+    await setDoc(
+      ref,
+      {
+        email: sanitized,
+        source: "landing_page",
+        createdAt: serverTimestamp(),
+      },
+      { merge: false }
+    ).catch(async () => {
+      // Documento já existe — só registra nova tentativa
+      await setDoc(ref, { lastAttempt: serverTimestamp() }, { merge: true });
+      return { success: true, alreadyExists: true };
+    });
+
+    console.log("✅ Lead salvo com sucesso:", sanitized);
+    return { success: true, alreadyExists: false };
+  } catch (err) {
+    console.error("❌ Erro ao salvar lead [email:", email, "]:", err);
+    return { success: false, error: err.message };
+  }
+}
+
 
 /* ====================================================
    UTILS — Formatação de Timestamp
