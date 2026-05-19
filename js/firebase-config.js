@@ -1,16 +1,15 @@
 /* ====================================================
    FIREBASE CONFIG — CoreLab
-   Substitua os valores pelas suas credenciais reais
+   Credenciais do projeto corelab-app-ecfd5
 ==================================================== */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getAuth,
   GoogleAuthProvider,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ⚠️ SUBSTITUA PELOS SEUS DADOS DO FIREBASE CONSOLE
 const firebaseConfig = {
   apiKey: "AIzaSyBVquVlMKbkem815fdDUPNvj9Z3TitUxIc",
   authDomain: "corelab-app-ecfd5.firebaseapp.com",
@@ -21,17 +20,16 @@ const firebaseConfig = {
   measurementId: "G-GV4NR8NZM5",
 };
 
-// Inicializa o Firebase
-const app = initializeApp(firebaseConfig);
+// Evita inicializar múltiplas vezes (safe em multi-página)
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Inicializa os serviços
 const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
 
-// Configurações do Google Provider
-googleProvider.setCustomParameters({
-  prompt: "select_account",
-});
+// O banco foi criado com ID "default" (sem parênteses) — especificar explicitamente
+const db = getFirestore(app, "default");
+
+// Configuração do provedor Google
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
 export { auth, db, googleProvider };

@@ -1,0 +1,63 @@
+# ====================================================
+#   .GITIGNORE — CoreLab
+#   Protege dados sensíveis do repositório
+# ====================================================
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Dependências (caso adicione npm futuramente)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+.output/
+
+# Chaves e certificados
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+
+# Firebase Service Account (NUNCA subir ao GitHub!)
+*-firebase-adminsdk-*.json
+firebase-service-account.json
+
+# Arquivos de IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Firebase local emulator
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Arquivos temporários
+tmp/
+temp/

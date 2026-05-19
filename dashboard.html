@@ -1,914 +1,315 @@
-<!doctype html>
-<html lang="pt-BR" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>CoreLab — Dashboard de Performance</title>
+<!doctype html> <!-- Comentário: Declaração de tipo de documento HTML5 -->
+<html lang="pt-BR" data-theme="dark"> <!-- Elemento raiz com idioma e tema padrão escuro -->
+  <head> <!-- Cabeçalho do documento -->
+    <meta charset="UTF-8" /> <!-- Codificação UTF-8 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" /> <!-- Responsividade -->
+    <title>CoreLab — Dashboard de Performance</title> <!-- Título da página -->
     <link
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
-    />
-    <script type="module" src="js/analytics.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-    <style>
-      :root {
-        --green: #00ff87;
-        --green2: #00cc6a;
-        --red: #ff3b5c;
-        --orange: #ff8c42;
-        --blue: #4ecdc4;
-        --purple: #9b5de5;
-        --bg: #080808;
-        --bg2: #0f0f0f;
-        --bg3: #161616;
-        --surf: #1a1a1a;
-        --border: rgba(255, 255, 255, 0.07);
-        --text: #f0f0f0;
-        --text2: #888;
-        --text3: #444;
-      }
-      [data-theme="light"] {
-        --bg: #f0f0ec;
-        --bg2: #e8e8e4;
-        --bg3: #dcdcd8;
-        --surf: #fff;
-        --border: rgba(0, 0, 0, 0.08);
-        --text: #0a0a0a;
-        --text2: #555;
-        --text3: #aaa;
-      }
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      body {
-        font-family: "DM Sans", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        min-height: 100vh;
-      }
-      ::-webkit-scrollbar {
-        width: 4px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--green);
-        border-radius: 2px;
-      }
-      button {
-        cursor: pointer;
-        border: none;
-        background: none;
-        font-family: inherit;
-      }
+    /> <!-- Importação de fontes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script> <!-- Biblioteca Chart.js para gráficos -->
+    <link rel="stylesheet" href="css/global.css" /> <!-- Estilos globais -->
+    <link rel="stylesheet" href="css/dashboard.css" /> <!-- Estilos específicos do Dashboard -->
+  </head> <!-- Fim head -->
+  <body> <!-- Início do corpo -->
+    <div class="topbar"> <!-- Barra superior do dashboard -->
+      <div class="topbar-logo">CORE<span>LAB</span></div> <!-- Logo -->
+      <div class="topbar-sep"></div> <!-- Separador visual -->
+      <div class="topbar-title">Dashboard de Performance</div> <!-- Título da página atual -->
+      <div class="topbar-space"></div> <!-- Espaçador flexível -->
+      <div class="topbar-live"> <!-- Indicador de status "Ao Vivo" -->
+        <div class="live-dot"></div> <!-- Ponto pulsante -->
+        AO VIVO <!-- Texto -->
+      </div> <!-- Fim topbar-live -->
+      <button class="theme-btn" id="themeBtn">🌙</button> <!-- Alternador de tema -->
+      <button
+        class="topbar-btn dash-logout-btn"
+        id="dashLogoutBtn"
+        title="Sair da conta"
+      > <!-- Botão de logout -->
+        🚪 Sair <!-- Ícone e texto -->
+      </button> <!-- Fim logout -->
+      <a href="index.html" class="topbar-btn">← Voltar</a> <!-- Link de retorno para a landing page -->
+    </div> <!-- Fim topbar -->
 
-      /* TOPBAR */
-      .topbar {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        background: rgba(8, 8, 8, 0.92);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--border);
-        padding: 0 24px;
-        height: 64px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-      [data-theme="light"] .topbar {
-        background: rgba(240, 240, 236, 0.92);
-      }
-      .topbar-logo {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 22px;
-        letter-spacing: 0.1em;
-      }
-      .topbar-logo span {
-        color: var(--green);
-      }
-      .topbar-sep {
-        width: 1px;
-        height: 24px;
-        background: var(--border);
-      }
-      .topbar-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--text2);
-      }
-      .topbar-space {
-        flex: 1;
-      }
-      .topbar-live {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        color: var(--green);
-        letter-spacing: 0.1em;
-      }
-      .live-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--green);
-        animation: pulse 2s ease infinite;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.4;
-        }
-      }
+    <div class="dash-wrap"> <!-- Container principal do layout do dashboard -->
+      <div class="sidebar"> <!-- Barra lateral de navegação -->
+        <div class="profile-card"> <!-- Cartão de perfil do usuário -->
+          <div class="profile-av" id="profileAv">CL</div> <!-- Avatar (iniciais ou foto) -->
+          <div class="profile-name" id="profileName">Carregando...</div> <!-- Nome do usuário -->
+          <div class="profile-level" id="profileLevel">NÍVEL 1 — INICIANTE</div> <!-- Nível de experiência -->
+          <div class="xp-bar-wrap"> <!-- Container da barra de XP -->
+            <div class="xp-labels"> <!-- Rótulos de XP -->
+              <span>XP</span><span id="xpLabel">0 / 1000</span> <!-- Texto XP e valores -->
+            </div> <!-- Fim xp-labels -->
+            <div class="xp-bar"> <!-- Barra de progresso de XP -->
+              <div class="xp-fill" id="xpFill" style="width: 0%"></div> <!-- Preenchimento da barra -->
+            </div> <!-- Fim xp-bar -->
+          </div> <!-- Fim xp-bar-wrap -->
+        </div> <!-- Fim profile-card -->
+        <div class="sidebar-section">Principal</div> <!-- Seção da barra lateral -->
+        <div class="sidebar-item active" data-page="overview"> <!-- Item: Visão Geral (Ativo) -->
+          <div class="sidebar-icon">📊</div> <!-- Ícone -->
+          Visão Geral <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="workouts"> <!-- Item: Treinos -->
+          <div class="sidebar-icon">🏋️</div> <!-- Ícone -->
+          Treinos <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="body"> <!-- Item: Corpo -->
+          <div class="sidebar-icon">⚖️</div> <!-- Ícone -->
+          Corpo <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="cardio"> <!-- Item: Cardio -->
+          <div class="sidebar-icon">❤️</div> <!-- Ícone -->
+          Cardio <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="goals"> <!-- Item: Metas -->
+          <div class="sidebar-icon">🎯</div> <!-- Ícone -->
+          Metas <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-section">Saúde</div> <!-- Seção Saúde -->
+        <div class="sidebar-item" data-page="sleep"> <!-- Item: Sono -->
+          <div class="sidebar-icon">🌙</div> <!-- Ícone -->
+          Sono <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="nutrition"> <!-- Item: Nutrição -->
+          <div class="sidebar-icon">🥗</div> <!-- Ícone -->
+          Nutrição <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+        <div class="sidebar-item" data-page="profile"> <!-- Item: Perfil -->
+          <div class="sidebar-icon">👤</div> <!-- Ícone -->
+          Perfil <!-- Texto -->
+        </div> <!-- Fim sidebar-item -->
+      </div> <!-- Fim sidebar -->
 
-      .topbar-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 30px;
-        font-size: 13px;
-        color: var(--text2);
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.25s;
-      }
-      .topbar-btn:hover {
-        border-color: var(--green);
-        color: var(--green);
-      }
-      .theme-btn {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 15px;
-        transition: all 0.25s;
-      }
-      .theme-btn:hover {
-        border-color: var(--green);
-      }
-
-      /* LAYOUT */
-      .dash-wrap {
-        display: grid;
-        grid-template-columns: 220px 1fr;
-        min-height: calc(100vh - 64px);
-      }
-
-      /* SIDEBAR */
-      .sidebar {
-        background: var(--bg2);
-        border-right: 1px solid var(--border);
-        padding: 20px 0;
-        position: sticky;
-        top: 64px;
-        height: calc(100vh - 64px);
-        overflow-y: auto;
-      }
-      .profile-card {
-        margin: 0 16px 16px;
-        padding: 16px;
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-      }
-      .profile-av {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--green), #00aa55);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 18px;
-        color: #000;
-        margin-bottom: 10px;
-      }
-      .profile-name {
-        font-weight: 600;
-        font-size: 14px;
-        margin-bottom: 2px;
-      }
-      .profile-level {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        color: var(--green);
-        letter-spacing: 0.1em;
-      }
-      .xp-bar-wrap {
-        margin-top: 10px;
-      }
-      .xp-labels {
-        display: flex;
-        justify-content: space-between;
-        font-size: 11px;
-        color: var(--text2);
-        margin-bottom: 4px;
-      }
-      .xp-bar {
-        height: 4px;
-        background: var(--border);
-        border-radius: 2px;
-        overflow: hidden;
-      }
-      .xp-fill {
-        height: 100%;
-        background: var(--green);
-        border-radius: 2px;
-      }
-
-      .sidebar-section {
-        padding: 8px 16px;
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        color: var(--text3);
-        margin-top: 16px;
-      }
-      .sidebar-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 20px;
-        font-size: 14px;
-        color: var(--text2);
-        cursor: pointer;
-        transition: all 0.2s;
-        border-left: 2px solid transparent;
-      }
-      .sidebar-item:hover {
-        background: rgba(255, 255, 255, 0.03);
-        color: var(--text);
-      }
-      .sidebar-item.active {
-        background: rgba(0, 255, 135, 0.06);
-        border-left-color: var(--green);
-        color: var(--green);
-      }
-      .sidebar-icon {
-        font-size: 16px;
-        width: 20px;
-        text-align: center;
-      }
-
-      /* MAIN */
-      .dash-main {
-        padding: 24px;
-        overflow-y: auto;
-      }
-      .dash-page {
-        display: none;
-      }
-      .dash-page.active {
-        display: block;
-      }
-
-      /* SECTION HEADER */
-      .page-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        margin-bottom: 24px;
-        flex-wrap: wrap;
-        gap: 12px;
-      }
-      .page-tag {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        color: var(--green);
-        margin-bottom: 4px;
-      }
-      .page-title {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 36px;
-        letter-spacing: 0.03em;
-        line-height: 1;
-      }
-      .date-filter {
-        display: flex;
-        gap: 6px;
-      }
-      .df-btn {
-        padding: 6px 14px;
-        background: var(--surf);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        font-size: 12px;
-        color: var(--text2);
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-      .df-btn.active {
-        background: var(--green);
-        color: #000;
-        border-color: var(--green);
-      }
-
-      /* KPI GRID */
-      .kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 14px;
-        margin-bottom: 24px;
-      }
-      .kpi {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 18px;
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.2s;
-      }
-      .kpi:hover {
-        transform: translateY(-2px);
-      }
-      .kpi::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-      }
-      .kpi.g::before {
-        background: var(--green);
-      }
-      .kpi.r::before {
-        background: var(--red);
-      }
-      .kpi.o::before {
-        background: var(--orange);
-      }
-      .kpi.b::before {
-        background: var(--blue);
-      }
-      .kpi.p::before {
-        background: var(--purple);
-      }
-      .kpi-icon {
-        font-size: 22px;
-        margin-bottom: 10px;
-      }
-      .kpi-val {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 36px;
-        letter-spacing: 0.02em;
-        line-height: 1;
-        margin-bottom: 2px;
-      }
-      .kpi-label {
-        font-size: 12px;
-        color: var(--text2);
-        font-weight: 300;
-      }
-      .kpi-delta {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        margin-top: 8px;
-      }
-      .kpi-delta.up {
-        color: var(--green);
-      }
-      .kpi-delta.dn {
-        color: var(--red);
-      }
-
-      /* CHARTS */
-      .chart-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 14px;
-        margin-bottom: 24px;
-      }
-      .chart-grid-3 {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 14px;
-        margin-bottom: 24px;
-      }
-      .chart-box {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 20px;
-      }
-      .chart-title {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 18px;
-        letter-spacing: 0.05em;
-        margin-bottom: 4px;
-      }
-      .chart-sub {
-        font-size: 12px;
-        color: var(--text2);
-        margin-bottom: 16px;
-      }
-      .chart-wrap {
-        position: relative;
-        height: 200px;
-      }
-      .chart-wrap.tall {
-        height: 260px;
-      }
-
-      /* TABLE */
-      .table-box {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 20px;
-        margin-bottom: 24px;
-      }
-      .dash-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 12px;
-      }
-      .dash-table th {
-        text-align: left;
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: var(--text3);
-        padding: 8px 12px;
-        border-bottom: 1px solid var(--border);
-      }
-      .dash-table td {
-        padding: 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-        font-size: 14px;
-        color: var(--text2);
-      }
-      .dash-table tr:hover td {
-        background: rgba(255, 255, 255, 0.02);
-        color: var(--text);
-      }
-      .badge {
-        display: inline-block;
-        padding: 2px 10px;
-        border-radius: 20px;
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        letter-spacing: 0.1em;
-      }
-      .badge.done {
-        background: rgba(0, 255, 135, 0.12);
-        color: var(--green);
-        border: 1px solid rgba(0, 255, 135, 0.2);
-      }
-      .badge.skip {
-        background: rgba(255, 59, 92, 0.1);
-        color: var(--red);
-        border: 1px solid rgba(255, 59, 92, 0.2);
-      }
-      .badge.rest {
-        background: rgba(78, 205, 196, 0.1);
-        color: var(--blue);
-        border: 1px solid rgba(78, 205, 196, 0.2);
-      }
-
-      /* STREAK */
-      .streak-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-        margin-top: 12px;
-      }
-      .sday {
-        aspect-ratio: 1;
-        border-radius: 4px;
-        background: var(--border);
-        cursor: pointer;
-        transition: transform 0.2s;
-      }
-      .sday:hover {
-        transform: scale(1.1);
-      }
-      .sday.done {
-        background: var(--green);
-        opacity: 0.7;
-      }
-      .sday.done.today {
-        opacity: 1;
-        box-shadow: 0 0 10px rgba(0, 255, 135, 0.4);
-      }
-      .sday.rest {
-        background: var(--blue);
-        opacity: 0.4;
-      }
-
-      /* GOALS */
-      .goal-item {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 14px 0;
-        border-bottom: 1px solid var(--border);
-      }
-      .goal-item:last-child {
-        border-bottom: none;
-      }
-      .goal-icon {
-        font-size: 24px;
-        flex-shrink: 0;
-      }
-      .goal-info {
-        flex: 1;
-      }
-      .goal-name {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-      .goal-detail {
-        font-size: 12px;
-        color: var(--text2);
-      }
-      .goal-right {
-        width: 120px;
-        text-align: right;
-      }
-      .goal-pct {
-        font-family: "Space Mono", monospace;
-        font-size: 12px;
-        color: var(--green);
-        margin-bottom: 4px;
-      }
-      .prog-bar {
-        height: 6px;
-        background: var(--border);
-        border-radius: 3px;
-        overflow: hidden;
-      }
-      .prog-fill {
-        height: 100%;
-        border-radius: 3px;
-        transition: width 1s ease;
-      }
-
-      /* BODY METRICS */
-      .body-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-bottom: 24px;
-      }
-      .body-metric {
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 18px;
-      }
-      .bm-label {
-        font-size: 12px;
-        color: var(--text2);
-        margin-bottom: 6px;
-      }
-      .bm-val {
-        font-family: "Bebas Neue", sans-serif;
-        font-size: 32px;
-        letter-spacing: 0.02em;
-        margin-bottom: 4px;
-      }
-      .bm-unit {
-        font-size: 12px;
-        color: var(--text3);
-      }
-      .bm-detail {
-        font-size: 11px;
-        color: var(--text2);
-        margin-top: 2px;
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 900px) {
-        .dash-wrap {
-          grid-template-columns: 1fr;
-        }
-        .sidebar {
-          position: static;
-          height: auto;
-          display: flex;
-          flex-wrap: nowrap;
-          overflow-x: auto;
-          padding: 8px;
-          gap: 4px;
-          border-right: none;
-          border-bottom: 1px solid var(--border);
-        }
-        .sidebar-section {
-          display: none;
-        }
-        .profile-card {
-          display: none;
-        }
-        .sidebar-item {
-          padding: 8px 14px;
-          border-left: none;
-          white-space: nowrap;
-          border-radius: 20px;
-          flex-shrink: 0;
-        }
-        .chart-grid,
-        .chart-grid-3 {
-          grid-template-columns: 1fr;
-        }
-        .body-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-      @media (max-width: 600px) {
-        .kpi-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-        .dash-main {
-          padding: 16px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="topbar">
-      <div class="topbar-logo">CORE<span>LAB</span></div>
-      <div class="topbar-sep"></div>
-      <div class="topbar-title">Dashboard de Performance</div>
-      <div class="topbar-space"></div>
-      <div class="topbar-live">
-        <div class="live-dot"></div>
-        AO VIVO
-      </div>
-      <button class="theme-btn" id="themeBtn">🌙</button>
-      <a href="index.html" class="topbar-btn">← Voltar</a>
-    </div>
-
-    <div class="dash-wrap">
-      <!-- SIDEBAR -->
-      <div class="sidebar">
-        <div class="profile-card">
-          <div class="profile-av">LB</div>
-          <div class="profile-name">Luis Beckman</div>
-          <div class="profile-level">NÍVEL 12 — ATLETA</div>
-          <div class="xp-bar-wrap">
-            <div class="xp-labels">
-              <span>XP</span><span>7.240 / 10.000</span>
-            </div>
-            <div class="xp-bar">
-              <div class="xp-fill" style="width: 72%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="sidebar-section">Principal</div>
-        <div class="sidebar-item active" data-page="overview">
-          <div class="sidebar-icon">📊</div>
-          Visão Geral
-        </div>
-        <div class="sidebar-item" data-page="workouts">
-          <div class="sidebar-icon">🏋️</div>
-          Treinos
-        </div>
-        <div class="sidebar-item" data-page="body">
-          <div class="sidebar-icon">⚖️</div>
-          Corpo
-        </div>
-        <div class="sidebar-item" data-page="cardio">
-          <div class="sidebar-icon">❤️</div>
-          Cardio
-        </div>
-        <div class="sidebar-item" data-page="goals">
-          <div class="sidebar-icon">🎯</div>
-          Metas
-        </div>
-        <div class="sidebar-section">Saúde</div>
-        <div class="sidebar-item" data-page="sleep">
-          <div class="sidebar-icon">🌙</div>
-          Sono
-        </div>
-        <div class="sidebar-item" data-page="nutrition">
-          <div class="sidebar-icon">🥗</div>
-          Nutrição
-        </div>
-      </div>
-
-      <!-- MAIN -->
-      <div class="dash-main">
-        <!-- OVERVIEW -->
-        <div class="dash-page active" id="page-overview">
-          <div class="page-header">
+      <div class="dash-main"> <!-- Área principal de conteúdo do dashboard -->
+        <!-- VISÃO GERAL --> <!-- Comentário: Página de resumo estatístico -->
+        <div class="dash-page active" id="page-overview"> <!-- Container da página Overview -->
+          <div class="page-header"> <!-- Cabeçalho da página -->
             <div>
-              <div class="page-tag">Dashboard</div>
-              <div class="page-title">VISÃO GERAL</div>
+              <div class="page-tag">Dashboard</div> <!-- Tag de categoria -->
+              <div class="page-title">VISÃO GERAL</div> <!-- Título da página -->
             </div>
-            <div class="date-filter">
-              <button class="df-btn active">7d</button>
-              <button class="df-btn">30d</button>
-              <button class="df-btn">3m</button>
-              <button class="df-btn">1a</button>
+          </div> <!-- Fim page-header -->
+          <div class="kpi-grid"> <!-- Grade de KPIs (Indicadores Chave de Performance) -->
+            <div class="kpi g"> <!-- KPI: Treinos (Verde) -->
+              <div class="kpi-icon">🔥</div> <!-- Ícone de fogo (streak) -->
+              <div class="kpi-val" id="kpi-workouts">0</div> <!-- Valor total de treinos -->
+              <div class="kpi-label">Treinos totais</div> <!-- Rótulo -->
+              <div class="kpi-delta up" id="kpi-streak">⟳ Carregando...</div> <!-- Status de consistência -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi o"> <!-- KPI: Calorias (Laranja) -->
+              <div class="kpi-icon">⚡</div> <!-- Ícone de raio -->
+              <div class="kpi-val" id="kpi-calories">0</div> <!-- Valor de calorias -->
+              <div class="kpi-label">kcal queimadas (total)</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ Acumulado</div> <!-- Indicador de crescimento -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi b"> <!-- KPI: Duração (Azul) -->
+              <div class="kpi-icon">⏱️</div> <!-- Ícone de cronômetro -->
+              <div class="kpi-val" id="kpi-duration">0min</div> <!-- Valor de tempo -->
+              <div class="kpi-label">Tempo de treino (total)</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ Acumulado</div> <!-- Indicador -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi p"> <!-- KPI: Volume (Roxo) -->
+              <div class="kpi-icon">💪</div> <!-- Ícone de força -->
+              <div class="kpi-val" id="kpi-volume">0kg</div> <!-- Valor de peso total -->
+              <div class="kpi-label">Volume total</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ Acumulado</div> <!-- Indicador -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi g"> <!-- KPI: XP (Verde) -->
+              <div class="kpi-icon">🏆</div> <!-- Ícone de troféu -->
+              <div class="kpi-val" id="kpi-xp">0</div> <!-- Valor de XP -->
+              <div class="kpi-label">XP acumulado</div> <!-- Rótulo -->
+              <div class="kpi-delta up">↑ +100 por treino</div> <!-- Explicação do ganho -->
+            </div> <!-- Fim kpi -->
+          </div> <!-- Fim kpi-grid -->
+          <div class="chart-grid"> <!-- Grade de gráficos estatísticos -->
+            <div class="chart-box"> <!-- Box do gráfico de Volume -->
+              <div class="chart-title">Volume de Treino</div> <!-- Título do gráfico -->
+              <div class="chart-sub">Carga total por sessão (kg)</div> <!-- Subtítulo explicativo -->
+              <div class="chart-wrap" id="volumeChartWrap"> <!-- Container onde o Canvas do Chart.js é injetado -->
+                <div class="empty-state"> <!-- Estado vazio (exibido se não houver dados) -->
+                  <div class="empty-icon">📊</div> <!-- Ícone de gráfico vazio -->
+                  <div class="empty-title">SEM DADOS</div> <!-- Título -->
+                  <div class="empty-sub">
+                    Registre treinos para ver o gráfico <!-- Instrução ao usuário -->
+                  </div> <!-- Fim empty-sub -->
+                </div> <!-- Fim empty-state -->
+              </div> <!-- Fim chart-wrap -->
+            </div> <!-- Fim chart-box -->
+            <div class="chart-box"> <!-- Box do gráfico de Distribuição Muscular -->
+              <div class="chart-title">Distribuição Muscular</div> <!-- Título -->
+              <div class="chart-sub">Grupos musculares trabalhados</div> <!-- Subtítulo -->
+              <div class="chart-wrap" id="muscleChartWrap"> <!-- Container do gráfico de rosca/pizza -->
+                <div class="empty-state"> <!-- Estado vazio -->
+                  <div class="empty-icon">💪</div> <!-- Ícone -->
+                  <div class="empty-title">SEM DADOS</div> <!-- Título -->
+                  <div class="empty-sub">
+                    Registre treinos para ver a distribuição <!-- Instrução -->
+                  </div> <!-- Fim empty-sub -->
+                </div> <!-- Fim empty-state -->
+              </div> <!-- Fim chart-wrap -->
+            </div> <!-- Fim chart-box -->
+          </div> <!-- Fim chart-grid -->
+          <div class="table-box"> <!-- Box da tabela de histórico -->
+            <div class="chart-title">Histórico Recente</div> <!-- Título -->
+            <div class="chart-sub">Últimas sessões registradas</div> <!-- Subtítulo -->
+            <table class="dash-table"> <!-- Tabela de dados -->
+              <thead> <!-- Cabeçalho da tabela -->
+                <tr>
+                  <th>Data</th> <!-- Coluna Data -->
+                  <th>Treino</th> <!-- Coluna Nome do Treino -->
+                  <th>Duração</th> <!-- Coluna Duração -->
+                  <th>Volume</th> <!-- Coluna Peso total -->
+                  <th>Calorias</th> <!-- Coluna Calorias -->
+                </tr>
+              </thead> <!-- Fim thead -->
+              <tbody id="workoutTableBody"> <!-- Corpo da tabela (preenchido via JavaScript) -->
+                <tr>
+                  <td
+                    colspan="5"
+                    style="
+                      text-align: center;
+                      padding: 32px;
+                      color: var(--text3);
+                    "
+                  > <!-- Célula única para estado vazio inicial -->
+                    Nenhum treino registrado ainda
+                  </td>
+                </tr>
+              </tbody> <!-- Fim tbody -->
+            </table> <!-- Fim table -->
+          </div> <!-- Fim table-box -->
+        </div> <!-- Fim page-overview -->
+
+        <!-- TREINOS --> <!-- Comentário: Página para registro de sessões de treino -->
+        <div class="dash-page" id="page-workouts"> <!-- Container da página de treinos -->
+          <div class="page-header"> <!-- Cabeçalho -->
+            <div>
+              <div class="page-tag">Registrar</div> <!-- Tag -->
+              <div class="page-title">TREINOS</div> <!-- Título -->
             </div>
-          </div>
-          <div class="kpi-grid">
-            <div class="kpi g">
-              <div class="kpi-icon">🔥</div>
-              <div class="kpi-val">6</div>
-              <div class="kpi-label">Treinos na semana</div>
-              <div class="kpi-delta up">↑ +1 vs semana passada</div>
-            </div>
-            <div class="kpi o">
-              <div class="kpi-icon">⚡</div>
-              <div class="kpi-val">4.820</div>
-              <div class="kpi-label">kcal queimadas</div>
-              <div class="kpi-delta up">↑ +8% esta semana</div>
-            </div>
-            <div class="kpi b">
-              <div class="kpi-icon">⏱️</div>
-              <div class="kpi-val">5h42</div>
-              <div class="kpi-label">Tempo de treino</div>
-              <div class="kpi-delta up">↑ +23min vs média</div>
-            </div>
-            <div class="kpi p">
-              <div class="kpi-icon">💪</div>
-              <div class="kpi-val">12.400</div>
-              <div class="kpi-label">kg volume total</div>
-              <div class="kpi-delta up">↑ +340kg vs semana</div>
-            </div>
-            <div class="kpi g">
-              <div class="kpi-icon">🏆</div>
-              <div class="kpi-val">21</div>
-              <div class="kpi-label">Sequência (dias)</div>
-              <div class="kpi-delta up">↑ Recorde pessoal!</div>
-            </div>
-          </div>
-          <div class="chart-grid">
-            <div class="chart-box">
-              <div class="chart-title">Volume de Treino</div>
-              <div class="chart-sub">
-                Carga total por sessão (kg) — últimos 14 dias
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Cartão contendo o formulário de registro -->
+            <div class="form-card-title">🏋️ Registrar Nova Sessão</div> <!-- Título do formulário -->
+            <div class="form-grid"> <!-- Grade de campos do formulário -->
+              <div class="form-group"> <!-- Grupo de campo: Nome do Treino -->
+                <label class="form-label">Nome do Treino</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-name"
+                  placeholder="Ex: Peito & Tríceps"
+                /> <!-- Entrada de texto -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Grupo de campo: Duração -->
+                <label class="form-label">Duração (min)</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-duration"
+                  type="number"
+                  min="1"
+                  placeholder="60"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Grupo de campo: Volume -->
+                <label class="form-label">Volume (kg)</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-volume"
+                  type="number"
+                  min="0"
+                  placeholder="2400"
+                /> <!-- Entrada numérica de carga total -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Grupo de campo: Calorias -->
+                <label class="form-label">Calorias queimadas</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="w-calories"
+                  type="number"
+                  min="0"
+                  placeholder="480"
+                />
               </div>
-              <div class="chart-wrap"><canvas id="volumeChart"></canvas></div>
+              <div class="form-group">
+                <label class="form-label">Grupo muscular principal</label>
+                <select class="form-select" id="w-muscle">
+                  <option value="Peito">Peito</option>
+                  <option value="Costas">Costas</option>
+                  <option value="Pernas">Pernas</option>
+                  <option value="Ombros">Ombros</option>
+                  <option value="Bíceps">Bíceps</option>
+                  <option value="Tríceps">Tríceps</option>
+                  <option value="Core">Core</option>
+                  <option value="Full Body">Full Body</option>
+                  <option value="Cardio">Cardio</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Observações</label
+                ><input
+                  class="form-input"
+                  id="w-notes"
+                  placeholder="Como foi o treino?"
+                />
+              </div>
             </div>
-            <div class="chart-box">
-              <div class="chart-title">Distribuição Muscular</div>
-              <div class="chart-sub">Grupos musculares trabalhados</div>
-              <div class="chart-wrap"><canvas id="muscleChart"></canvas></div>
-            </div>
-          </div>
-          <div class="chart-box" style="margin-bottom: 24px">
-            <div class="chart-title">Sequência de Treinos — Abril 2026</div>
-            <div class="chart-sub">
-              🟢 Treino &nbsp;|&nbsp; 🔵 Descanso ativo &nbsp;|&nbsp; ⬛
-              Descanso
-            </div>
-            <div class="streak-grid" id="streakGrid"></div>
-          </div>
-          <div class="table-box">
-            <div class="chart-title">Histórico Recente</div>
-            <div class="chart-sub">Últimas 7 sessões</div>
-            <table class="dash-table">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Treino</th>
-                  <th>Duração</th>
-                  <th>Volume</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>09/04</td>
-                  <td>Peito & Tríceps</td>
-                  <td>58 min</td>
-                  <td>2.340 kg</td>
-                  <td><span class="badge done">CONCLUÍDO</span></td>
-                </tr>
-                <tr>
-                  <td>08/04</td>
-                  <td>Cardio HIIT</td>
-                  <td>28 min</td>
-                  <td>—</td>
-                  <td><span class="badge done">CONCLUÍDO</span></td>
-                </tr>
-                <tr>
-                  <td>07/04</td>
-                  <td>Costas & Bíceps</td>
-                  <td>62 min</td>
-                  <td>2.780 kg</td>
-                  <td><span class="badge done">CONCLUÍDO</span></td>
-                </tr>
-                <tr>
-                  <td>06/04</td>
-                  <td>Descanso Ativo</td>
-                  <td>30 min</td>
-                  <td>—</td>
-                  <td><span class="badge rest">DESCANSO</span></td>
-                </tr>
-                <tr>
-                  <td>05/04</td>
-                  <td>Pernas (Quad)</td>
-                  <td>71 min</td>
-                  <td>3.420 kg</td>
-                  <td><span class="badge done">CONCLUÍDO</span></td>
-                </tr>
-                <tr>
-                  <td>04/04</td>
-                  <td>Ombros & Core</td>
-                  <td>55 min</td>
-                  <td>1.860 kg</td>
-                  <td><span class="badge done">CONCLUÍDO</span></td>
-                </tr>
-                <tr>
-                  <td>03/04</td>
-                  <td>Mobilidade</td>
-                  <td>40 min</td>
-                  <td>—</td>
-                  <td><span class="badge done">CONCLUÍDO</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- WORKOUTS -->
-        <div class="dash-page" id="page-workouts">
-          <div class="page-header">
-            <div>
-              <div class="page-tag">Análise</div>
-              <div class="page-title">TREINOS</div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="w-save">SALVAR TREINO</button>
+              <span class="form-feedback" id="w-feedback"></span>
             </div>
           </div>
           <div class="kpi-grid">
             <div class="kpi g">
               <div class="kpi-icon">📈</div>
-              <div class="kpi-val">187</div>
+              <div class="kpi-val" id="wk-total">0</div>
               <div class="kpi-label">Treinos totais</div>
-              <div class="kpi-delta up">↑ Este ano</div>
             </div>
             <div class="kpi o">
               <div class="kpi-icon">⏱️</div>
-              <div class="kpi-val">57min</div>
+              <div class="kpi-val" id="wk-avgDur">0min</div>
               <div class="kpi-label">Duração média</div>
-              <div class="kpi-delta up">↑ +4min vs mês passado</div>
             </div>
             <div class="kpi b">
-              <div class="kpi-icon">🔄</div>
-              <div class="kpi-val">4.2</div>
-              <div class="kpi-label">Treinos/semana</div>
-              <div class="kpi-delta up">↑ acima da meta (4)</div>
+              <div class="kpi-icon">🔥</div>
+              <div class="kpi-val" id="wk-totalCal">0</div>
+              <div class="kpi-label">kcal totais</div>
             </div>
             <div class="kpi p">
               <div class="kpi-icon">💪</div>
-              <div class="kpi-val">142kg</div>
-              <div class="kpi-label">1RM Supino</div>
-              <div class="kpi-delta up">↑ +8kg em 2 meses</div>
+              <div class="kpi-val" id="wk-totalVol">0kg</div>
+              <div class="kpi-label">Volume total</div>
             </div>
           </div>
           <div class="chart-grid-3">
             <div class="chart-box">
-              <div class="chart-title">Peito</div>
-              <div class="chart-sub">Progressão 1RM (kg)</div>
-              <div class="chart-wrap"><canvas id="chestChart"></canvas></div>
+              <div class="chart-title">Volume por Sessão</div>
+              <div class="chart-sub">kg por treino</div>
+              <div class="chart-wrap"><canvas id="wVolChart"></canvas></div>
             </div>
             <div class="chart-box">
-              <div class="chart-title">Costas</div>
-              <div class="chart-sub">Progressão 1RM (kg)</div>
-              <div class="chart-wrap"><canvas id="backChart"></canvas></div>
+              <div class="chart-title">Calorias por Sessão</div>
+              <div class="chart-sub">kcal queimadas</div>
+              <div class="chart-wrap"><canvas id="wCalChart"></canvas></div>
             </div>
             <div class="chart-box">
-              <div class="chart-title">Pernas</div>
-              <div class="chart-sub">Progressão 1RM (kg)</div>
-              <div class="chart-wrap"><canvas id="legsChart"></canvas></div>
-            </div>
-          </div>
-          <div class="chart-box">
-            <div class="chart-title">
-              Volume Semanal por Grupo Muscular (kg)
-            </div>
-            <div class="chart-sub">Últimas 8 semanas</div>
-            <div class="chart-wrap tall">
-              <canvas id="weeklyVolChart"></canvas>
+              <div class="chart-title">Grupos Musculares</div>
+              <div class="chart-sub">Distribuição de treinos</div>
+              <div class="chart-wrap"><canvas id="wMuscleChart"></canvas></div>
             </div>
           </div>
         </div>
 
-        <!-- BODY -->
+        <!-- CORPO -->
         <div class="dash-page" id="page-body">
           <div class="page-header">
             <div>
@@ -916,302 +317,515 @@
               <div class="page-title">CORPO</div>
             </div>
           </div>
+          <div class="form-card">
+            <div class="form-card-title">⚖️ Registrar Medidas Corporais</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Peso (kg)</label
+                ><input
+                  class="form-input"
+                  id="b-weight"
+                  type="number"
+                  step="0.1"
+                  placeholder="80.5"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">% Gordura</label
+                ><input
+                  class="form-input"
+                  id="b-fat"
+                  type="number"
+                  step="0.1"
+                  placeholder="15.0"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cintura (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-waist"
+                  type="number"
+                  placeholder="84"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Peito (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-chest"
+                  type="number"
+                  placeholder="102"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bíceps (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-biceps"
+                  type="number"
+                  placeholder="38"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Coxa (cm)</label
+                ><input
+                  class="form-input"
+                  id="b-thigh"
+                  type="number"
+                  placeholder="60"
+                />
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="b-save">SALVAR MEDIDAS</button>
+              <span class="form-feedback" id="b-feedback"></span>
+            </div>
+          </div>
           <div class="kpi-grid">
             <div class="kpi g">
               <div class="kpi-icon">⚖️</div>
-              <div class="kpi-val">82.4kg</div>
-              <div class="kpi-label">Peso atual</div>
-              <div class="kpi-delta dn">↓ -1.2kg em 30d</div>
+              <div class="kpi-val" id="bk-weight">—</div>
+              <div class="kpi-label">Peso atual (kg)</div>
             </div>
             <div class="kpi b">
               <div class="kpi-icon">🔬</div>
-              <div class="kpi-val">14.8%</div>
-              <div class="kpi-label">% Gordura</div>
-              <div class="kpi-delta dn">↓ -0.8% em 30d</div>
+              <div class="kpi-val" id="bk-fat">—</div>
+              <div class="kpi-label">% Gordura atual</div>
             </div>
             <div class="kpi p">
               <div class="kpi-icon">💪</div>
-              <div class="kpi-val">70.2kg</div>
-              <div class="kpi-label">Massa magra</div>
-              <div class="kpi-delta up">↑ +0.4kg em 30d</div>
+              <div class="kpi-val" id="bk-lean">—</div>
+              <div class="kpi-label">Massa magra (kg)</div>
             </div>
             <div class="kpi o">
-              <div class="kpi-icon">💧</div>
-              <div class="kpi-val">58.1%</div>
-              <div class="kpi-label">Água corporal</div>
-              <div class="kpi-delta up">↑ Ideal</div>
+              <div class="kpi-icon">📏</div>
+              <div class="kpi-val" id="bk-waist">—</div>
+              <div class="kpi-label">Cintura (cm)</div>
             </div>
           </div>
           <div class="chart-grid">
             <div class="chart-box">
               <div class="chart-title">Evolução do Peso</div>
-              <div class="chart-sub">Últimas 12 semanas (kg)</div>
+              <div class="chart-sub">kg ao longo do tempo</div>
               <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
             </div>
             <div class="chart-box">
               <div class="chart-title">Composição Corporal</div>
-              <div class="chart-sub">Distribuição atual</div>
+              <div class="chart-sub">Última medição</div>
               <div class="chart-wrap"><canvas id="bodyCompChart"></canvas></div>
             </div>
           </div>
           <div class="body-grid">
             <div class="body-metric">
               <div class="bm-label">Cintura</div>
-              <div class="bm-val">84<span class="bm-unit">cm</span></div>
-              <div class="bm-detail">Meta: 80cm</div>
-              <div class="prog-bar" style="margin-top: 8px">
-                <div
-                  class="prog-fill"
-                  style="width: 60%; background: var(--orange)"
-                ></div>
+              <div class="bm-val">
+                <span id="bm-waist">—</span><span class="bm-unit"> cm</span>
               </div>
             </div>
             <div class="body-metric">
               <div class="bm-label">Peito</div>
-              <div class="bm-val">102<span class="bm-unit">cm</span></div>
-              <div class="bm-detail">Meta: 106cm</div>
-              <div class="prog-bar" style="margin-top: 8px">
-                <div
-                  class="prog-fill"
-                  style="width: 72%; background: var(--blue)"
-                ></div>
+              <div class="bm-val">
+                <span id="bm-chest">—</span><span class="bm-unit"> cm</span>
               </div>
             </div>
-            <div class="body-metric">
-              <div class="bm-label">Bíceps</div>
-              <div class="bm-val">38<span class="bm-unit">cm</span></div>
-              <div class="bm-detail">Meta: 42cm</div>
-              <div class="prog-bar" style="margin-top: 8px">
-                <div
-                  class="prog-fill"
-                  style="width: 55%; background: var(--purple)"
-                ></div>
-              </div>
-            </div>
-            <div class="body-metric">
-              <div class="bm-label">Coxa</div>
-              <div class="bm-val">60<span class="bm-unit">cm</span></div>
-              <div class="bm-detail">Meta: 64cm</div>
-              <div class="prog-bar" style="margin-top: 8px">
-                <div
-                  class="prog-fill"
-                  style="width: 68%; background: var(--green)"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="b-save">SALVAR MEDIDAS</button> <!-- Botão salvar -->
+              <span class="form-feedback" id="b-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
+          <div class="kpi-grid"> <!-- Grade de indicadores de corpo -->
+            <div class="kpi g"> <!-- KPI: Peso -->
+              <div class="kpi-icon">⚖️</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-weight">—</div> <!-- Valor -->
+              <div class="kpi-label">Peso atual (kg)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi b"> <!-- KPI: Gordura -->
+              <div class="kpi-icon">🔬</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-fat">—</div> <!-- Valor -->
+              <div class="kpi-label">% Gordura atual</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi p"> <!-- KPI: Massa magra -->
+              <div class="kpi-icon">💪</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-lean">—</div> <!-- Valor -->
+              <div class="kpi-label">Massa magra (kg)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi o"> <!-- KPI: Cintura -->
+              <div class="kpi-icon">📏</div> <!-- Ícone -->
+              <div class="kpi-val" id="bk-waist">—</div> <!-- Valor -->
+              <div class="kpi-label">Cintura (cm)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+          </div> <!-- Fim kpi-grid -->
+          <div class="chart-grid"> <!-- Grade de gráficos de corpo -->
+            <div class="chart-box"> <!-- Gráfico: Peso -->
+              <div class="chart-title">Evolução do Peso</div> <!-- Título -->
+              <div class="chart-sub">kg ao longo do tempo</div> <!-- Subtítulo -->
+              <div class="chart-wrap"><canvas id="weightChart"></canvas></div> <!-- Canvas -->
+            </div> <!-- Fim chart-box -->
+            <div class="chart-box"> <!-- Gráfico: Composição -->
+              <div class="chart-title">Composição Corporal</div> <!-- Título -->
+              <div class="chart-sub">Última medição</div> <!-- Subtítulo -->
+              <div class="chart-wrap"><canvas id="bodyCompChart"></canvas></div> <!-- Canvas -->
+            </div> <!-- Fim chart-box -->
+          </div> <!-- Fim chart-grid -->
+          <div class="body-grid"> <!-- Grade de métricas individuais -->
+            <div class="body-metric"> <!-- Item: Cintura -->
+              <div class="bm-label">Cintura</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-waist">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+            <div class="body-metric"> <!-- Item: Peito -->
+              <div class="bm-label">Peito</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-chest">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+            <div class="body-metric"> <!-- Item: Bíceps -->
+              <div class="bm-label">Bíceps</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-biceps">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+            <div class="body-metric"> <!-- Item: Coxa -->
+              <div class="bm-label">Coxa</div> <!-- Rótulo -->
+              <div class="bm-val">
+                <span id="bm-thigh">—</span><span class="bm-unit"> cm</span> <!-- Valor e unidade -->
+              </div> <!-- Fim bm-val -->
+            </div> <!-- Fim body-metric -->
+          </div> <!-- Fim body-grid -->
+        </div> <!-- Fim page-body -->
 
-        <!-- CARDIO -->
-        <div class="dash-page" id="page-cardio">
-          <div class="page-header">
+        <!-- CARDIO --> <!-- Comentário: Registro e análise de atividades aeróbicas -->
+        <div class="dash-page" id="page-cardio"> <!-- Container cardio -->
+          <div class="page-header"> <!-- Cabeçalho -->
             <div>
-              <div class="page-tag">Cardiovascular</div>
-              <div class="page-title">CARDIO</div>
+              <div class="page-tag">Cardiovascular</div> <!-- Tag -->
+              <div class="page-title">CARDIO</div> <!-- Título -->
             </div>
-          </div>
-          <div class="kpi-grid">
-            <div class="kpi r">
-              <div class="kpi-icon">❤️</div>
-              <div class="kpi-val">58bpm</div>
-              <div class="kpi-label">FC em repouso</div>
-              <div class="kpi-delta up">↓ Excelente (&lt;60)</div>
-            </div>
-            <div class="kpi o">
-              <div class="kpi-icon">🏃</div>
-              <div class="kpi-val">48.2</div>
-              <div class="kpi-label">VO2 Máx (est.)</div>
-              <div class="kpi-delta up">↑ +1.8 em 2 meses</div>
-            </div>
-            <div class="kpi b">
-              <div class="kpi-icon">⏱️</div>
-              <div class="kpi-val">3h20</div>
-              <div class="kpi-label">Cardio semanal</div>
-              <div class="kpi-delta up">↑ +20min vs meta</div>
-            </div>
-            <div class="kpi g">
-              <div class="kpi-icon">🔥</div>
-              <div class="kpi-val">2.840</div>
-              <div class="kpi-label">kcal cardio/sem</div>
-              <div class="kpi-delta up">↑ esta semana</div>
-            </div>
-          </div>
-          <div class="chart-grid">
-            <div class="chart-box">
-              <div class="chart-title">FC — Última Sessão HIIT</div>
-              <div class="chart-sub">BPM ao longo dos 28 minutos</div>
-              <div class="chart-wrap"><canvas id="hrChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-              <div class="chart-title">Distribuição por Zona</div>
-              <div class="chart-sub">Tempo em cada zona de FC</div>
-              <div class="chart-wrap"><canvas id="zoneChart"></canvas></div>
-            </div>
-          </div>
-          <div class="chart-box">
-            <div class="chart-title">Evolução VO2 Máximo (estimado)</div>
-            <div class="chart-sub">Últimas 12 semanas</div>
-            <div class="chart-wrap"><canvas id="vo2Chart"></canvas></div>
-          </div>
-        </div>
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Formulário cardio -->
+            <div class="form-card-title">❤️ Registrar Sessão de Cardio</div> <!-- Título -->
+            <div class="form-grid"> <!-- Grade de campos -->
+              <div class="form-group"> <!-- Campo tipo -->
+                <label class="form-label">Tipo</label> <!-- Rótulo -->
+                <select class="form-select" id="c-type"> <!-- Seletor -->
+                  <option>HIIT</option> <!-- Opção -->
+                  <option>LISS</option> <!-- Opção -->
+                  <option>Corrida</option> <!-- Opção -->
+                  <option>Ciclismo</option> <!-- Opção -->
+                  <option>Natação</option> <!-- Opção -->
+                  <option>Caminhada</option> <!-- Opção -->
+                  <option>Outro</option> <!-- Opção -->
+                </select> <!-- Fim select -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo duração -->
+                <label class="form-label">Duração (min)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-duration"
+                  type="number"
+                  min="1"
+                  placeholder="28"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo calorias -->
+                <label class="form-label">Calorias queimadas</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-calories"
+                  type="number"
+                  placeholder="320"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo FC média -->
+                <label class="form-label">FC Média (bpm)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-avghr"
+                  type="number"
+                  placeholder="145"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo FC máxima -->
+                <label class="form-label">FC Máxima (bpm)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-maxhr"
+                  type="number"
+                  placeholder="172"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo distância -->
+                <label class="form-label">Distância (km)</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="c-distance"
+                  type="number"
+                  step="0.1"
+                  placeholder="5.0"
+                /> <!-- Entrada numérica -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="c-save">SALVAR CARDIO</button> <!-- Botão -->
+              <span class="form-feedback" id="c-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
+          <div class="kpi-grid"> <!-- Grade de indicadores -->
+            <div class="kpi r"> <!-- KPI: FC -->
+              <div class="kpi-icon">❤️</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-avghr">—</div> <!-- Valor -->
+              <div class="kpi-label">FC média geral (bpm)</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi o"> <!-- KPI: Distância -->
+              <div class="kpi-icon">🏃</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-distance">—</div> <!-- Valor -->
+              <div class="kpi-label">km acumulados</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi b"> <!-- KPI: Duração -->
+              <div class="kpi-icon">⏱️</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-duration">—</div> <!-- Valor -->
+              <div class="kpi-label">Minutos de cardio</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+            <div class="kpi g"> <!-- KPI: Calorias -->
+              <div class="kpi-icon">🔥</div> <!-- Ícone -->
+              <div class="kpi-val" id="ck-calories">—</div> <!-- Valor -->
+              <div class="kpi-label">kcal cardio total</div> <!-- Rótulo -->
+            </div> <!-- Fim kpi -->
+          </div> <!-- Fim kpi-grid -->
+          <div class="chart-grid"> <!-- Grade de gráficos -->
+            <div class="chart-box"> <!-- Gráfico: FC -->
+              <div class="chart-title">FC Média por Sessão</div> <!-- Título -->
+              <div class="chart-sub">Batimentos por minuto</div> <!-- Subtítulo -->
+              <div class="chart-wrap"><canvas id="hrChart"></canvas></div> <!-- Canvas -->
+            </div> <!-- Fim chart-box -->
+            <div class="chart-box"> <!-- Gráfico: Tipos -->
+              <div class="chart-title">Tipos de Cardio</div> <!-- Título -->
+              <div class="chart-sub">Distribuição de modalidades</div> <!-- Subtítulo -->
+              <div class="chart-wrap">
+                <canvas id="cardioTypeChart"></canvas> <!-- Canvas -->
+              </div> <!-- Fim chart-wrap -->
+            </div> <!-- Fim chart-box -->
+          </div> <!-- Fim chart-grid -->
+        </div> <!-- Fim page-cardio -->
 
-        <!-- GOALS -->
-        <div class="dash-page" id="page-goals">
-          <div class="page-header">
+        <!-- METAS --> <!-- Comentário: Monitoramento de objetivos pessoais -->
+        <div class="dash-page" id="page-goals"> <!-- Container metas -->
+          <div class="page-header"> <!-- Cabeçalho -->
             <div>
-              <div class="page-tag">Objetivos</div>
-              <div class="page-title">METAS</div>
+              <div class="page-tag">Objetivos</div> <!-- Tag -->
+              <div class="page-title">METAS</div> <!-- Título -->
             </div>
-          </div>
-          <div class="chart-box">
-            <div class="chart-title">Metas Ativas do Trimestre</div>
-            <div class="chart-sub">Progresso em relação às metas definidas</div>
-            <div style="margin-top: 16px">
-              <div class="goal-item">
-                <div class="goal-icon">💪</div>
-                <div class="goal-info">
-                  <div class="goal-name">Supino de 150kg</div>
-                  <div class="goal-detail">
-                    Atual: 142kg &nbsp;•&nbsp; Meta: Junho/26
-                  </div>
-                </div>
-                <div class="goal-right">
-                  <div class="goal-pct">94%</div>
-                  <div class="prog-bar">
-                    <div
-                      class="prog-fill"
-                      style="width: 94%; background: var(--green)"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div class="goal-item">
-                <div class="goal-icon">⚖️</div>
-                <div class="goal-info">
-                  <div class="goal-name">12% de gordura corporal</div>
-                  <div class="goal-detail">
-                    Atual: 14.8% &nbsp;•&nbsp; Meta: Julho/26
-                  </div>
-                </div>
-                <div class="goal-right">
-                  <div class="goal-pct">68%</div>
-                  <div class="prog-bar">
-                    <div
-                      class="prog-fill"
-                      style="width: 68%; background: var(--orange)"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div class="goal-item">
-                <div class="goal-icon">❤️</div>
-                <div class="goal-info">
-                  <div class="goal-name">VO2 Máx de 52</div>
-                  <div class="goal-detail">
-                    Atual: 48.2 &nbsp;•&nbsp; Meta: Agosto/26
-                  </div>
-                </div>
-                <div class="goal-right">
-                  <div class="goal-pct">73%</div>
-                  <div class="prog-bar">
-                    <div
-                      class="prog-fill"
-                      style="width: 73%; background: var(--blue)"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div class="goal-item">
-                <div class="goal-icon">🏃</div>
-                <div class="goal-info">
-                  <div class="goal-name">Correr 5km em 22 min</div>
-                  <div class="goal-detail">
-                    Atual: 24min30s &nbsp;•&nbsp; Meta: Setembro/26
-                  </div>
-                </div>
-                <div class="goal-right">
-                  <div class="goal-pct">42%</div>
-                  <div class="prog-bar">
-                    <div
-                      class="prog-fill"
-                      style="width: 42%; background: var(--purple)"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-              <div class="goal-item">
-                <div class="goal-icon">🔥</div>
-                <div class="goal-info">
-                  <div class="goal-name">21 dias consecutivos de treino</div>
-                  <div class="goal-detail">
-                    Atual: 21 dias &nbsp;•&nbsp; Concluída!
-                  </div>
-                </div>
-                <div class="goal-right">
-                  <div class="goal-pct" style="color: var(--green)">100% ✓</div>
-                  <div class="prog-bar">
-                    <div
-                      class="prog-fill"
-                      style="width: 100%; background: var(--green)"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Formulário metas -->
+            <div class="form-card-title">🎯 Adicionar Nova Meta</div> <!-- Título -->
+            <div class="form-grid"> <!-- Grade de campos -->
+              <div class="form-group"> <!-- Campo ícone -->
+                <label class="form-label">Ícone</label> <!-- Rótulo -->
+                <select class="form-select" id="g-icon"> <!-- Seletor -->
+                  <option>💪</option> <!-- Opção -->
+                  <option>⚖️</option> <!-- Opção -->
+                  <option>❤️</option> <!-- Opção -->
+                  <option>🏃</option> <!-- Opção -->
+                  <option>🔥</option> <!-- Opção -->
+                  <option>🏋️</option> <!-- Opção -->
+                  <option>🧘</option> <!-- Opção -->
+                  <option>🥗</option> <!-- Opção -->
+                  <option>💧</option> <!-- Opção -->
+                  <option>🎯</option> <!-- Opção -->
+                </select> <!-- Fim select -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group grid-col-span-2"> <!-- Campo nome -->
+                <label class="form-label">Nome da Meta</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-name"
+                  placeholder="Ex: Supino de 100kg"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo valor atual -->
+                <label class="form-label">Valor Atual</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-current"
+                  type="number"
+                  placeholder="80"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo valor alvo -->
+                <label class="form-label">Valor Alvo</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-target"
+                  type="number"
+                  placeholder="100"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo unidade -->
+                <label class="form-label">Unidade</label <!-- Rótulo -->
+                ><input
+                  class="form-input"
+                  id="g-unit"
+                  placeholder="kg, %, min, km..."
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo prazo -->
+                <label class="form-label">Prazo</label <!-- Rótulo -->
+                ><input class="form-input" id="g-deadline" type="date" /> <!-- Data -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="g-save">ADICIONAR META</button> <!-- Botão -->
+              <span class="form-feedback" id="g-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
+          <div class="chart-box"> <!-- Box metas -->
+            <div class="chart-title">Metas Ativas</div> <!-- Título -->
+            <div class="chart-sub">Progresso em relação às metas definidas</div> <!-- Subtítulo -->
+            <div id="goalsList" class="mt-16"> <!-- Lista dinâmica -->
+              <div class="empty-state"> <!-- Estado vazio -->
+                <div class="empty-icon">🎯</div> <!-- Ícone -->
+                <div class="empty-title">SEM METAS</div> <!-- Título -->
+                <div class="empty-sub">Adicione sua primeira meta acima</div> <!-- Subtítulo -->
+              </div> <!-- Fim empty-state -->
+            </div> <!-- Fim goalsList -->
+          </div> <!-- Fim chart-box -->
+        </div> <!-- Fim page-goals -->
 
-        <!-- SLEEP -->
-        <div class="dash-page" id="page-sleep">
-          <div class="page-header">
+        <!-- SONO --> <!-- Comentário: Registro de sono e recuperação -->
+        <div class="dash-page" id="page-sleep"> <!-- Container sono -->
+          <div class="page-header"> <!-- Cabeçalho -->
             <div>
-              <div class="page-tag">Recuperação</div>
-              <div class="page-title">SONO</div>
+              <div class="page-tag">Recuperação</div> <!-- Tag -->
+              <div class="page-title">SONO</div> <!-- Título -->
             </div>
-          </div>
+          </div> <!-- Fim page-header -->
+          <div class="form-card"> <!-- Formulário sono -->
+            <div class="form-card-title">🌙 Registrar Noite de Sono</div> <!-- Título -->
+            <div class="form-grid"> <!-- Grade de campos -->
+              <div class="form-group"> <!-- Campo horas -->
+                <label class="form-label">Horas dormidas</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-hours"
+                  type="number"
+                  step="0.5"
+                  min="1"
+                  max="12"
+                  placeholder="7.5"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo qualidade -->
+                <label class="form-label">Qualidade (1–10)</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-quality"
+                  type="number"
+                  min="1"
+                  max="10"
+                  placeholder="8"
+                /> <!-- Entrada -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo hora dormir -->
+                <label class="form-label">Dormiu às</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-bedtime"
+                  type="time"
+                  value="23:00"
+                /> <!-- Time -->
+              </div> <!-- Fim form-group -->
+              <div class="form-group"> <!-- Campo hora acordar -->
+                <label class="form-label">Acordou às</label> <!-- Rótulo -->
+                <input
+                  class="form-input"
+                  id="sl-wake"
+                /> <!-- Time -->
+              </div> <!-- Fim form-group -->
+            </div> <!-- Fim form-grid -->
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            > <!-- Container de botões -->
+              <button class="btn-save" id="sl-save">SALVAR SONO</button> <!-- Botão -->
+              <span class="form-feedback" id="sl-feedback"></span> <!-- Feedback -->
+            </div> <!-- Fim container -->
+          </div> <!-- Fim form-card -->
           <div class="kpi-grid">
             <div class="kpi b">
               <div class="kpi-icon">🌙</div>
-              <div class="kpi-val">7h24</div>
-              <div class="kpi-label">Média diária</div>
-              <div class="kpi-delta up">↑ Dentro do ideal</div>
+              <div class="kpi-val" id="sk-avg">—</div>
+              <div class="kpi-label">Média de horas</div>
             </div>
             <div class="kpi g">
               <div class="kpi-icon">✨</div>
-              <div class="kpi-val">82</div>
-              <div class="kpi-label">Score de qualidade</div>
-              <div class="kpi-delta up">↑ Boa noite</div>
+              <div class="kpi-val" id="sk-quality">—</div>
+              <div class="kpi-label">Qualidade média (1–10)</div>
             </div>
             <div class="kpi p">
-              <div class="kpi-icon">🔄</div>
-              <div class="kpi-val">4.8</div>
-              <div class="kpi-label">Ciclos por noite</div>
-              <div class="kpi-delta up">↑ Ideal &gt; 4</div>
+              <div class="kpi-icon">📅</div>
+              <div class="kpi-val" id="sk-total">—</div>
+              <div class="kpi-label">Noites registradas</div>
             </div>
             <div class="kpi o">
               <div class="kpi-icon">⚡</div>
-              <div class="kpi-val">88</div>
-              <div class="kpi-label">Score de prontidão</div>
-              <div class="kpi-delta up">↑ Pronto para treinar!</div>
+              <div class="kpi-val" id="sk-best">—</div>
+              <div class="kpi-label">Melhor noite (h)</div>
             </div>
           </div>
           <div class="chart-grid">
             <div class="chart-box">
               <div class="chart-title">Horas de Sono</div>
-              <div class="chart-sub">Últimas 2 semanas</div>
+              <div class="chart-sub">Últimas noites registradas</div>
               <div class="chart-wrap"><canvas id="sleepChart"></canvas></div>
             </div>
             <div class="chart-box">
-              <div class="chart-title">Fases do Sono</div>
-              <div class="chart-sub">Distribuição ontem</div>
+              <div class="chart-title">Qualidade do Sono</div>
+              <div class="chart-sub">Score 1–10 por noite</div>
               <div class="chart-wrap">
-                <canvas id="sleepPhaseChart"></canvas>
+                <canvas id="sleepQualChart"></canvas>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- NUTRITION -->
+        <!-- NUTRIÇÃO -->
         <div class="dash-page" id="page-nutrition">
           <div class="page-header">
             <div>
@@ -1219,42 +833,169 @@
               <div class="page-title">NUTRIÇÃO</div>
             </div>
           </div>
+          <div class="form-card">
+            <div class="form-card-title">🥗 Registrar Ingestão do Dia</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Calorias (kcal)</label
+                ><input
+                  class="form-input"
+                  id="n-cal"
+                  type="number"
+                  placeholder="2800"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Proteína (g)</label
+                ><input
+                  class="form-input"
+                  id="n-protein"
+                  type="number"
+                  placeholder="180"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Carboidratos (g)</label
+                ><input
+                  class="form-input"
+                  id="n-carbs"
+                  type="number"
+                  placeholder="310"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gorduras (g)</label
+                ><input
+                  class="form-input"
+                  id="n-fats"
+                  type="number"
+                  placeholder="80"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Água (ml)</label
+                ><input
+                  class="form-input"
+                  id="n-water"
+                  type="number"
+                  placeholder="2500"
+                />
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="n-save">SALVAR NUTRIÇÃO</button>
+              <span class="form-feedback" id="n-feedback"></span>
+            </div>
+          </div>
           <div class="kpi-grid">
             <div class="kpi g">
               <div class="kpi-icon">🔥</div>
-              <div class="kpi-val">2.840</div>
-              <div class="kpi-label">kcal hoje</div>
-              <div class="kpi-delta up">Meta: 3.000 kcal</div>
+              <div class="kpi-val" id="nk-cal">—</div>
+              <div class="kpi-label">kcal (último registro)</div>
             </div>
             <div class="kpi b">
               <div class="kpi-icon">🥩</div>
-              <div class="kpi-val">198g</div>
-              <div class="kpi-label">Proteína hoje</div>
-              <div class="kpi-delta up">↑ Meta: 180g ✓</div>
+              <div class="kpi-val" id="nk-protein">—</div>
+              <div class="kpi-label">Proteína média (g)</div>
             </div>
             <div class="kpi o">
               <div class="kpi-icon">🍞</div>
-              <div class="kpi-val">310g</div>
-              <div class="kpi-label">Carboidratos hoje</div>
-              <div class="kpi-delta up">Meta: 350g</div>
+              <div class="kpi-val" id="nk-carbs">—</div>
+              <div class="kpi-label">Carbos médios (g)</div>
             </div>
             <div class="kpi p">
-              <div class="kpi-icon">🥑</div>
-              <div class="kpi-val">82g</div>
-              <div class="kpi-label">Gorduras hoje</div>
-              <div class="kpi-delta up">Meta: 80g ✓</div>
+              <div class="kpi-icon">💧</div>
+              <div class="kpi-val" id="nk-water">—</div>
+              <div class="kpi-label">Água média (ml)</div>
             </div>
           </div>
           <div class="chart-grid">
             <div class="chart-box">
               <div class="chart-title">Ingestão Calórica</div>
-              <div class="chart-sub">Últimas 2 semanas (kcal)</div>
+              <div class="chart-sub">kcal por dia registrado</div>
               <div class="chart-wrap"><canvas id="calChart"></canvas></div>
             </div>
             <div class="chart-box">
-              <div class="chart-title">Macros de Hoje</div>
-              <div class="chart-sub">Distribuição realizada</div>
+              <div class="chart-title">Macros (último registro)</div>
+              <div class="chart-sub">Distribuição de macronutrientes</div>
               <div class="chart-wrap"><canvas id="macroChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PERFIL -->
+        <div class="dash-page" id="page-profile">
+          <div class="page-header">
+            <div>
+              <div class="page-tag">Conta</div>
+              <div class="page-title">MEU PERFIL</div>
+            </div>
+          </div>
+          <div class="form-card">
+            <div class="form-card-title">👤 Editar Informações</div>
+            <div class="profile-edit-grid">
+              <div class="form-group">
+                <label class="form-label">Nome completo</label
+                ><input class="form-input" id="p-name" placeholder="Seu nome" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nível</label>
+                <select class="form-select" id="p-level">
+                  <option>Iniciante</option>
+                  <option>Intermediário</option>
+                  <option>Avançado</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Objetivo principal</label>
+                <select class="form-select" id="p-goal">
+                  <option>Hipertrofia</option>
+                  <option>Perda de gordura</option>
+                  <option>Resistência</option>
+                  <option>Força máxima</option>
+                  <option>Saúde geral</option>
+                  <option>Recomposição corporal</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Dias disponíveis/semana</label>
+                <select class="form-select" id="p-days">
+                  <option>2-3 dias</option>
+                  <option>4 dias</option>
+                  <option>5-6 dias</option>
+                  <option>7 dias</option>
+                </select>
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                margin-top: 16px;
+              "
+            >
+              <button class="btn-save" id="p-save">SALVAR PERFIL</button>
+              <span class="form-feedback" id="p-feedback"></span>
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <div class="kpi g">
+              <div class="kpi-icon">🏆</div>
+              <div class="kpi-val" id="pk-workouts">0</div>
+              <div class="kpi-label">Treinos totais</div>
+            </div>
+            <div class="kpi o">
+              <div class="kpi-icon">🎯</div>
+              <div class="kpi-val" id="pk-goals">0</div>
+              <div class="kpi-label">Metas concluídas</div>
             </div>
           </div>
         </div>
@@ -1262,184 +1003,39 @@
     </div>
 
     <script type="module">
-      import { onAuthChange, logout } from "./js/auth.js";
-      import {
-        getUserProfile,
-        getWorkoutHistory,
-        saveWorkout,
-        formatTimestamp,
-      } from "./js/db.js";
+ // Lógica do Dashboard
+      import { onAuthChange, logout } from "./js/auth.js"; // Importa monitor de login
+      import { // Importa funções de banco de dados
+        saveWorkoutEntry,
+        subscribeWorkouts,
+        saveBodyMeasurement,
+        subscribeBodyMeasurements,
+        saveCardioEntry,
+        subscribeCardioRecords,
+        saveSleepEntry,
+        subscribeSleepRecords,
+        saveNutritionEntry,
+        subscribeNutritionRecords,
+        saveGoal,
+        subscribeGoals,
+        deleteGoal,
+        subscribeProfile,
+        updateUserProfile,
+        formatDate,
+      } from "./js/dashboard-data.js";
 
-      /* ====================================================
-   AUTH GUARD — Redireciona se não logado
-==================================================== */
-      onAuthChange(async (user) => {
-        if (!user) {
-          window.location.href = "index.html";
-          return;
-        }
+      // Cores do sistema
+      const GRN = "#00FF87",
+        RED = "#FF3B5C",
+        ORG = "#FF8C42",
+        BLU = "#4ECDC4",
+        PRP = "#9B5DE5",
+        GRID = "rgba(255,255,255,0.06)",
+        TXT = "#888";
+      
+      const charts = {}; // Cache de gráficos
 
-        // Carrega perfil real do usuário
-        const profile = await getUserProfile(user.uid);
-        if (profile) {
-          updateProfileUI(profile);
-          await loadWorkoutHistory(user.uid);
-        }
-      });
-
-      /* ====================================================
-   ATUALIZA UI COM DADOS REAIS
-==================================================== */
-      function updateProfileUI(profile) {
-        const initials = (profile.name || profile.email || "CL")
-          .substring(0, 2)
-          .toUpperCase();
-
-        // Atualiza avatar e nome
-        document.querySelector(".profile-av").textContent = initials;
-        document.querySelector(".profile-name").textContent =
-          profile.name || "Usuário";
-        document.querySelector(".profile-level").textContent =
-          `NÍVEL ${getLevelNumber(profile.xp)} — ${profile.level || "INICIANTE"}`;
-
-        // Atualiza XP
-        const xpPct = Math.min((profile.xp % 1000) / 10, 100);
-        document.querySelector(".xp-fill").style.width = xpPct + "%";
-        document.querySelector(".xp-labels span:last-child").textContent =
-          `${profile.xp || 0} XP`;
-
-        // Atualiza KPIs
-        updateKPI("totalWorkouts", profile.totalWorkouts || 0);
-        updateKPI("streak", profile.streak || 0);
-      }
-
-      function getLevelNumber(xp = 0) {
-        return Math.floor(xp / 1000) + 1;
-      }
-
-      function updateKPI(key, value) {
-        const els = document.querySelectorAll(".kpi-val");
-        // Atualiza o primeiro KPI que corresponde ao key
-      }
-
-      /* ====================================================
-   CARREGA HISTÓRICO DE TREINOS REAL
-==================================================== */
-      async function loadWorkoutHistory(userId) {
-        const history = await getWorkoutHistory(userId, 7);
-        if (history.length === 0) return;
-
-        const tbody = document.querySelector(".dash-table tbody");
-        if (!tbody) return;
-
-        tbody.innerHTML = history
-          .map(
-            (w) => `
-    <tr>
-      <td>${formatTimestamp(w.completedAt)}</td>
-      <td>${w.name || "Treino"}</td>
-      <td>${w.duration || 0} min</td>
-      <td>${w.volume ? w.volume.toLocaleString("pt-BR") + " kg" : "—"}</td>
-      <td><span class="badge done">CONCLUÍDO</span></td>
-    </tr>
-  `,
-          )
-          .join("");
-      }
-
-      /* ====================================================
-   SIDEBAR NAV
-==================================================== */
-      document.querySelectorAll(".sidebar-item").forEach((item) => {
-        item.onclick = () => {
-          document
-            .querySelectorAll(".sidebar-item")
-            .forEach((i) => i.classList.remove("active"));
-          document
-            .querySelectorAll(".dash-page")
-            .forEach((p) => p.classList.remove("active"));
-          item.classList.add("active");
-          document
-            .getElementById("page-" + item.dataset.page)
-            .classList.add("active");
-          initCharts();
-        };
-      });
-
-      /* ====================================================
-   DATE FILTER
-==================================================== */
-      document.querySelectorAll(".df-btn").forEach((b) => {
-        b.onclick = () => {
-          document
-            .querySelectorAll(".df-btn")
-            .forEach((x) => x.classList.remove("active"));
-          b.classList.add("active");
-        };
-      });
-
-      /* ====================================================
-   THEME
-==================================================== */
-      let dark = true;
-      document.getElementById("themeBtn").onclick = () => {
-        dark = !dark;
-        document.documentElement.setAttribute(
-          "data-theme",
-          dark ? "dark" : "light",
-        );
-        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
-      };
-
-      /* ====================================================
-   LOGOUT
-==================================================== */
-      document
-        .getElementById("logoutDash")
-        ?.addEventListener("click", async () => {
-          await logout();
-          window.location.href = "index.html";
-        });
-
-      /* ====================================================
-   STREAK GRID
-==================================================== */
-      const sg = document.getElementById("streakGrid");
-      if (sg) {
-        const pattern = [
-          1, 1, 2, 1, 1, 0, 1, 1, 1, 2, 1, 1, 1, 0, 1, 0, 1, 1, 2, 1, 1, 1, 1,
-          2, 1, 1, 0, 1, 1, 1,
-        ];
-        pattern.forEach((v, i) => {
-          const d = document.createElement("div");
-          d.className =
-            "sday" +
-            (v === 1 ? " done" : "") +
-            (v === 2 ? " rest" : "") +
-            (i === pattern.length - 1 ? " today" : "");
-          d.title =
-            v === 1
-              ? "Treino concluído"
-              : v === 2
-                ? "Descanso ativo"
-                : "Descanso";
-          sg.appendChild(d);
-        });
-      }
-
-      /* ====================================================
-   CHARTS
-==================================================== */
-      const GRN = "#00FF87";
-      const RED = "#FF3B5C";
-      const ORG = "#FF8C42";
-      const BLU = "#4ECDC4";
-      const PRP = "#9B5DE5";
-      const GRID = "rgba(255,255,255,0.06)";
-      const TXT = "#888";
-
-      const charts = {};
-
+      // Função auxiliar para criar/destruir gráficos
       function mkChart(id, config) {
         if (charts[id]) {
           charts[id].destroy();
@@ -1450,362 +1046,249 @@
         charts[id] = new Chart(el, config);
       }
 
-      function lineConf(label, data, color, fill = false) {
+      // Opções padrão para gráficos de linha/barra
+      function baseOpts(legend = false) {
         return {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: legend,
+              labels: { color: TXT, font: { size: 11 }, padding: 12 },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: GRID },
+              ticks: { color: TXT, font: { size: 10 } },
+            },
+            y: {
+              grid: { color: GRID },
+              ticks: { color: TXT, font: { size: 10 } },
+            },
+          },
+        };
+      }
+
+      let uid = null; // ID do usuário
+      let unsubs = []; // Funções de cancelamento de inscrições
+
+      // Cancela todos os listeners ativos
+      function cancelAllSubscriptions() {
+        unsubs.forEach((fn) => {
+          try { fn(); } catch (e) {}
+        });
+        unsubs = [];
+      }
+
+      // Monitor de autenticação
+      onAuthChange(async (user) => {
+        cancelAllSubscriptions(); // Limpa listeners anteriores
+        if (!user) {
+          uid = null;
+          window.location.href = "index.html"; // Redireciona se não logado
+          return;
+        }
+        uid = user.uid;
+
+        // Inscrições em tempo real
+        unsubs.push(subscribeProfile(uid, renderProfileUI));
+        unsubs.push(subscribeWorkouts(uid, (w) => {
+          renderWorkoutsKPIs(w);
+          renderWorkoutsCharts(w);
+          renderWorkoutsTable(w);
+          renderOverviewKPIs(w);
+        }));
+        unsubs.push(subscribeBodyMeasurements(uid, renderBodyUI));
+        unsubs.push(subscribeCardioRecords(uid, renderCardioUI));
+        unsubs.push(subscribeSleepRecords(uid, renderSleepUI));
+        unsubs.push(subscribeNutritionRecords(uid, renderNutritionUI));
+        unsubs.push(subscribeGoals(uid, renderGoalsUI));
+      });
+
+      // Renderização do Perfil
+      function renderProfileUI(p) {
+        const name = p.name || "Atleta CoreLab";
+        const initials = name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+        const xp = p.xp || 0;
+        const level = Math.floor(xp / 1000) + 1;
+        const xpPct = ((xp % 1000) / 10).toFixed(0);
+
+        document.getElementById("profileAv").textContent = initials;
+        document.getElementById("profileName").textContent = name;
+        document.getElementById("profileLevel").textContent = `NÍVEL ${level} — ${p.level || "INICIANTE"}`;
+        document.getElementById("xpLabel").textContent = `${xp} XP`;
+        document.getElementById("xpFill").style.width = xpPct + "%";
+
+        // Campos do formulário
+        if(document.getElementById("p-name")) document.getElementById("p-name").value = p.name || "";
+        if(document.getElementById("p-level")) document.getElementById("p-level").value = p.level || "Iniciante";
+        if(document.getElementById("p-goal")) document.getElementById("p-goal").value = p.goal || "Hipertrofia";
+        if(document.getElementById("p-days")) document.getElementById("p-days").value = p.daysPerWeek || "4 dias";
+
+        // KPIs do perfil
+        document.getElementById("pk-workouts").textContent = p.totalWorkouts || 0;
+        document.getElementById("pk-streak").textContent = p.streak || 0;
+        document.getElementById("pk-xp").textContent = xp;
+        document.getElementById("pk-level").textContent = level;
+      }
+
+      // Renderização de KPIs Gerais
+      function renderOverviewKPIs(workouts) {
+        const total = workouts.length;
+        const calories = workouts.reduce((s, w) => s + (Number(w.calories) || 0), 0);
+        const duration = workouts.reduce((s, w) => s + (Number(w.duration) || 0), 0);
+        const volume = workouts.reduce((s, w) => s + (Number(w.volume) || 0), 0);
+
+        document.getElementById("kpi-workouts").textContent = total;
+        document.getElementById("kpi-calories").textContent = calories.toLocaleString("pt-BR");
+        document.getElementById("kpi-duration").textContent = duration >= 60 ? `${Math.floor(duration/60)}h${duration%60}m` : `${duration}min`;
+        document.getElementById("kpi-volume").textContent = volume >= 1000 ? `${(volume/1000).toFixed(1)}t` : `${volume}kg`;
+      }
+
+      // Renderização de KPIs de Treino
+      function renderWorkoutsKPIs(workouts) {
+        document.getElementById("wk-total").textContent = workouts.length;
+        // Adicionar lógica de volume médio se necessário
+      }
+
+      // Renderização de Gráficos de Treino
+      function renderWorkoutsCharts(workouts) {
+        const recent = workouts.slice(0, 10).reverse();
+        mkChart("workoutVolumeChart", {
           type: "line",
           data: {
-            labels: data.map((_, i) => `D${i + 1}`),
-            datasets: [
-              {
-                label,
-                data,
-                borderColor: color,
-                backgroundColor: fill ? color + "22" : "transparent",
-                borderWidth: 2,
-                pointRadius: 3,
-                pointBackgroundColor: color,
-                tension: 0.4,
-                fill,
-              },
-            ],
+            labels: recent.map(w => formatDate(w.completedAt)),
+            datasets: [{
+              label: "Volume (kg)",
+              data: recent.map(w => w.volume),
+              borderColor: GRN,
+              tension: 0.4,
+              fill: true,
+              backgroundColor: "rgba(0,255,135,0.1)"
+            }]
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: {
-                grid: { color: GRID },
-                ticks: { color: TXT, font: { size: 10 } },
-              },
-              y: {
-                grid: { color: GRID },
-                ticks: { color: TXT, font: { size: 10 } },
-              },
-            },
-          },
-        };
-      }
-
-      function barConf(labels, data, colors) {
-        return {
-          type: "bar",
-          data: {
-            labels,
-            datasets: [
-              {
-                data,
-                backgroundColor: colors || GRN,
-                borderRadius: 6,
-                borderSkipped: false,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: {
-                grid: { color: GRID },
-                ticks: { color: TXT, font: { size: 10 } },
-              },
-              y: {
-                grid: { color: GRID },
-                ticks: { color: TXT, font: { size: 10 } },
-              },
-            },
-          },
-        };
-      }
-
-      function doughConf(labels, data, colors) {
-        return {
-          type: "doughnut",
-          data: {
-            labels,
-            datasets: [
-              {
-                data,
-                backgroundColor: colors,
-                borderWidth: 0,
-                hoverOffset: 6,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: "65%",
-            plugins: {
-              legend: {
-                position: "right",
-                labels: {
-                  color: TXT,
-                  font: { size: 11 },
-                  padding: 12,
-                },
-              },
-            },
-          },
-        };
-      }
-
-      function initCharts() {
-        mkChart(
-          "volumeChart",
-          lineConf(
-            "Volume",
-            [
-              1800, 2100, 1600, 2400, 1900, 2200, 1700, 2500, 2100, 2300, 1800,
-              2600, 2200, 2400,
-            ],
-            GRN,
-            true,
-          ),
-        );
-
-        mkChart(
-          "muscleChart",
-          doughConf(
-            ["Peito", "Costas", "Pernas", "Ombros", "Bíceps", "Outros"],
-            [24, 22, 28, 12, 8, 6],
-            [GRN, BLU, PRP, ORG, RED, "#555"],
-          ),
-        );
-
-        mkChart(
-          "chestChart",
-          lineConf(
-            "Supino",
-            [
-              118, 120, 122, 120, 125, 128, 130, 132, 135, 136, 138, 140, 140,
-              142,
-            ],
-            ORG,
-          ),
-        );
-
-        mkChart(
-          "backChart",
-          lineConf(
-            "Barra",
-            [80, 82, 84, 84, 86, 88, 90, 90, 92, 94, 95, 96, 98, 100],
-            BLU,
-          ),
-        );
-
-        mkChart(
-          "legsChart",
-          lineConf(
-            "Agachamento",
-            [
-              140, 142, 144, 148, 150, 152, 150, 155, 158, 160, 162, 164, 166,
-              168,
-            ],
-            PRP,
-          ),
-        );
-
-        mkChart("weeklyVolChart", {
-          type: "bar",
-          data: {
-            labels: ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"],
-            datasets: [
-              {
-                label: "Peito",
-                data: [2100, 2300, 2100, 2500, 2200, 2400, 2300, 2600],
-                backgroundColor: GRN,
-                borderRadius: 4,
-                borderSkipped: false,
-              },
-              {
-                label: "Costas",
-                data: [2400, 2200, 2500, 2300, 2600, 2400, 2500, 2700],
-                backgroundColor: BLU,
-                borderRadius: 4,
-                borderSkipped: false,
-              },
-              {
-                label: "Pernas",
-                data: [3000, 2800, 3200, 3000, 3400, 3100, 3300, 3600],
-                backgroundColor: PRP,
-                borderRadius: 4,
-                borderSkipped: false,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { labels: { color: TXT } },
-            },
-            scales: {
-              x: {
-                grid: { color: GRID },
-                ticks: { color: TXT },
-                stacked: true,
-              },
-              y: {
-                grid: { color: GRID },
-                ticks: { color: TXT },
-                stacked: true,
-              },
-            },
-          },
+          options: baseOpts()
         });
-
-        mkChart(
-          "weightChart",
-          lineConf(
-            "Peso",
-            [
-              85.2, 84.8, 84.6, 84.9, 84.4, 84.2, 83.9, 84.1, 83.8, 83.5, 83.2,
-              82.8, 82.6, 82.4,
-            ],
-            ORG,
-            true,
-          ),
-        );
-
-        mkChart(
-          "bodyCompChart",
-          doughConf(
-            ["Massa Magra", "Gordura", "Água", "Ossos"],
-            [70.2, 12.2, 47.9, 2.1],
-            [GRN, RED, BLU, "#555"],
-          ),
-        );
-
-        mkChart("hrChart", {
-          type: "line",
-          data: {
-            labels: Array.from({ length: 28 }, (_, i) => i + "min"),
-            datasets: [
-              {
-                label: "BPM",
-                borderColor: RED,
-                backgroundColor: "rgba(255,59,92,0.1)",
-                data: [
-                  72, 80, 95, 120, 145, 165, 150, 120, 130, 155, 170, 165, 140,
-                  120, 135, 158, 172, 168, 145, 120, 130, 152, 170, 165, 142,
-                  118, 95, 78,
-                ],
-                borderWidth: 2,
-                pointRadius: 0,
-                tension: 0.4,
-                fill: true,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: {
-                grid: { color: GRID },
-                ticks: {
-                  color: TXT,
-                  font: { size: 9 },
-                  maxTicksLimit: 8,
-                },
-              },
-              y: {
-                grid: { color: GRID },
-                ticks: { color: TXT, font: { size: 10 } },
-                min: 60,
-                max: 185,
-              },
-            },
-          },
-        });
-
-        mkChart(
-          "zoneChart",
-          doughConf(
-            ["Z1 Repouso", "Z2 Leve", "Z3 Moderado", "Z4 Difícil", "Z5 Máximo"],
-            [3, 5, 8, 9, 3],
-            [BLU, GRN, "#88dd00", ORG, RED],
-          ),
-        );
-
-        mkChart(
-          "vo2Chart",
-          lineConf(
-            "VO2 Máx",
-            [
-              44.2, 44.8, 45.1, 45.6, 46.0, 46.2, 46.8, 47.1, 47.4, 47.8, 48.0,
-              48.2,
-            ],
-            BLU,
-          ),
-        );
-
-        mkChart(
-          "sleepChart",
-          barConf(
-            [
-              "S1",
-              "S2",
-              "S3",
-              "S4",
-              "S5",
-              "S6",
-              "D1",
-              "D2",
-              "S1",
-              "S2",
-              "S3",
-              "S4",
-              "S5",
-              "S6",
-            ],
-            [
-              7.2, 6.8, 7.5, 8.0, 7.1, 7.4, 7.8, 6.9, 7.3, 7.6, 8.1, 7.4, 7.2,
-              7.5,
-            ],
-            [
-              7.2, 6.8, 7.5, 8.0, 7.1, 7.4, 7.8, 6.9, 7.3, 7.6, 8.1, 7.4, 7.2,
-              7.5,
-            ].map((v) => (v >= 7.5 ? GRN : v >= 7 ? ORG : RED)),
-          ),
-        );
-
-        mkChart(
-          "sleepPhaseChart",
-          doughConf(
-            ["Profundo", "REM", "Leve", "Acordado"],
-            [1.8, 1.6, 3.6, 0.4],
-            [PRP, BLU, GRN, "#444"],
-          ),
-        );
-
-        mkChart(
-          "calChart",
-          lineConf(
-            "kcal",
-            [
-              2600, 3100, 2800, 2900, 3200, 2700, 3000, 2850, 3100, 2900, 3200,
-              2750, 2840,
-            ],
-            GRN,
-            true,
-          ),
-        );
-
-        mkChart(
-          "macroChart",
-          doughConf(
-            ["Proteína", "Carboidratos", "Gorduras"],
-            [792, 1240, 738],
-            [GRN, BLU, ORG],
-          ),
-        );
       }
 
-      initCharts();
-    </script>
-  </body>
-</html>
+      // Renderização de Tabela de Treinos
+      function renderWorkoutsTable(workouts) {
+        const rows = workouts.map(w => `
+          <tr>
+            <td>${formatDate(w.completedAt)}</td>
+            <td>${w.name}</td>
+            <td>${w.duration} min</td>
+            <td>${w.volume} kg</td>
+            <td>${w.calories} kcal</td>
+          </tr>
+        `).join("");
+        document.getElementById("workoutTableBody").innerHTML = rows || '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text3)">Nenhum treino encontrado</td></tr>';
+      }
+
+      // Renderização de Medidas Corporais
+      function renderBodyUI(entries) {
+        if(!entries.length) return;
+        const last = entries[entries.length - 1];
+        document.getElementById("bk-weight").textContent = last.weight + " kg";
+        document.getElementById("bk-fat").textContent = last.fatPct + " %";
+        // Adicionar gráfico de peso
+      }
+
+      // Renderização de Cardio
+      function renderCardioUI(entries) {
+        const totalDist = entries.reduce((s, e) => s + (Number(e.distance) || 0), 0);
+        document.getElementById("ck-distance").textContent = totalDist.toFixed(1);
+        // Adicionar mais KPIs de cardio
+      }
+
+      // Renderização de Sono
+      function renderSleepUI(entries) {
+        if(!entries.length) return;
+        const avg = (entries.reduce((s, e) => s + (Number(e.hours) || 0), 0) / entries.length).toFixed(1);
+        document.getElementById("sk-avg").textContent = avg;
+      }
+
+      // Renderização de Nutrição
+      function renderNutritionUI(entries) {
+        if(!entries.length) return;
+        const last = entries[entries.length - 1];
+        document.getElementById("nk-cal").textContent = last.calories;
+      }
+
+      // Renderização de Metas
+      function renderGoalsUI(goals) {
+        const list = document.getElementById("goalsList");
+        if(!goals.length) {
+          list.innerHTML = '<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-title">SEM METAS</div></div>';
+          return;
+        }
+        list.innerHTML = goals.map(g => {
+          const pct = Math.min(100, (g.current / g.target) * 100).toFixed(0);
+          const w = pct + "%";
+          const bg = g.color;
+          const s = "style";
+          return `
+            <div class="goal-item">
+              <div class="goal-info">
+                <span class="goal-icon">${g.icon}</span>
+                <span class="goal-name">${g.name}</span>
+                <span class="goal-val">${g.current}/${g.target} ${g.unit}</span>
+              </div>
+              <div class="goal-bar"><div class="goal-fill" ${s}="width:${w}; background:${bg}"></div></div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      // Handlers de Salvar Dados
+      document.getElementById("p-save").onclick = async () => {
+        const data = {
+          name: document.getElementById("p-name").value,
+          level: document.getElementById("p-level").value,
+          goal: document.getElementById("p-goal").value,
+          daysPerWeek: document.getElementById("p-days").value
+        };
+        const btn = document.getElementById("p-save");
+        btn.disabled = true;
+        await updateUserProfile(uid, data);
+        btn.disabled = false;
+        alert("Perfil atualizado!");
+      };
+
+      document.getElementById("w-save").onclick = async () => {
+        const data = {
+          name: document.getElementById("w-name").value,
+          duration: document.getElementById("w-duration").value,
+          volume: document.getElementById("w-volume").value,
+          calories: document.getElementById("w-calories").value
+        };
+        await saveWorkoutEntry(uid, data);
+        alert("Treino salvo!");
+      };
+
+      // Handler de Logout
+      document.getElementById("dashLogoutBtn").onclick = () => logout();
+
+      // Alternador de abas (sidebar)
+      document.querySelectorAll(".sidebar-item").forEach((item) => {
+        item.onclick = () => {
+          document.querySelectorAll(".sidebar-item").forEach((i) => i.classList.remove("active"));
+          document.querySelectorAll(".dash-page").forEach((p) => p.classList.remove("active"));
+          item.classList.add("active");
+          const page = document.getElementById("page-" + item.dataset.page);
+          if(page) page.classList.add("active");
+        };
+      });
+
+      // Tema claro/escuro
+      let dark = true;
+      document.getElementById("themeBtn").onclick = () => {
+        dark = !dark;
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
+      };
+    </script> <!-- Fim do script -->
+  </body> <!-- Fim body -->
+</html> <!-- Fim html -->
+

@@ -1,0 +1,785 @@
+.topbar {
+  /* Barra superior fixa do dashboard */
+  position: sticky; /* Mantém a barra no topo ao rolar */
+  top: 0; /* Alinha ao topo da tela */
+  z-index: 50; /* Fica acima do conteúdo do dashboard */
+  background: rgba(8, 8, 8, 0.95); /* Fundo escuro semi-transparente */
+  backdrop-filter: blur(20px); /* Efeito de vidro jateado */
+  border-bottom: 1px solid var(--border); /* Linha divisória inferior */
+  padding: 0 24px; /* Espaçamento lateral interno */
+  height: 64px; /* Altura fixa da barra */
+  display: flex; /* Alinhamento horizontal dos itens */
+  align-items: center; /* Centraliza itens verticalmente */
+  gap: 14px; /* Espaço entre os elementos da barra */
+} /* Fim de .topbar */
+/* Estilos para o tema claro (Seletor abaixo aplica-se à topbar quando o tema é claro) */
+[data-theme="light"] .topbar {
+  /* Ajuste da topbar no modo claro */
+  background: rgba(240, 240, 236, 0.95); /* Fundo claro semi-transparente */
+} /* Fim da topbar clara */
+.topbar-logo {
+  /* Estilo do logo na topbar */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 22px; /* Tamanho de destaque */
+  letter-spacing: 0.1em; /* Espaçamento de marca */
+} /* Fim de .topbar-logo */
+.topbar-logo span {
+  /* Parte colorida do logo */
+  color: var(--green); /* Destaque verde neon */
+} /* Fim do span no logo */
+.topbar-sep {
+  /* Divisor vertical entre logo e título */
+  width: 1px; /* Espessura fina */
+  height: 24px; /* Altura do divisor */
+  background: var(--border); /* Cor da borda padrão */
+} /* Fim de .topbar-sep */
+.topbar-title {
+  /* Título da página atual na topbar */
+  font-size: 14px; /* Tamanho legível */
+  font-weight: 600; /* Semi-negrito */
+  color: var(--text2); /* Cor de suporte suave */
+} /* Fim de .topbar-title */
+.topbar-space {
+  /* Espaçador flexível */
+  flex: 1; /* Empurra os itens seguintes para a direita */
+} /* Fim de .topbar-space */
+.topbar-live {
+  /* Indicador de status "Ao Vivo" ou "Conectado" */
+  display: flex; /* Alinha ponto e texto */
+  align-items: center; /* Centro vertical */
+  gap: 8px; /* Espaço entre ponto e texto */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto mini */
+  color: var(--green); /* Cor verde neon */
+  letter-spacing: 0.1em; /* Espaçado */
+} /* Fim de .topbar-live */
+.live-dot {
+  /* O ponto que pulsa no indicador live */
+  width: 6px; /* Pequeno */
+  height: 6px; /* Pequeno */
+  border-radius: 50%; /* Círculo */
+  background: var(--green); /* Cor neon */
+  animation: pulse 2s ease infinite; /* Animação de pulsação eterna */
+} /* Fim de .live-dot */
+@keyframes pulse {
+  /* Definição da animação de pulso */
+  0%, /* Início */
+  100% {
+    /* Fim */
+    opacity: 1; /* Totalmente visível */
+  } /* Fim do estado 1 */
+  50% {
+    /* Meio */
+    opacity: 0.4; /* Fica transparente */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes pulse */
+.topbar-btn {
+  /* Botão de ação na topbar (ex: Voltar ao Site) */
+  display: flex; /* Alinhamento interno */
+  align-items: center; /* Centro vertical */
+  gap: 8px; /* Espaçamento */
+  padding: 8px 16px; /* Tamanho confortável */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 30px; /* Formato pílula */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  text-decoration: none; /* Sem sublinhado */
+  transition: all 0.25s; /* Transição suave */
+} /* Fim de .topbar-btn */
+.topbar-btn:hover {
+  /* Efeito de hover no botão da topbar */
+  border-color: var(--green); /* Borda brilha em verde */
+  color: var(--green); /* Texto fica verde */
+} /* Fim de .topbar-btn:hover */
+.theme-btn {
+  /* Botão circular de troca de tema */
+  width: 36px; /* Tamanho fixo */
+  height: 36px; /* Tamanho fixo */
+  border-radius: 50%; /* Círculo */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  cursor: pointer; /* Mãozinha */
+  font-size: 15px; /* Tamanho do emoji/ícone */
+  transition: all 0.25s; /* Transição */
+} /* Fim de .theme-btn */
+.theme-btn:hover {
+  /* Hover no botão de tema */
+  border-color: var(--green); /* Borda brilha */
+} /* Fim de .theme-btn:hover */
+.dash-wrap {
+  /* Container principal que divide sidebar e conteúdo */
+  display: grid; /* Layout em grade */
+  grid-template-columns: 220px 1fr; /* Sidebar fixa de 220px e resto flexível */
+  min-height: calc(100vh - 64px); /* Ocupa o resto da altura da tela */
+} /* Fim de .dash-wrap */
+.sidebar {
+  /* Barra lateral de navegação */
+  background: var(--bg2); /* Fundo de segunda camada */
+  border-right: 1px solid var(--border); /* Divisória lateral */
+  padding: 20px 0; /* Espaçamento vertical interno */
+  position: sticky; /* Mantém a sidebar visível ao rolar o conteúdo */
+  top: 64px; /* Começa logo abaixo da topbar */
+  height: calc(100vh - 64px); /* Altura total menos a topbar */
+  overflow-y: auto; /* Habilita rolagem interna se houver muitos itens */
+} /* Fim de .sidebar */
+.profile-card {
+  /* Card de resumo do perfil na sidebar */
+  margin: 0 16px 16px; /* Margens externas */
+  padding: 16px; /* Espaçamento interno */
+  background: var(--bg3); /* Fundo de terceira camada */
+  border: 1px solid var(--border); /* Borda discreta */
+  border-radius: 14px; /* Cantos arredondados */
+} /* Fim de .profile-card */
+.profile-av {
+  /* Avatar circular com iniciais */
+  width: 44px; /* Tamanho médio */
+  height: 44px; /* Tamanho médio */
+  border-radius: 50%; /* Círculo */
+  background: linear-gradient(
+    135deg,
+    var(--green),
+    #00aa55
+  ); /* Gradiente de progresso */
+  display: flex; /* Centralização interna */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 18px; /* Tamanho das letras */
+  color: #000; /* Texto preto para contraste */
+  margin-bottom: 10px; /* Espaço para o nome */
+} /* Fim de .profile-av */
+.profile-name {
+  /* Nome do usuário logado */
+  font-weight: 600; /* Semi-negrito */
+  font-size: 14px; /* Texto legível */
+  margin-bottom: 2px; /* Espaço para o nível */
+} /* Fim de .profile-name */
+.profile-level {
+  /* Indicação de nível/XP */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto pequeno */
+  color: var(--green); /* Verde neon */
+  letter-spacing: 0.1em; /* Espaçado */
+} /* Fim de .profile-level */
+.xp-bar-wrap {
+  /* Container da barra de experiência */
+  margin-top: 10px; /* Espaço do conteúdo acima */
+} /* Fim de .xp-bar-wrap */
+.xp-labels {
+  /* Rótulos da barra XP (ex: Nível Atual e Próximo) */
+  display: flex; /* Alinha nas extremidades */
+  justify-content: space-between; /* Um na esquerda, outro na direita */
+  font-size: 11px; /* Texto pequeno */
+  color: var(--text2); /* Cor de suporte */
+  margin-bottom: 4px; /* Espaço para a barra física */
+} /* Fim de .xp-labels */
+.xp-bar {
+  /* Fundo da barra de progresso XP */
+  height: 4px; /* Fina e elegante */
+  background: var(--border); /* Cor de fundo neutra */
+  border-radius: 2px; /* Cantos arredondados */
+  overflow: hidden; /* Esconde o preenchimento fora */
+} /* Fim de .xp-bar */
+.xp-fill {
+  /* O preenchimento colorido da barra XP */
+  height: 100%; /* Ocupa toda a altura do pai */
+  background: var(--green); /* Cor verde neon */
+  border-radius: 2px; /* Cantos arredondados */
+  transition: width 0.8s ease; /* Transição suave de preenchimento */
+} /* Fim de .xp-fill */
+.sidebar-section {
+  /* Rótulo de seção na sidebar (ex: MENU PRINCIPAL) */
+  padding: 8px 16px; /* Espaçamento interno */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 9px; /* Texto mini */
+  letter-spacing: 0.3em; /* Bem espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text3); /* Cor bem discreta */
+  margin-top: 16px; /* Distância da seção anterior */
+} /* Fim de .sidebar-section */
+.sidebar-item {
+  /* Item de navegação individual da sidebar */
+  display: flex; /* Ícone e texto alinhados */
+  align-items: center; /* Centro vertical */
+  gap: 12px; /* Espaçamento entre ícone e texto */
+  padding: 10px 20px; /* Área de clique confortável */
+  font-size: 14px; /* Tamanho padrão */
+  color: var(--text2); /* Cor de suporte */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição suave */
+  border-left: 2px solid transparent; /* Borda de destaque (inativa) */
+} /* Fim de .sidebar-item */
+.sidebar-item:hover {
+  /* Efeito de hover na sidebar */
+  background: rgba(255, 255, 255, 0.03); /* Fundo sutilmente mais claro */
+  color: var(--text); /* Texto clareia */
+} /* Fim de .sidebar-item:hover */
+.sidebar-item.active {
+  /* Estilo do item de menu selecionado */
+  background: rgba(0, 255, 135, 0.06); /* Fundo levemente verde */
+  border-left-color: var(--green); /* Borda lateral fica verde neon */
+  color: var(--green); /* Texto fica verde neon */
+} /* Fim de .sidebar-item.active */
+.sidebar-icon {
+  /* Ícone do item do menu */
+  font-size: 16px; /* Tamanho visual */
+  width: 20px; /* Largura fixa para alinhamento vertical */
+  text-align: center; /* Centraliza o ícone */
+} /* Fim de .sidebar-icon */
+.dash-main {
+  /* Área principal onde as páginas do dashboard são carregadas */
+  padding: 24px; /* Espaçamento interno */
+  overflow-y: auto; /* Habilita rolagem vertical */
+} /* Fim de .dash-main */
+.dash-page {
+  /* Estrutura de cada "página" dentro do dashboard */
+  display: none; /* Escondida por padrão */
+  animation: pageIn 0.3s ease; /* Animação de entrada suave */
+} /* Fim de .dash-page */
+.dash-page.active {
+  /* Mostra a página ativa */
+  display: block; /* Visível */
+} /* Fim de .dash-page.active */
+@keyframes pageIn {
+  /* Definição da animação de entrada de página */
+  from {
+    /* Estado inicial */
+    opacity: 0; /* Invisível */
+    transform: translateY(8px); /* Começa levemente abaixo */
+  } /* Fim do estado 1 */
+  to {
+    /* Estado final */
+    opacity: 1; /* Visível */
+    transform: translateY(0); /* Posição normal */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes pageIn */
+.page-header {
+  /* Cabeçalho interno de cada página do dashboard */
+  display: flex; /* Alinha título e possíveis botões de ação */
+  align-items: flex-start; /* Alinha ao topo */
+  justify-content: space-between; /* Empurra itens para os lados */
+  margin-bottom: 24px; /* Espaço para o conteúdo da página */
+  flex-wrap: wrap; /* Quebra linha se necessário */
+  gap: 12px; /* Espaçamento entre elementos do cabeçalho */
+} /* Fim de .page-header */
+.page-tag {
+  /* Pequeno marcador de categoria da página (ex: VISÃO GERAL) */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto mini */
+  letter-spacing: 0.3em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--green); /* Verde neon */
+  margin-bottom: 4px; /* Espaço para o título principal */
+} /* Fim de .page-tag */
+.page-title {
+  /* Título principal da página atual */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 36px; /* Tamanho grande */
+  letter-spacing: 0.03em; /* Leve espaçamento */
+  line-height: 1; /* Altura compacta */
+} /* Fim de .page-title */
+.kpi-grid {
+  /* Grade para os cartões de métricas (KPIs) */
+  display: grid; /* Ativa grade */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(150px, 1fr)
+  ); /* Colunas responsivas */
+  gap: 14px; /* Espaço entre cartões */
+  margin-bottom: 24px; /* Espaço para os gráficos abaixo */
+} /* Fim de .kpi-grid */
+.kpi {
+  /* Cartão de métrica individual */
+  background: var(--bg3); /* Fundo de terceira camada */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 18px; /* Espaçamento interno */
+  position: relative; /* Para o detalhe de cor no topo */
+  overflow: hidden; /* Corta excessos */
+  transition: transform 0.2s; /* Transição de movimento */
+} /* Fim de .kpi */
+.kpi:hover {
+  /* Efeito de hover no cartão KPI */
+  transform: translateY(-2px); /* Sobe levemente */
+} /* Fim de .kpi:hover */
+.kpi::before {
+  /* Linha colorida no topo de cada KPI */
+  content: ""; /* Necessário */
+  position: absolute; /* Fixa no topo do cartão */
+  top: 0; /* Alinhado ao topo */
+  left: 0; /* Alinhado à esquerda */
+  right: 0; /* Alinhado à direita */
+  height: 2px; /* Espessura fina */
+} /* Fim de .kpi::before */
+.kpi.g::before {
+  /* Cor verde para KPI positivo/sucesso */
+  background: var(--green); /* Verde neon */
+} /* Fim kpi verde */
+.kpi.r::before {
+  /* Cor vermelha para KPI crítico/alerta */
+  background: var(--red); /* Vermelho */
+} /* Fim kpi vermelho */
+.kpi.o::before {
+  /* Cor laranja para KPI em atenção */
+  background: var(--orange); /* Laranja */
+} /* Fim kpi laranja */
+.kpi.b::before {
+  /* Cor azul para KPI informativo */
+  background: var(--blue); /* Azul */
+} /* Fim kpi azul */
+.kpi.p::before {
+  /* Cor roxa para KPI premium/especial */
+  background: var(--purple); /* Roxo */
+} /* Fim kpi roxo */
+.kpi-icon {
+  /* Ícone que representa a métrica */
+  font-size: 22px; /* Tamanho médio */
+  margin-bottom: 10px; /* Espaço para o valor */
+} /* Fim de .kpi-icon */
+.kpi-val {
+  /* O valor numérico da métrica */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 36px; /* Tamanho grande */
+  letter-spacing: 0.02em; /* Espaçado */
+  line-height: 1; /* Compacto */
+  margin-bottom: 2px; /* Espaço para o rótulo */
+  transition: all 0.4s; /* Transição para atualizações dinâmicas */
+} /* Fim de .kpi-val */
+.kpi-label {
+  /* Descrição do que a métrica representa (ex: Calorias) */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  font-weight: 300; /* Leve */
+} /* Fim de .kpi-label */
+.kpi-delta {
+  /* Variação em relação ao período anterior (ex: +5%) */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto mini */
+  margin-top: 8px; /* Distância do valor principal */
+} /* Fim de .kpi-delta */
+.kpi-delta.up {
+  /* Estilo para variação positiva (aumento) */
+  color: var(--green); /* Texto verde */
+} /* Fim delta subindo */
+.kpi-delta.dn {
+  /* Estilo para variação negativa (queda) */
+  color: var(--red); /* Texto vermelho */
+} /* Fim delta descendo */
+
+.chart-grid {
+  /* Grade para dois gráficos lado a lado */
+  display: grid; /* Ativa grade */
+  grid-template-columns: 2fr 1fr; /* Um gráfico grande e um pequeno */
+  gap: 14px; /* Espaço entre os gráficos */
+  margin-bottom: 24px; /* Espaço inferior */
+} /* Fim de .chart-grid */
+.chart-grid-3 {
+  /* Grade para três gráficos iguais lado a lado */
+  display: grid; /* Ativa grade */
+  grid-template-columns: repeat(3, 1fr); /* Três colunas iguais */
+  gap: 14px; /* Espaçamento */
+  margin-bottom: 24px; /* Espaço inferior */
+} /* Fim de .chart-grid-3 */
+.chart-box {
+  /* Container de um gráfico */
+  background: var(--bg3); /* Fundo de terceira camada */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+} /* Fim de .chart-box */
+.chart-title {
+  /* Título do gráfico (ex: Atividade Semanal) */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 18px; /* Tamanho médio */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-bottom: 4px; /* Espaço para o subtítulo */
+} /* Fim de .chart-title */
+.chart-sub {
+  /* Descrição ou legenda do gráfico */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  margin-bottom: 16px; /* Espaço para a área do gráfico */
+} /* Fim de .chart-sub */
+.chart-wrap {
+  /* Área física onde o gráfico (canvas) é renderizado */
+  position: relative; /* Para posicionamento absoluto interno */
+  height: 200px; /* Altura padrão */
+} /* Fim de .chart-wrap */
+.chart-wrap.tall {
+  /* Versão mais alta da área do gráfico */
+  height: 260px; /* Altura estendida */
+} /* Fim de .chart-wrap.tall */
+.empty-state {
+  /* Estado exibido quando não há dados para mostrar */
+  display: flex; /* Alinhamento centralizado */
+  flex-direction: column; /* Itens em coluna */
+  align-items: center; /* Centro horizontal */
+  justify-content: center; /* Centro vertical */
+  padding: 48px 24px; /* Espaçamento generoso */
+  text-align: center; /* Texto centralizado */
+  gap: 12px; /* Espaço entre ícone e texto */
+} /* Fim de .empty-state */
+.empty-icon {
+  /* Ícone do estado vazio */
+  font-size: 48px; /* Tamanho grande */
+  opacity: 0.4; /* Bem transparente */
+} /* Fim de .empty-icon */
+.empty-title {
+  /* Título do estado vazio */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 22px; /* Tamanho médio */
+  letter-spacing: 0.05em; /* Espaçado */
+  color: var(--text2); /* Cor suave */
+} /* Fim de .empty-title */
+.empty-sub {
+  /* Texto explicativo do estado vazio */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text3); /* Cor discreta */
+  max-width: 260px; /* Limite de largura para leitura */
+  line-height: 1.6; /* Espaçamento de linha */
+} /* Fim de .empty-sub */
+.form-card {
+  /* Cartão que contém um formulário (ex: Registrar Treino) */
+  background: var(--bg3); /* Fundo de terceira camada */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+  margin-bottom: 24px; /* Espaço para o próximo elemento */
+} /* Fim de .form-card */
+.form-card-title {
+  /* Título do formulário no cartão */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 18px; /* Tamanho médio */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-bottom: 16px; /* Espaço para os campos */
+  display: flex; /* Alinhamento com ícone */
+  align-items: center; /* Centro vertical */
+  gap: 10px; /* Espaço ícone-texto */
+} /* Fim de .form-card-title */
+.form-grid {
+  /* Grade de campos do formulário */
+  display: grid; /* Ativa grade */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(140px, 1fr)
+  ); /* Colunas adaptáveis */
+  gap: 12px; /* Espaço entre campos */
+} /* Fim de .form-grid */
+.form-group {
+  /* Grupo de rótulo e campo de entrada */
+  display: flex; /* Alinhamento vertical */
+  flex-direction: column; /* Um abaixo do outro */
+  gap: 6px; /* Espaço rótulo-campo */
+} /* Fim de .form-group */
+.form-label {
+  /* Rótulo do campo (ex: PESO) */
+  font-size: 11px; /* Texto mini */
+  font-weight: 600; /* Negrito */
+  letter-spacing: 0.08em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text2); /* Cor suave */
+} /* Fim de .form-label */
+.form-input {
+  /* Campo de entrada de texto/número */
+  padding: 10px 14px; /* Espaçamento interno */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 10px; /* Cantos arredondados */
+  color: var(--text); /* Texto claro */
+  font-size: 14px; /* Tamanho legível */
+  outline: none; /* Sem brilho padrão */
+  transition: border-color 0.2s; /* Transição suave */
+} /* Fim de .form-input */
+.form-input:focus {
+  /* Quando o campo está em foco */
+  border-color: var(--green); /* Borda brilha em verde */
+} /* Fim foco input */
+.form-input::placeholder {
+  /* Texto de exemplo no campo */
+  color: var(--text3); /* Cor discreta */
+} /* Fim placeholder */
+.form-select {
+  /* Campo de seleção (dropdown) */
+  padding: 10px 14px; /* Espaçamento interno */
+  background: var(--surf); /* Cor de superfície */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 10px; /* Cantos arredondados */
+  color: var(--text); /* Texto claro */
+  font-size: 14px; /* Tamanho legível */
+  outline: none; /* Sem brilho */
+  cursor: pointer; /* Mãozinha */
+  transition: border-color 0.2s; /* Transição suave */
+} /* Fim de .form-select */
+.form-select:focus {
+  /* Foco no select */
+  border-color: var(--green); /* Borda verde */
+} /* Fim foco select */
+.btn-save {
+  /* Botão de envio do formulário */
+  padding: 11px 28px; /* Tamanho generoso */
+  background: var(--green); /* Fundo verde neon */
+  color: #000; /* Texto preto (contraste) */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 18px; /* Tamanho médio */
+  letter-spacing: 0.08em; /* Espaçado */
+  border-radius: 10px; /* Cantos arredondados */
+  transition: all 0.25s; /* Transição de efeitos */
+  margin-top: 4px; /* Espaço superior */
+} /* Fim de .btn-save */
+.btn-save:hover {
+  /* Efeito de hover no botão salvar */
+  background: var(--green2); /* Verde mais intenso */
+  transform: translateY(-1px); /* Sobe levemente */
+} /* Fim de .btn-save:hover */
+.btn-save:disabled {
+  /* Botão desativado (carregando ou erro) */
+  opacity: 0.5; /* Fica transparente */
+  cursor: not-allowed; /* Ícone de proibido */
+  transform: none; /* Sem movimento */
+} /* Fim do botão desabilitado */
+.form-feedback {
+  /* Mensagem de retorno do formulário (ex: Salvo!) */
+  font-size: 12px; /* Texto pequeno */
+  padding: 6px 0; /* Espaçamento vertical */
+  opacity: 0; /* Invisível por padrão */
+  transition: opacity 0.3s; /* Transição de visibilidade */
+} /* Fim de .form-feedback */
+.form-feedback.show {
+  /* Mostra o feedback */
+  opacity: 1; /* Visível */
+} /* Fim feedback visível */
+.form-feedback.ok {
+  /* Feedback de sucesso */
+  color: var(--green); /* Texto verde */
+} /* Fim feedback ok */
+.form-feedback.err {
+  /* Feedback de erro */
+  color: var(--red); /* Texto vermelho */
+} /* Fim feedback erro */
+.table-box {
+  /* Container para tabelas de dados */
+  background: var(--bg3); /* Fundo de terceira camada */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 16px; /* Cantos arredondados */
+  padding: 20px; /* Espaçamento interno */
+  margin-bottom: 24px; /* Espaçamento inferior */
+} /* Fim de .table-box */
+.dash-table {
+  /* Estilo da tabela do dashboard */
+  width: 100%; /* Ocupa largura total */
+  border-collapse: collapse; /* Mescla bordas das células */
+  margin-top: 12px; /* Espaço do título da tabela */
+} /* Fim de .dash-table */
+.dash-table th {
+  /* Cabeçalho da tabela */
+  text-align: left; /* Alinhado à esquerda */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto mini */
+  letter-spacing: 0.2em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text3); /* Cor discreta */
+  padding: 8px 12px; /* Espaçamento interno */
+  border-bottom: 1px solid var(--border); /* Divisória inferior */
+} /* Fim de th */
+.dash-table td {
+  /* Célula de dado da tabela */
+  padding: 12px; /* Espaçamento interno */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04); /* Divisória bem sutil */
+  font-size: 14px; /* Texto legível */
+  color: var(--text2); /* Cor suave */
+} /* Fim de td */
+.dash-table tr:hover td {
+  /* Efeito de hover na linha da tabela */
+  background: rgba(255, 255, 255, 0.02); /* Fundo levemente destacado */
+  color: var(--text); /* Texto clareia */
+} /* Fim do hover na linha */
+.goal-item {
+  /* Item individual de meta/objetivo */
+  display: flex; /* Alinha ícone e info horizontalmente */
+  align-items: center; /* Centro vertical */
+  gap: 14px; /* Espaçamento interno */
+  padding: 14px 0; /* Espaçamento vertical */
+  border-bottom: 1px solid var(--border); /* Divisória entre metas */
+} /* Fim de .goal-item */
+.goal-item:last-child {
+  /* Remove divisória da última meta */
+  border-bottom: none; /* Sem borda */
+} /* Fim da última meta */
+.goal-icon {
+  /* Ícone da meta (ex: Troféu) */
+  font-size: 24px; /* Tamanho médio */
+  flex-shrink: 0; /* Não deixa o ícone esmagar */
+} /* Fim de .goal-icon */
+.goal-info {
+  /* Container das informações da meta */
+  flex: 1; /* Ocupa o espaço restante */
+} /* Fim de .goal-info */
+.goal-name {
+  /* Nome da meta */
+  font-size: 14px; /* Texto padrão */
+  font-weight: 600; /* Negrito */
+  margin-bottom: 4px; /* Espaço para detalhes */
+} /* Fim de .goal-name */
+.goal-detail {
+  /* Detalhes da meta (ex: 8 de 10 dias) */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+} /* Fim de .goal-detail */
+.goal-right {
+  /* Lado direito da meta (Progresso e porcentagem) */
+  width: 120px; /* Largura fixa */
+  text-align: right; /* Alinhado à direita */
+} /* Fim de .goal-right */
+.goal-pct {
+  /* Texto da porcentagem concluída */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--green); /* Verde neon */
+  margin-bottom: 4px; /* Espaço para a barra física */
+} /* Fim de .goal-pct */
+.prog-bar {
+  /* Fundo da barra de progresso da meta */
+  height: 6px; /* Espessura média */
+  background: var(--border); /* Cor neutra */
+  border-radius: 3px; /* Cantos arredondados */
+  overflow: hidden; /* Corta preenchimento */
+} /* Fim de .prog-bar */
+.prog-fill {
+  /* Preenchimento da barra de meta */
+  height: 100%; /* Altura total */
+  border-radius: 3px; /* Cantos arredondados */
+  transition: width 1s ease; /* Transição lenta e elegante */
+} /* Fim de .prog-fill */
+.goal-del {
+  /* Botão de excluir meta */
+  width: 28px; /* Pequeno e circular */
+  height: 28px; /* Pequeno e circular */
+  border-radius: 50%; /* Círculo */
+  background: rgba(255, 59, 92, 0.1); /* Fundo vermelho transparente */
+  color: var(--red); /* Ícone vermelho */
+  display: flex; /* Centralização */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 14px; /* Tamanho do ícone */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição rápida */
+  flex-shrink: 0; /* Não esmaga */
+} /* Fim de .goal-del */
+.goal-del:hover {
+  /* Hover no botão excluir meta */
+  background: var(--red); /* Fundo fica vermelho sólido */
+  color: #fff; /* Ícone fica branco */
+} /* Fim de .goal-del:hover */
+.body-grid {
+  /* Grade para métricas corporais (ex: Peso e Gordura) */
+  display: grid; /* Ativa grade */
+  grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+  gap: 14px; /* Espaçamento */
+  margin-bottom: 24px; /* Espaço inferior */
+} /* Fim de .body-grid */
+.body-metric {
+  /* Cartão de métrica corporal individual */
+  background: var(--bg3); /* Fundo de terceira camada */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 14px; /* Cantos arredondados */
+  padding: 18px; /* Espaçamento interno */
+} /* Fim de .body-metric */
+.bm-label {
+  /* Rótulo da métrica corporal */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  margin-bottom: 6px; /* Espaço para o valor */
+} /* Fim de .bm-label */
+.bm-val {
+  /* Valor numérico da métrica corporal */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 32px; /* Tamanho grande */
+  letter-spacing: 0.02em; /* Espaçado */
+  margin-bottom: 4px; /* Espaço para unidade */
+} /* Fim de .bm-val */
+.bm-unit {
+  /* Unidade de medida (ex: kg, %) */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text3); /* Cor discreta */
+} /* Fim de .bm-unit */
+.profile-edit-grid {
+  /* Grade para campos de edição de perfil */
+  display: grid; /* Ativa grade */
+  grid-template-columns: 1fr 1fr; /* Duas colunas */
+  gap: 12px; /* Espaçamento */
+} /* Fim de .profile-edit-grid */
+@media (max-width: 900px) {
+  /* Tablet e Mobile Médio */
+  .dash-wrap {
+    /* Container principal no mobile */
+    grid-template-columns: 1fr; /* Passa para uma única coluna */
+  } /* Fim wrap mobile */
+  .sidebar {
+    /* Sidebar no mobile (vira barra superior horizontal) */
+    position: static; /* Remove o sticky lateral */
+    height: auto; /* Altura baseada no conteúdo */
+    display: flex; /* Itens lado a lado */
+    flex-wrap: nowrap; /* Não quebra linha (gera scroll lateral) */
+    overflow-x: auto; /* Habilita scroll horizontal */
+    padding: 8px; /* Reduz padding */
+    gap: 4px; /* Espaço entre itens */
+    border-right: none; /* Remove borda lateral */
+    border-bottom: 1px solid var(--border); /* Adiciona borda inferior */
+  } /* Fim sidebar mobile */
+  .sidebar-section, /* Esconde rótulos de seção no mobile */
+  .profile-card {
+    /* Esconde card de perfil na sidebar mobile (espaço reduzido) */
+    display: none; /* Remove da visão */
+  } /* Fim escondidos mobile */
+  .sidebar-item {
+    /* Itens da sidebar no mobile */
+    padding: 8px 14px; /* Mais compactos */
+    border-left: none; /* Remove borda lateral */
+    white-space: nowrap; /* Não deixa quebrar texto */
+    border-radius: 20px; /* Formato de botão arredondado */
+    flex-shrink: 0; /* Não deixa esmagar */
+  } /* Fim item sidebar mobile */
+  .chart-grid, /* Grades de gráficos no mobile */
+  .chart-grid-3 {
+    /* Grade tripla no mobile */
+    grid-template-columns: 1fr; /* Tudo em uma coluna (empilhado) */
+  } /* Fim grades mobile */
+  .body-grid {
+    /* Grade corporal no mobile */
+    grid-template-columns: 1fr; /* Empilhado */
+  } /* Fim body-grid mobile */
+  .profile-edit-grid {
+    /* Grade de edição no mobile */
+    grid-template-columns: 1fr; /* Empilhado */
+  } /* Fim edit-grid mobile */
+} /* Fim media 900px */
+@media (max-width: 600px) {
+  /* Celulares Pequenos */
+  .kpi-grid {
+    /* Grade de KPIs no mobile pequeno */
+    grid-template-columns: 1fr 1fr; /* Mantém duas colunas se possível */
+  } /* Fim kpi mobile */
+  .dash-main {
+    /* Área principal no mobile pequeno */
+    padding: 16px; /* Padding reduzido */
+  } /* Fim main mobile */
+  .form-grid {
+    /* Grade de formulário no mobile pequeno */
+    grid-template-columns: 1fr; /* Tudo empilhado */
+  } /* Fim form mobile */
+} /* Fim media 600px */
+
+/* Utils extracted from dashboard /* Utilitários específicos para o dashboard */
+*/ .dash-logout-btn {
+  /* Botão de logout (estilo perigoso) */
+  color: var(--red); /* Texto vermelho */
+  border-color: rgba(255, 59, 92, 0.3); /* Borda vermelha suave */
+} /* Fim do botão de logout */
+.grid-col-span-2 {
+  /* Utilitário para ocupar duas colunas na grade */
+  grid-column: span 2; /* Expansão horizontal */
+} /* Fim de span 2 */

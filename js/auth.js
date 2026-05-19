@@ -1,5 +1,9 @@
 /* ====================================================
    AUTH.JS — Autenticação CoreLab
+   Versão corrigida:
+   - createUserProfile usa merge:true (não sobrescreve)
+   - Verificação robusta de perfil existente antes de criar
+   - Erros de auth mapeados em PT-BR
 ==================================================== */
 
 import { auth, googleProvider } from "./firebase-config.js";
@@ -19,26 +23,25 @@ import {
 ==================================================== */
 export async function registerWithEmail(name, email, password) {
   try {
-    // Cria usuário no Firebase Auth
-    const credential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
     const user = credential.user;
 
-    // Atualiza nome no Auth
+    // Atualiza o displayName no Auth
     await updateProfile(user, { displayName: name });
 
-    // Cria perfil no Firestore
+    // Cria o perfil no Firestore (com merge para não sobrescrever se já existir)
     await createUserProfile(user.uid, {
       name,
       email,
       photoURL: "",
     });
 
+    // Desloga após cadastro para forçar login manual
+    await signOut(auth);
+
     return { success: true, user };
   } catch (err) {
+    console.error("Erro no cadastro:", err);
     return { success: false, error: getAuthError(err.code) };
   }
 }
@@ -51,6 +54,7 @@ export async function loginWithEmail(email, password) {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     return { success: true, user: credential.user };
   } catch (err) {
+    console.error("Erro no login:", err);
     return { success: false, error: getAuthError(err.code) };
   }
 }
@@ -63,7 +67,7 @@ export async function loginWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
 
-    // Verifica se perfil já existe
+    // Verifica se o perfil já existe antes de criar
     const existing = await getUserProfile(user.uid);
     if (!existing) {
       await createUserProfile(user.uid, {
@@ -75,6 +79,7 @@ export async function loginWithGoogle() {
 
     return { success: true, user };
   } catch (err) {
+    console.error("Erro no login Google:", err);
     return { success: false, error: getAuthError(err.code) };
   }
 }
@@ -87,6 +92,7 @@ export async function logout() {
     await signOut(auth);
     return { success: true };
   } catch (err) {
+    console.error("Erro no logout:", err);
     return { success: false, error: err.message };
   }
 }
@@ -99,6 +105,7 @@ export async function resetPassword(email) {
     await sendPasswordResetEmail(auth, email);
     return { success: true };
   } catch (err) {
+    console.error("Erro ao resetar senha:", err);
     return { success: false, error: getAuthError(err.code) };
   }
 }
@@ -131,6 +138,9 @@ function getAuthError(code) {
     "auth/popup-closed-by-user": "Login cancelado.",
     "auth/network-request-failed": "Erro de conexão. Verifique sua internet.",
     "auth/invalid-credential": "Email ou senha incorretos.",
+    "auth/popup-blocked": "Popup bloqueado pelo navegador. Permita popups para este site.",
+    "auth/account-exists-with-different-credential":
+      "Já existe uma conta com este email usando outro método de login.",
   };
   return errors[code] || "Ocorreu um erro. Tente novamente.";
 }

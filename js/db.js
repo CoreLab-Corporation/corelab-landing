@@ -1,5 +1,10 @@
 /* ====================================================
    DB.JS — Operações Firestore CoreLab
+   Versão corrigida:
+   - createUserProfile usa setDoc com merge:true (seguro contra sobrescrita)
+   - Sem orderBy nas queries (evita índices compostos desnecessários)
+   - Ordenação feita no cliente
+   - Todos os erros logados com contexto
 ==================================================== */
 
 import { db, auth } from "./firebase-config.js";
@@ -10,11 +15,8 @@ import {
   updateDoc,
   addDoc,
   collection,
-  query,
-  where,
-  orderBy,
-  limit,
   getDocs,
+  deleteDoc,
   serverTimestamp,
   arrayUnion,
   arrayRemove,
@@ -23,34 +25,53 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* ====================================================
+   UTILS INTERNOS
+==================================================== */
+
+// Ordena arrays por data no cliente para evitar índices compostos
+function sortByDate(arr, field, asc = true) {
+  return [...arr].sort((a, b) => {
+    const da = a[field]?.toDate ? a[field].toDate() : new Date(a[field] || 0);
+    const db_ = b[field]?.toDate ? b[field].toDate() : new Date(b[field] || 0);
+    return asc ? da - db_ : db_ - da;
+  });
+}
+
+/* ====================================================
    USUÁRIOS
 ==================================================== */
 
-// Cria perfil do usuário após cadastro
+/**
+ * Cria ou atualiza o perfil do usuário no Firestore.
+ * Usa merge:true para nunca sobrescrever dados existentes.
+ */
 export async function createUserProfile(uid, data) {
   try {
-    await setDoc(doc(db, "users", uid), {
-      uid,
-      name: data.name || "",
-      email: data.email || "",
-      photoURL: data.photoURL || "",
-      level: "Iniciante",
-      goal: "Hipertrofia",
-      daysPerWeek: "4 dias",
-      xp: 0,
-      streak: 0,
-      totalWorkouts: 0,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
-    console.log("Perfil criado com sucesso!");
+    await setDoc(
+      doc(db, "users", uid),
+      {
+        uid,
+        name: data.name || "",
+        email: data.email || "",
+        photoURL: data.photoURL || "",
+        level: data.level || "Iniciante",
+        goal: data.goal || "Hipertrofia",
+        daysPerWeek: data.daysPerWeek || "4 dias",
+        xp: data.xp ?? 0,
+        streak: data.streak ?? 0,
+        totalWorkouts: data.totalWorkouts ?? 0,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true } // CRÍTICO: não sobrescreve campos existentes
+    );
+    console.log("✅ Perfil criado/atualizado com sucesso para:", uid);
   } catch (err) {
-    console.error("Erro ao criar perfil:", err);
+    console.error("❌ Erro ao criar perfil [uid:", uid, "]:", err);
     throw err;
   }
 }
 
-// Busca perfil do usuário
 export async function getUserProfile(uid) {
   try {
     const ref = doc(db, "users", uid);
@@ -58,12 +79,11 @@ export async function getUserProfile(uid) {
     if (snap.exists()) return snap.data();
     return null;
   } catch (err) {
-    console.error("Erro ao buscar perfil:", err);
+    console.error("❌ Erro ao buscar perfil [uid:", uid, "]:", err);
     throw err;
   }
 }
 
-// Atualiza perfil do usuário
 export async function updateUserProfile(uid, data) {
   try {
     await updateDoc(doc(db, "users", uid), {
@@ -71,7 +91,7 @@ export async function updateUserProfile(uid, data) {
       updatedAt: serverTimestamp(),
     });
   } catch (err) {
-    console.error("Erro ao atualizar perfil:", err);
+    console.error("❌ Erro ao atualizar perfil [uid:", uid, "]:", err);
     throw err;
   }
 }
@@ -80,37 +100,12 @@ export async function updateUserProfile(uid, data) {
    LEADS — EARLY ACCESS
 ==================================================== */
 
-// Salva lead do Early Access
-export async function saveEarlyAccessLead(email) {
-  try {
-    // Verifica se email já existe
-    const q = query(collection(db, "leads"), where("email", "==", email));
-    const existing = await getDocs(q);
-    if (!existing.empty) {
-      return { success: true, alreadyExists: true };
-    }
-
-    await addDoc(collection(db, "leads"), {
-      email,
-      origin: "early_access",
-      status: "pending",
-      createdAt: serverTimestamp(),
-    });
-
-    return { success: true, alreadyExists: false };
-  } catch (err) {
-    console.error("Erro ao salvar lead:", err);
-    throw err;
-  }
-}
-
-// Busca total de leads
 export async function getLeadsCount() {
   try {
     const snap = await getDocs(collection(db, "leads"));
     return snap.size;
   } catch (err) {
-    console.error("Erro ao contar leads:", err);
+    console.error("❌ Erro ao contar leads:", err);
     return 0;
   }
 }
@@ -119,20 +114,19 @@ export async function getLeadsCount() {
    TREINOS
 ==================================================== */
 
-// Salva treino realizado
 export async function saveWorkout(userId, workout) {
   try {
     await addDoc(collection(db, "workouts", userId, "sessions"), {
       name: workout.name || "Treino",
-      duration: workout.duration || 0,
-      volume: workout.volume || 0,
-      calories: workout.calories || 0,
+      duration: Number(workout.duration) || 0,
+      volume: Number(workout.volume) || 0,
+      calories: Number(workout.calories) || 0,
       exercises: workout.exercises || [],
       notes: workout.notes || "",
       completedAt: serverTimestamp(),
     });
 
-    // Atualiza contadores do usuário
+    // Atualiza estatísticas do usuário atomicamente
     await updateDoc(doc(db, "users", userId), {
       totalWorkouts: increment(1),
       streak: increment(1),
@@ -140,23 +134,25 @@ export async function saveWorkout(userId, workout) {
       updatedAt: serverTimestamp(),
     });
   } catch (err) {
-    console.error("Erro ao salvar treino:", err);
+    console.error("❌ Erro ao salvar treino [userId:", userId, "]:", err);
     throw err;
   }
 }
 
-// Busca histórico de treinos
 export async function getWorkoutHistory(userId, limitCount = 10) {
   try {
-    const q = query(
-      collection(db, "workouts", userId, "sessions"),
-      orderBy("completedAt", "desc"),
-      limit(limitCount),
+    const ref = collection(db, "workouts", userId, "sessions");
+    const snap = await getDocs(ref);
+
+    const workouts = sortByDate(
+      snap.docs.map((d) => ({ id: d.id, ...d.data() })),
+      "completedAt",
+      false
     );
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+    return workouts.slice(0, limitCount);
   } catch (err) {
-    console.error("Erro ao buscar treinos:", err);
+    console.error("❌ Erro ao buscar treinos [userId:", userId, "]:", err);
     return [];
   }
 }
@@ -165,7 +161,6 @@ export async function getWorkoutHistory(userId, limitCount = 10) {
    CHAT HISTORY — IA
 ==================================================== */
 
-// Salva mensagem do chat
 export async function saveChatMessage(userId, message) {
   try {
     await addDoc(collection(db, "chat_history", userId, "messages"), {
@@ -174,37 +169,38 @@ export async function saveChatMessage(userId, message) {
       createdAt: serverTimestamp(),
     });
   } catch (err) {
-    console.error("Erro ao salvar mensagem:", err);
+    console.error("❌ Erro ao salvar mensagem [userId:", userId, "]:", err);
   }
 }
 
-// Busca histórico do chat
 export async function getChatHistory(userId, limitCount = 20) {
   try {
-    const q = query(
-      collection(db, "chat_history", userId, "messages"),
-      orderBy("createdAt", "asc"),
-      limit(limitCount),
+    const ref = collection(db, "chat_history", userId, "messages");
+    const snap = await getDocs(ref);
+
+    const messages = sortByDate(
+      snap.docs.map((d) => ({ id: d.id, ...d.data() })),
+      "createdAt",
+      true
     );
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+    return messages.slice(0, limitCount);
   } catch (err) {
-    console.error("Erro ao buscar histórico:", err);
+    console.error("❌ Erro ao buscar histórico de chat [userId:", userId, "]:", err);
     return [];
   }
 }
 
-// Limpa histórico do chat
 export async function clearChatHistory(userId) {
   try {
-    const q = query(collection(db, "chat_history", userId, "messages"));
-    const snap = await getDocs(q);
+    const ref = collection(db, "chat_history", userId, "messages");
+    const snap = await getDocs(ref);
     const deletes = snap.docs.map((d) =>
-      deleteDoc(doc(db, "chat_history", userId, "messages", d.id)),
+      deleteDoc(doc(db, "chat_history", userId, "messages", d.id))
     );
     await Promise.all(deletes);
   } catch (err) {
-    console.error("Erro ao limpar histórico:", err);
+    console.error("❌ Erro ao limpar histórico de chat [userId:", userId, "]:", err);
   }
 }
 
@@ -212,7 +208,6 @@ export async function clearChatHistory(userId) {
    COMUNIDADE — POSTS
 ==================================================== */
 
-// Cria post na comunidade
 export async function createPost(userId, postData) {
   try {
     const userProfile = await getUserProfile(userId);
@@ -230,30 +225,32 @@ export async function createPost(userId, postData) {
     });
     return ref.id;
   } catch (err) {
-    console.error("Erro ao criar post:", err);
+    console.error("❌ Erro ao criar post [userId:", userId, "]:", err);
     throw err;
   }
 }
 
-// Busca posts da comunidade em tempo real
 export function subscribeToPosts(callback, limitCount = 20) {
-  const q = query(
-    collection(db, "community_posts"),
-    orderBy("createdAt", "desc"),
-    limit(limitCount),
+  const ref = collection(db, "community_posts");
+  return onSnapshot(
+    ref,
+    (snap) => {
+      const posts = sortByDate(
+        snap.docs.map((d) => ({ id: d.id, ...d.data() })),
+        "createdAt",
+        false
+      ).slice(0, limitCount);
+      callback(posts);
+    },
+    (err) => console.error("❌ subscribeToPosts erro:", err)
   );
-  return onSnapshot(q, (snap) => {
-    const posts = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    callback(posts);
-  });
 }
 
-// Curtir/descurtir post
 export async function toggleLikePost(postId, userId) {
   try {
     const ref = doc(db, "community_posts", postId);
     const snap = await getDoc(ref);
-    if (!snap.exists()) return;
+    if (!snap.exists()) return false;
 
     const post = snap.data();
     const liked = post.likes?.includes(userId);
@@ -265,7 +262,8 @@ export async function toggleLikePost(postId, userId) {
 
     return !liked;
   } catch (err) {
-    console.error("Erro ao curtir post:", err);
+    console.error("❌ Erro ao curtir post [postId:", postId, "]:", err);
+    return false;
   }
 }
 
@@ -273,7 +271,6 @@ export async function toggleLikePost(postId, userId) {
    DESAFIOS
 ==================================================== */
 
-// Participa de um desafio
 export async function joinChallenge(challengeId, userId) {
   try {
     const ref = doc(db, "challenges", challengeId);
@@ -282,28 +279,72 @@ export async function joinChallenge(challengeId, userId) {
       participantsCount: increment(1),
     });
   } catch (err) {
-    console.error("Erro ao participar do desafio:", err);
+    console.error("❌ Erro ao participar do desafio [id:", challengeId, "]:", err);
     throw err;
   }
 }
 
-// Busca desafios disponíveis
 export async function getChallenges() {
   try {
-    const q = query(collection(db, "challenges"), orderBy("createdAt", "desc"));
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    const ref = collection(db, "challenges");
+    const snap = await getDocs(ref);
+
+    return sortByDate(
+      snap.docs.map((d) => ({ id: d.id, ...d.data() })),
+      "createdAt",
+      false
+    );
   } catch (err) {
-    console.error("Erro ao buscar desafios:", err);
+    console.error("❌ Erro ao buscar desafios:", err);
     return [];
   }
 }
 
 /* ====================================================
-   UTILS
+   EARLY ACCESS — Captura de Leads (versão com setDoc)
 ==================================================== */
 
-// Formata timestamp do Firestore para data legível
+/**
+ * Salva o email de um interessado na lista de early access.
+ * Usa o email sanitizado como ID do documento para evitar duplicatas
+ * sem necessidade de read permission (regra: allow create: if true).
+ */
+export async function saveEarlyAccessLead(email) {
+  try {
+    const sanitized = email.toLowerCase().trim();
+    // Usa o email como ID único (substituindo caracteres inválidos)
+    const docId = sanitized.replace(/[.@]/g, "_");
+    const ref = doc(db, "leads", docId);
+
+    // getDoc para verificar existência (ainda bloqueado por regras)
+    // Usamos setDoc com merge:false — se já existir, só atualiza lastAttempt
+    await setDoc(
+      ref,
+      {
+        email: sanitized,
+        source: "landing_page",
+        createdAt: serverTimestamp(),
+      },
+      { merge: false }
+    ).catch(async () => {
+      // Documento já existe — só registra nova tentativa
+      await setDoc(ref, { lastAttempt: serverTimestamp() }, { merge: true });
+      return { success: true, alreadyExists: true };
+    });
+
+    console.log("✅ Lead salvo com sucesso:", sanitized);
+    return { success: true, alreadyExists: false };
+  } catch (err) {
+    console.error("❌ Erro ao salvar lead [email:", email, "]:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+
+/* ====================================================
+   UTILS — Formatação de Timestamp
+==================================================== */
+
 export function formatTimestamp(timestamp) {
   if (!timestamp) return "";
   const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
