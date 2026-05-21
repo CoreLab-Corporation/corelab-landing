@@ -1,220 +1,200 @@
-# CoreLab — Landing Page
+# CoreLab — Forge Your Core
 
-> **"Forje Seu Core"** — Landing page oficial do CoreLab, aplicativo de fitness com IA, comunidade elite e dashboards de performance em tempo real.
+> **"Forje Seu Core"** — Landing page oficial e aplicativo integrado do CoreLab: ecossistema fitness de elite com inteligência artificial, rede social integrada, banco de dados Firebase e dashboards analíticos em tempo real.
+
+<p align="center">
+  <img src="img/treino_mental.png" alt="CoreLab Mente" width="18%"/>
+  <img src="img/poder_muscular.png" alt="CoreLab Força" width="18%"/>
+  <img src="img/cardio.png" alt="CoreLab Cardio" width="18%"/>
+  <img src="img/flexibilidade.png" alt="CoreLab Flexibilidade" width="18%"/>
+  <img src="img/recuperacao.png" alt="CoreLab Recuperação" width="18%"/>
+</p>
 
 ---
 
 ## 📋 Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
-- [Funcionalidades](#funcionalidades)
-- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Funcionalidades Principais](#funcionalidades-principais)
+- [Arquitetura e Integrações](#arquitetura-e-integrações)
+- [Estrutura Atualizada do Projeto](#estrutura-atualizada-do-projeto)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Como Executar](#como-executar)
-- [Páginas](#páginas)
-- [Branches](#branches)
-- [Contribuindo](#contribuindo)
+- [Como Executar Localmente](#como-executar-localmente)
+- [Páginas do Ecossistema](#páginas-do-ecossistema)
+- [Padrões de Desenvolvimento](#padrões-de-desenvolvimento)
 - [Licença](#licença)
 
 ---
 
 ## Sobre o Projeto
 
-O **CoreLab** é um aplicativo de fitness que integra treino inteligente, IA personalizada, comunidade de alta performance e dashboards em tempo real. Esta landing page é a vitrine do produto, desenvolvida como projeto acadêmico pela **UNIP Limeira** em 2026.
+O **CoreLab** é um aplicativo de fitness de alta performance desenvolvido como projeto acadêmico pela **UNIP Limeira** em 2026. A aplicação reúne a ciência da educação física de ponta com recursos digitais modernos, atuando como um hub para o desenvolvimento físico e mental completo do usuário.
 
-A landing page foi construída com HTML, CSS e JavaScript puros (Vanilla), sem dependências externas de frameworks, garantindo leveza, desempenho e total controle do código.
-
----
-
-## Funcionalidades
-
-### 🎠 Hero Carousel
-Carrossel automático com 4 slides apresentando os pilares do CoreLab:
-- **Forge Your Core** — Apresentação principal com CTA de Early Access
-- **Treino com IA** — Destaque do chatbot de inteligência artificial
-- **Comunidade Elite** — Desafios, prêmios e rede social de atletas
-- **Dashboard de Progresso** — Métricas em tempo real e análise de performance
-
-### 🧠 Seções de Pilares (5 pilares de treino)
-Cada seção apresenta um pilar do método CoreLab com animações de scroll reveal e chips interativos:
-
-| # | Pilar | Chips / Tópicos |
-|---|-------|-----------------|
-| 01 | **Mente** | Foco, Mindfulness, Respiração, Sono & Recuperação |
-| 02 | **Força** | Hipertrofia, Força Máxima, Composição Corporal |
-| 03 | **Cardio** | HIIT, Resistência, Queima de Gordura |
-| 04 | **Flexibilidade** | Mobilidade, Alongamento, Yoga & Pilates |
-| 05 | **Recuperação** | Sono, Nutrição, Hidratação, Dias de Descanso |
-
-### 💡 Chip Popups
-Ao clicar em qualquer chip das seções, um modal deslizante exibe informações detalhadas com:
-- Explicação científica do tópico
-- Benefícios práticos integrados ao CoreLab
-- Estatísticas baseadas em evidências
-
-### 📊 Grid de Features
-4 cards clicáveis destacando as principais funcionalidades:
-- Progresso em Tempo Real (→ `dashboard.html`)
-- IA Personalizada (→ `chatbot.html`)
-- Comunidade Elite (→ `comunidade.html`)
-- 100% Offline
-
-### 📩 Early Access
-Formulário de captura de e-mail para lista de espera do lançamento, com feedback visual de confirmação.
-
-### 🔐 Modal de Login
-Sistema de autenticação simulado com modal de login, avatar com iniciais do usuário e persistência de estado na sessão.
-
-### 🌙 Tema Dark / Light
-Alternância de tema com um clique — persiste durante a navegação na sessão.
-
-### 🌐 Seletor de Idioma
-Suporte visual para PT / ES / EN (estrutura preparada para internacionalização).
-
-### ✨ Splash Screen
-Tela de carregamento animada com barra de progresso e mensagens cíclicas.
+A aplicação foi construída com tecnologias web puras (**HTML5, Vanilla CSS e Vanilla JavaScript ES6+**), combinadas com o poder do **Firebase Web SDK** para dados em tempo real e **Chart.js** para renderização gráfica, entregando uma interface premium no estilo *glassmorphic dark-theme* com velocidade ultra-rápida e zero dependências de frameworks pesados (como React, Vue ou Tailwind).
 
 ---
 
-## Estrutura do Projeto
+## Funcionalidades Principais
+
+### 🎠 Carrossel de Destaques (Hero Carousel)
+* Slide de transição e ciclo automático de 4 telas que apresentam a filosofia CoreLab.
+* Efeitos de digitação dinâmica de tags e chamadas exclusivas com rotas otimizadas.
+
+### 🧘 Os 5 Pilares de Treino (Scroll Reveal & Imagens Premium)
+* **01 — Mente:** Foco mental, mindfulness, respiração e meditação.
+* **02 — Força:** Hipertrofia, potência muscular e resistência com ajuste progressivo.
+* **03 — Cardio:** Treinos cardiovasculares personalizados (HIIT, LISS e VO2 máximo).
+* **04 — Flexibilidade:** Amplitude de movimentos, yoga e liberação miofascial.
+* **05 — Recuperação:** Regeneração muscular ativa, sono profundo e acompanhamento nutricional.
+* *Todos os pilares contam com imagens exclusivas de altíssima fidelidade e mascaramento de cores HSL neon premium.*
+
+### 💡 Popups Informativos (Chips Científicos)
+* Clicar em qualquer tag de pilar abre um painel lateral dinâmico contendo explicações científicas do tema, métricas recomendadas e o impacto real no seu treino.
+
+### 👤 Painel de Controle de Sessão e Usuário
+* Área de login elegante com avatar que exibe as iniciais do usuário logado em tempo real e menu de controle de sessão com animações sutis de transição.
+
+---
+
+## Arquitetura e Integrações
+
+> [!IMPORTANT]
+> A engenharia da aplicação foi desenvolvida sob o conceito de **Resiliência de Conexão**, garantindo o funcionamento do ecossistema com ou sem internet.
+
+```mermaid
+graph TD
+    A[Navegador do Usuário] --> B{Possui Conexão?}
+    B -- Sim --> C[Firebase Authentication & Firestore]
+    B -- Não --> D[Modo Convidado / Demo LocalStorage]
+    C --> E[Sync de Dados Real-time]
+    D --> F[Simulação e Persistência Local]
+```
+
+### 🔥 Integração com Firebase
+* **Autenticação Real:** Sistema robusto com e-mail/senha e suporte integrado a login social com Provedor Google via redirecionamento de conta.
+* **Firestore Database:** Salvamento e sincronização em tempo real de treinos, composição corporal, sono, hidratação e metas do usuário, configurado explicitamente sob o banco de dados `default`.
+* **Regras de Segurança:** Validação estrita de acessos no Firestore para garantir privacidade total dos dados do atleta.
+
+### 💻 Modo Convidado / Demo Persistente
+* Se o usuário desejar testar a plataforma sem criar conta, ele pode ativar o **Modo Convidado (Demo)**.
+* Todos os módulos do painel entram em modo offline simulado: os dados são gravados localmente no `localStorage` com o prefixo `corelab_demo_` e persistem entre recarregamentos e F5.
+
+### 🌐 Motor de Internacionalização (i18n)
+* Suporte completo para **Português (PT)**, **Inglês (EN)** e **Espanhol (ES)**.
+* A tradução varre dinamicamente a árvore DOM aplicando dicionários sem recarregar a página e salva automaticamente a preferência de idioma no cache local.
+
+### 📊 Dashboard de Performance
+* Gráficos interativos integrados com a biblioteca **Chart.js** mapeando:
+  * Histórico de carga de treinos
+  * Evolução de peso corporal
+  * Duração e qualidade do sono
+  * Consumo calórico
+  * Metas e conquistas semanais com sistema de pontuação (XP)
+
+---
+
+## Estrutura Atualizada do Projeto
 
 ```
 corelab-landing/
-├── index.html          # Landing page principal
-├── chatbot.html        # Página do chatbot de IA
-├── comunidade.html     # Página da comunidade
-├── dashboard.html      # Dashboard de performance
+├── index.html              # Landing page principal (Carrossel, Pilares, Formulários)
+├── dashboard.html          # Painel de métricas analíticas e acompanhamento
+├── chatbot.html            # Chatbot IA inteligente (Treinador Pessoal Virtual)
+├── comunidade.html         # Rede social integrada com desafios e feed de postagens
+├── firebase.json           # Configuração de hospedagem e emuladores do Firebase
+├── firestore.rules         # Regras de segurança de banco de dados do Firestore
+├── firestore.indexes.json  # Configuração de índices de busca rápida do Firestore
+├── vercel.json             # Regras de roteamento e headers de segurança para Vercel
 ├── css/
-│   └── style.css       # Estilos globais (dark/light theme, animações, componentes)
+│   ├── global.css          # Variáveis de design (HSL), resets de página e temas
+│   ├── index.css           # Estilização visual e responsiva da Landing Page
+│   ├── dashboard.css       # Layouts, grades e componentes KPI do Dashboard
+│   ├── chatbot.css         # Interface de mensagens e animações do Assistente IA
+│   └── comunidade.css      # Feed de atividades e design da comunidade elite
 ├── js/
-│   └── main.js         # Lógica da aplicação (carousel, modais, chips, tema, i18n)
-├── .vscode/
-│   ├── extensions.json # Extensões recomendadas para VS Code
-│   └── settings.json   # Configurações do workspace
-├── LICENSE             # Licença MIT
-└── README.md           # Este arquivo
+│   ├── main.js             # Lógica de interface global e ciclos de splash screen
+│   ├── i18n.js             # Dicionários de tradução e motor de troca de idioma
+│   ├── auth.js             # Controladores de registro, login e sessão do Firebase
+│   ├── db.js               # Gerenciador de Firestore e LocalStorage em tempo real
+│   ├── dashboard-data.js   # Lógica e renderização dos gráficos analíticos (Chart.js)
+│   ├── demoData.js         # Dados genéricos para inicialização do Modo Convidado (Demo)
+│   ├── firebase-config.js  # Inicialização de APIs e instâncias oficiais do Firebase
+│   ├── config.js           # Constantes, limites e configurações de gamificação (XP)
+│   ├── security.js         # Proteções contra injeção e redirecionamento HTTPS seguro
+│   └── analytics.js        # Rastreamento básico de eventos de performance
+├── img/                    # Ativos de imagem premium (Mente, Força, Cardio, etc.)
+└── README.md               # Documentação técnica do projeto
 ```
 
 ---
 
 ## Tecnologias Utilizadas
 
-| Tecnologia | Uso |
-|------------|-----|
-| **HTML5** | Estrutura semântica das páginas |
-| **CSS3** | Estilos, animações, dark/light mode, glassmorphism |
-| **JavaScript (ES6+)** | Carousel, modais, scroll reveal, tema, idioma |
-| **Google Fonts** | Tipografia: `Bebas Neue`, `DM Sans`, `Space Mono` |
-| **Intersection Observer API** | Animações de entrada por scroll (scroll reveal) |
-
-> **Sem frameworks ou dependências externas.** O projeto é 100% Vanilla — sem React, Vue, Tailwind ou qualquer biblioteca JS.
+| Tecnologia | Finalidade | Detalhes |
+|------------|------------|----------|
+| **HTML5** | Estruturação semântica | Foco em SEO e acessibilidade estrutural. |
+| **CSS3** | Estilos e Transições | Variáveis de cores dinâmicas, glassmorphism e animações 60 FPS. |
+| **JavaScript** | Lógica de programação | Padrão modular ES6+ (`type="module"`) com controle assíncrono. |
+| **Firebase SDK** | Autenticação e Banco de Dados | Módulos `firebase-app`, `firebase-auth` e `firebase-firestore` (v10). |
+| **Chart.js** | Visualização de dados | Biblioteca rápida para desenhar canvas responsivos de KPIs. |
+| **Intersection Observer** | Efeitos de surgimento | Animações de Scroll Reveal sem carregar frameworks. |
 
 ---
 
-## Como Executar
+## Como Executar Localmente
 
-Por ser um projeto estático (sem build), basta abrir os arquivos diretamente no navegador:
+> [!WARNING]
+> Devido ao uso de módulos JavaScript nativos (`import`/`export`), abrir a landing page diretamente pelo arquivo no sistema de arquivos local (`file:///...`) gerará **erros de CORS** e impedirá o carregamento de scripts. É obrigatório executar a aplicação sob um servidor local.
 
-### Opção 1 — Abrir direto no navegador
+### 🌐 Opção Recomendada: Usando npx (NodeJS)
+
+Se você possui o Node.js instalado no seu computador, basta executar um dos comandos abaixo a partir da raiz do projeto para criar um servidor web instantâneo:
+
 ```bash
-# Clone o repositório
-git clone https://github.com/CoreLab-Corporation/corelab-landing.git
+# Executar servidor leve de desenvolvimento (Porta 5500 recomendada - Cache desativado)
+npx http-server . -p 5500 -c-1 --cors
 
-# Acesse a pasta
-cd corelab-landing
-
-# Abra o index.html no navegador
-# Windows:
-start index.html
-
-# macOS:
-open index.html
-
-# Linux:
-xdg-open index.html
-```
-
-### Opção 2 — Live Server (recomendado para desenvolvimento)
-```bash
-# Instale a extensão "Live Server" no VS Code e clique em "Go Live"
-# ou use o servidor do Node.js:
+# Alternativa (Porta 3000)
 npx serve .
 ```
 
-> **Nota:** Abrir via `file://` pode ter restrições de CORS em alguns navegadores. Para desenvolvimento, recomenda-se usar um servidor local.
+Em seguida, abra o navegador e digite o endereço: `http://localhost:5500`.
+
+### ⚡ Opção no VS Code
+Instale a extensão **Live Server** desenvolvida por Ritwick Dey no VS Code, abra a pasta do projeto e clique no botão **"Go Live"** na barra inferior direita do editor.
 
 ---
 
-## Páginas
+## Páginas do Ecossistema
 
-| Arquivo | Descrição |
-|---------|-----------|
-| `index.html` | Landing page principal — hero, pilares, features, early access |
-| `chatbot.html` | Interface do chatbot com IA para treinos personalizados |
-| `comunidade.html` | Feed e desafios da comunidade CoreLab Elite |
-| `dashboard.html` | Painel de métricas, composição corporal e evolução semanal |
+* **Landing Page (`index.html`):** Apresentação do produto, captura de e-mails para a lista e portal de entrada com acesso por login convencional ou modo de testes.
+* **Dashboard (`dashboard.html`):** Gráficos de progresso semanal, entrada manual de atividades físicas, monitoramento de saúde física e mental, e XP acumulado.
+* **Coach IA (`chatbot.html`):** Assistente virtual integrado que responde dúvidas e ajusta seu cronograma de treino.
+* **Comunidade Elite (`comunidade.html`):** Rede social interna onde atletas podem postar conquistas, dar curtidas e aceitar desafios coletivos do sistema.
 
 ---
 
-## Branches
+## Padrões de Desenvolvimento
 
-O projeto segue um fluxo de branches organizado para colaboração em equipe:
+### 📋 Convenção de Commits
+O time segue a convenção clássica do [Conventional Commits](https://www.conventionalcommits.org/):
 
-| Branch | Propósito |
-|--------|-----------|
-| `main` | Código estável e aprovado para produção |
-| `develop` | Branch de integração das features em desenvolvimento |
-| `feature/design-layout` | Desenvolvimento de design e layout visual |
-| `feature/conteudo-seo` | Otimização de conteúdo e SEO |
-| `feature/desenvolvimento` | Funcionalidades e interações JavaScript |
-| `feature/gestao-readme` | Documentação e gestão do README |
-| `feature/testes-qa` | Testes, validações e QA do projeto |
-
----
-
-## Contribuindo
-
-1. Faça um fork do projeto
-2. Crie sua branch a partir de `develop`:
-   ```bash
-   git checkout -b feature/minha-feature
-   ```
-3. Commit suas mudanças com mensagens descritivas:
-   ```bash
-   git commit -m "feat: adiciona funcionalidade X"
-   ```
-4. Faça push para sua branch:
-   ```bash
-   git push origin feature/minha-feature
-   ```
-5. Abra um Pull Request para `develop`
-
-### Convenção de Commits
-
-Este projeto segue o padrão [Conventional Commits](https://www.conventionalcommits.org/):
-
-| Prefixo | Uso |
-|---------|-----|
-| `feat:` | Nova funcionalidade |
-| `fix:` | Correção de bug |
-| `docs:` | Documentação |
-| `style:` | Formatação, sem mudança de lógica |
-| `refactor:` | Refatoração de código |
-| `chore:` | Tarefas de manutenção |
-| `test:` | Adição ou correção de testes |
+* `feat:` Uma nova funcionalidade ou melhoria de UI.
+* `fix:` Resolução de bugs e erros de console.
+* `docs:` Modificações na documentação e README.
+* `style:` Formatações cosméticas ou correções de CSS que não alteram a lógica.
+* `refactor:` Ajustes de performance ou reestruturação de arquivos JS.
+* `chore:` Atualizações de build ou configurações do Firebase.
 
 ---
 
 ## Licença
 
-Distribuído sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) para mais informações.
+Distribuído sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) para detalhes de cópia e distribuição livre.
 
 ---
 
-<div align="center">
-
-**© 2026 CoreLab Corporation — UNIP Limeira**
-
-*Todos os direitos reservados.*
-
-</div>
+<p align="center">
+  <strong>© 2026 CoreLab Corporation — UNIP Limeira</strong><br/>
+  <em>Todos os direitos reservados. Projeto Acadêmico de Alta Performance.</em>
+</p>
