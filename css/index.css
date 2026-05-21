@@ -223,6 +223,211 @@
 } /* Fim da borda logada */
 
 /* ==================================================== 
+   DEMO BUTTON — Botão premium para modo demonstração
+==================================================== */
+#demoBtn {
+  /* Override do icon-btn para formato pill */
+  width: auto;
+  height: 36px;
+  border-radius: 20px;
+  padding: 0 16px;
+  gap: 6px;
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--surf);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.35s var(--ease);
+}
+/* Borda gradiente animada via pseudo-elemento */
+#demoBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--purple), var(--blue), var(--green));
+  background-size: 200% 200%;
+  animation: demoBorderShift 4s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+  opacity: 0.7;
+  transition: opacity 0.35s;
+}
+#demoBtn:hover::before {
+  opacity: 1;
+}
+/* Glow suave atrás do botão */
+#demoBtn::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--purple), var(--blue), var(--green));
+  background-size: 200% 200%;
+  animation: demoBorderShift 4s ease infinite;
+  filter: blur(12px);
+  opacity: 0;
+  z-index: -2;
+  transition: opacity 0.35s;
+}
+#demoBtn:hover::after {
+  opacity: 0.35;
+}
+#demoBtn:hover {
+  transform: scale(1.06);
+  color: #fff;
+}
+#demoBtn:active {
+  transform: scale(0.97);
+}
+/* Ícone de tubo de ensaio dentro do botão */
+#demoBtn .demo-icon {
+  font-size: 14px;
+  display: inline-block;
+  transition: transform 0.4s var(--ease);
+}
+#demoBtn:hover .demo-icon {
+  transform: rotate(-12deg) scale(1.15);
+}
+/* Estado de carregamento do botão demo */
+#demoBtn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+#demoBtn .demo-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+#demoBtn.loading .demo-spinner {
+  display: inline-block;
+}
+#demoBtn.loading .demo-icon,
+#demoBtn.loading .demo-label {
+  display: none;
+}
+/* Esconde botão demo quando já logado */
+#demoBtn.d-none-demo {
+  display: none !important;
+}
+@keyframes demoBorderShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==================================================== 
+   DEMO BADGE — Indicador visual de modo demo no avatar
+==================================================== */
+.demo-badge {
+  display: none;
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #000;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  padding: 2px 5px;
+  border-radius: 6px;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(155, 93, 229, 0.5);
+  animation: demoBadgePulse 2s ease-in-out infinite;
+}
+.demo-badge.visible {
+  display: block;
+}
+@keyframes demoBadgePulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(155, 93, 229, 0.4); }
+  50% { box-shadow: 0 0 14px rgba(78, 205, 196, 0.6); }
+}
+/* Login button precisa de position relative para o badge */
+#loginBtn {
+  position: relative;
+}
+/* Avatar no modo demo usa gradiente roxo/azul ao invés de verde */
+.icon-btn.demo-mode .avatar-inner {
+  display: flex;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+}
+.icon-btn.demo-mode svg {
+  display: none;
+}
+.icon-btn.demo-mode {
+  border-color: var(--purple);
+}
+
+/* ==================================================== 
+   DEMO EXIT BANNER — Banner fixo no topo para sair do modo demo
+==================================================== */
+.demo-exit-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 32px;
+  background: linear-gradient(135deg, rgba(155,93,229,0.9), rgba(78,205,196,0.9));
+  backdrop-filter: blur(10px);
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #000;
+  transform: translateY(-100%);
+  animation: demoBarSlideIn 0.5s var(--ease) forwards;
+}
+.demo-exit-banner .demo-exit-btn {
+  background: rgba(0,0,0,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 12px;
+  padding: 2px 12px;
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.demo-exit-banner .demo-exit-btn:hover {
+  background: rgba(0,0,0,0.5);
+  border-color: #fff;
+}
+@keyframes demoBarSlideIn {
+  to { transform: translateY(0); }
+}
+/* Quando banner existe, empurra a navbar para baixo */
+body.demo-active #nav {
+  top: 32px;
+}
+
+/* ==================================================== 
    Início do bloco de Modal de Login
    LOGIN MODAL  Interface de autenticação 
 ==================================================== */
@@ -902,8 +1107,8 @@
   margin-top: 18px; /* Espaço do título */
 } /* Fim de .sec-body */
 
-/* VISUAL BLOCK /* Estilos para os blocos de mídia/animação ao lado do texto */
-*/ .vis {
+/* VISUAL BLOCK — Estilos para os blocos de mídia/animação ao lado do texto */
+.vis {
   /* Container principal do visual */
   position: relative; /* Para elementos internos absolutos */
   border-radius: 20px; /* Cantos arredondados */
@@ -921,49 +1126,34 @@
   overflow: hidden; /* Esconde overflow interno */
 } /* Fim de .vis-bg */
 .vis-mente {
-  /* Gradiente específico para o tema Mente */
-  background: linear-gradient(
-    135deg,
-    #0a0a0a,
-    #001a0d,
-    #000d0a
-  ); /* Tons verdes escuros */
+  /* Fundo de imagem para Treino Mental com máscara escurecida */
+  background: 
+    linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.8) 100%),
+    url('../img/treino_mental.png') center/cover no-repeat #0a0a0a;
 } /* Fim vis-mente */
 .vis-forca {
-  /* Gradiente específico para o tema Força */
-  background: linear-gradient(
-    135deg,
-    #0d0800,
-    #1a0d00,
-    #0d0500
-  ); /* Tons laranjas escuros */
+  /* Fundo de imagem para Poder Muscular com máscara escurecida */
+  background: 
+    linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.8) 100%),
+    url('../img/poder_muscular.png') center/cover no-repeat #0d0800;
 } /* Fim vis-forca */
 .vis-cardio {
-  /* Gradiente específico para o tema Cardio */
-  background: linear-gradient(
-    135deg,
-    #0d0005,
-    #1a0010,
-    #0d0008
-  ); /* Tons avermelhados escuros */
+  /* Fundo de imagem para Cardio com máscara escurecida */
+  background: 
+    linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.8) 100%),
+    url('../img/cardio.png') center/cover no-repeat #0a0a0a;
 } /* Fim vis-cardio */
-.vis-flexi {
-  /* Gradiente específico para o tema Flexibilidade */
-  background: linear-gradient(
-    135deg,
-    #00050d,
-    #001020,
-    #000a15
-  ); /* Tons azulados escuros */
-} /* Fim vis-flexi */
+.vis-flex {
+  /* Fundo de imagem para Flexibilidade com máscara escurecida */
+  background: 
+    linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.8) 100%),
+    url('../img/flexibilidade.png') center/cover no-repeat #0a0a0a;
+} /* Fim vis-flex */
 .vis-recup {
-  /* Gradiente específico para o tema Recuperação */
-  background: linear-gradient(
-    135deg,
-    #050d00,
-    #0a1a00,
-    #050d00
-  ); /* Tons verdes floresta */
+  /* Fundo de imagem para Recuperação com máscara escurecida */
+  background: 
+    linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.8) 100%),
+    url('../img/recuperacao.png') center/cover no-repeat #0a0a0a;
 } /* Fim vis-recup */
 .vis-lines {
   /* Camada de linhas horizontais decorativas sobre o visual */
@@ -1039,8 +1229,8 @@
   color: #fff; /* Branco puro */
 } /* Fim de .vis-btxt */
 
-/* CHIPS /* Pequenos botões de "Saiba Mais" em cada seção */
-*/ .chips {
+/* CHIPS — Pequenos botões de "Saiba Mais" em cada seção */
+.chips {
   /* Container para os botões de chips */
   display: flex; /* Em linha */
   flex-wrap: wrap; /* Quebra linha se necessário */
@@ -1570,8 +1760,8 @@ footer {
   display: block; /* Visível */
 } /* Fim do conteúdo ativo */
 
-/* ALERT /* Mensagens de erro ou sucesso dentro do modal */
-*/ .modal-alert {
+/* ALERT — Mensagens de erro ou sucesso dentro do modal */
+.modal-alert {
   /* Classe base para alertas */
   display: none; /* Escondido por padrão */
   padding: 10px 14px; /* Espaçamento interno */
@@ -1595,8 +1785,8 @@ footer {
   color: var(--green); /* Texto verde */
 } /* Fim do alerta de sucesso */
 
-/* GOOGLE BUTTON /* Botão de login social */
-*/ .btn-google {
+/* GOOGLE BUTTON — Botão de login social */
+.btn-google {
   /* Estilo do botão do Google */
   width: 100%; /* Largura total */
   padding: 13px; /* Altura padrão */
@@ -1620,8 +1810,8 @@ footer {
   background: rgba(66, 133, 244, 0.05); /* Fundo levemente azulado */
 } /* Fim de .btn-google:hover */
 
-/* MODAL LINK /* Links de suporte dentro do modal (ex: Esqueci minha senha) */
-*/ .modal-link {
+/* MODAL LINK — Links de suporte dentro do modal (ex: Esqueci minha senha) */
+.modal-link {
   /* Estilo de link de texto */
   color: var(--green); /* Verde neon */
   cursor: pointer; /* Mãozinha */
@@ -1634,8 +1824,8 @@ footer {
   opacity: 0.7; /* Fica levemente transparente */
 } /* Fim de .modal-link:hover */
 
-/* SPINNER /* Indicador de carregamento em botões */
-*/ .btn-spinner {
+/* SPINNER — Indicador de carregamento em botões */
+.btn-spinner {
   /* Ícone que gira */
   animation: spin 0.8s linear infinite; /* Animação de rotação contínua */
   display: inline-block; /* Permite rotação correta */
@@ -1648,83 +1838,205 @@ footer {
   } /* Fim do ciclo */
 } /* Fim de @keyframes spin */
 
-/* USER MENU DROPDOWN /* Menu de perfil do usuário logado */
-*/ .user-menu {
-  /* Container do menu suspenso */
-  position: absolute; /* Posicionado em relação à navbar */
-  top: calc(var(--nav) + 8px); /* Logo abaixo da navbar */
-  right: clamp(20px, 5vw, 60px); /* Alinhado com o avatar na direita */
-  background: var(--bg2); /* Fundo secundário escuro */
-  border: 1px solid var(--border); /* Borda elegante */
-  border-radius: 14px; /* Cantos arredondados */
-  padding: 8px; /* Espaçamento interno */
-  min-width: 200px; /* Largura mínima para o conteúdo */
-  z-index: 150; /* Acima de quase tudo */
-  opacity: 0; /* Invisível por padrão */
-  pointer-events: none; /* Ignora cliques */
-  transform: translateY(-8px); /* Começa um pouco acima */
-  transition: all 0.25s var(--ease); /* Transição suave de aparecimento */
-} /* Fim de .user-menu */
-.user-menu.open {
-  /* Estado aberto do menu do usuário */
-  opacity: 1; /* Visível */
-  pointer-events: all; /* Ativa cliques */
-  transform: translateY(0); /* Posição final */
-} /* Fim de .user-menu.open */
-.user-menu-header {
-  /* Cabeçalho do menu (Nome e Email) */
-  padding: 10px 12px 14px; /* Espaçamento interno */
-  border-bottom: 1px solid var(--border); /* Divisória base */
-  margin-bottom: 6px; /* Espaço para os itens do menu */
-} /* Fim de .user-menu-header */
-.user-menu-name {
-  /* Nome do usuário logado */
-  font-size: 14px; /* Texto legível */
-  font-weight: 600; /* Negrito */
-  margin-bottom: 2px; /* Espaço para o email */
-} /* Fim de .user-menu-name */
-.user-menu-email {
-  /* Email do usuário logado */
-  font-size: 12px; /* Texto menor */
-  color: var(--text2); /* Cor de suporte */
-} /* Fim de .user-menu-email */
-.user-menu-item {
-  /* Cada item clicável do menu (ex: Dashboard, Sair) */
-  display: flex; /* Ícone e texto alinhados */
-  align-items: center; /* Centro vertical */
-  gap: 10px; /* Espaço entre ícone e texto */
-  padding: 10px 12px; /* Área de clique confortável */
-  border-radius: 8px; /* Cantos internos */
-  font-size: 13px; /* Texto padrão do menu */
-  color: var(--text2); /* Cor de suporte */
-  cursor: pointer; /* Mãozinha */
-  transition: all 0.2s; /* Transição rápida */
-  text-decoration: none; /* Remove sublinhado de links */
-} /* Fim de .user-menu-item */
-.user-menu-item:hover {
-  /* Efeito de hover nos itens do menu */
-  background: var(--bg3); /* Fundo destaca */
-  color: var(--text); /* Texto clareia */
-} /* Fim de .user-menu-item:hover */
-.user-menu-item.danger {
-  /* Item de ação perigosa ou negativa (ex: Sair) */
-  color: var(--red); /* Texto vermelho */
-} /* Fim do item danger */
-.user-menu-item.danger:hover {
-  /* Hover no item perigoso */
-  background: rgba(255, 59, 92, 0.08); /* Fundo avermelhado sutil */
-} /* Fim do hover danger */
-.user-menu-icon {
-  /* Ícone (emoji ou font-icon) do item do menu */
-  font-size: 16px; /* Tamanho visual */
-  width: 20px; /* Largura fixa para alinhamento vertical perfeito */
-  text-align: center; /* Centraliza o ícone na sua largura */
-} /* Fim de .user-menu-icon */
+/* ====================================================
+   USER MENU — Icon Dock Vertical
+==================================================== */
 
-/* USER MENU — posicionado pelo body para evitar problemas de overflow */
+.user-menu {
+  position: absolute;
+  top: calc(var(--nav) + 12px);
+  right: clamp(20px, 5vw, 60px);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-12px) scale(0.95);
+  transition: opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.user-menu.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+/* O card principal — rail compacto de ícones */
 #userMenu {
-  /* Identificador único do menu (mesmos estilos do acima) */
-  position: fixed; /* Fixa na tela para evitar cortes por overflow de containers */
-  top: calc(var(--nav) + 8px); /* Mesma posição do topo */
-  right: clamp(20px, 5vw, 60px); /* Mesma posição da direita */
-} /* Fim de #userMenu */
+  position: fixed;
+  top: calc(var(--nav) + 12px);
+  right: clamp(20px, 5vw, 60px);
+  width: 56px;
+  background: rgba(8, 14, 10, 0.88);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid rgba(0, 255, 135, 0.16);
+  border-radius: 18px;
+  padding: 8px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 135, 0.05),
+    0 20px 48px rgba(0, 0, 0, 0.65),
+    0 0 60px rgba(0, 255, 135, 0.05);
+  overflow: visible;
+}
+
+/* Linha de brilho no topo */
+#userMenu::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 12px; right: 12px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 135, 0.55),
+    transparent
+  );
+  border-radius: 1px;
+}
+
+/* Avatar com iniciais no topo */
+.user-menu-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00ff87 0%, #00b85c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(0, 255, 135, 0.4);
+  margin-bottom: 4px;
+  position: relative;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.user-menu-avatar:hover .user-menu-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Dot online no avatar */
+.user-menu-avatar::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00ff87;
+  border: 2px solid rgba(8, 14, 10, 0.95);
+  box-shadow: 0 0 6px rgba(0, 255, 135, 0.9);
+  animation: pulse 2s ease infinite;
+}
+
+/* Separador */
+.user-menu-divider {
+  width: 32px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 1px;
+  margin: 2px 0;
+  flex-shrink: 0;
+}
+
+/* Cada item — só o ícone */
+.user-menu-item {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  text-decoration: none;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.user-menu-item:hover {
+  background: rgba(0, 255, 135, 0.12);
+  transform: scale(1.08);
+  box-shadow: 0 0 14px rgba(0, 255, 135, 0.18);
+}
+
+.user-menu-item:active {
+  transform: scale(0.96);
+}
+
+/* Tooltip label (span elemento real) */
+.user-menu-tooltip {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  margin-top: -1px; /* ajuste fino */
+  background: rgba(6, 10, 8, 0.97);
+  border: 1px solid rgba(0, 255, 135, 0.25);
+  border-radius: 9px;
+  padding: 6px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-50%) translateX(4px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+}
+
+.user-menu-item:hover .user-menu-tooltip,
+.user-menu-avatar:hover .user-menu-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Setinha do tooltip */
+.user-menu-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid rgba(6, 10, 8, 0.97);
+}
+
+.user-menu-item.danger .user-menu-tooltip {
+  border-color: rgba(255, 59, 92, 0.3);
+  color: #ff7080;
+}
+
+/* Ícone dentro do item */
+.user-menu-icon {
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Item de perigo (Sair) */
+.user-menu-item.danger:hover {
+  background: rgba(255, 59, 92, 0.14);
+  box-shadow: 0 0 14px rgba(255, 59, 92, 0.2);
+}
+
+
+

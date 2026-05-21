@@ -12,6 +12,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInAnonymously,
   signOut,
   onAuthStateChanged,
   updateProfile,
@@ -89,12 +90,39 @@ export async function loginWithGoogle() {
 ==================================================== */
 export async function logout() {
   try {
+    const user = auth.currentUser;
+    if (user && user.isAnonymous) {
+      // Clear demo data
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("corelab_demo_")) {
+          localStorage.removeItem(key);
+        }
+      }
+    }
     await signOut(auth);
     return { success: true };
   } catch (err) {
     console.error("Erro no logout:", err);
     return { success: false, error: err.message };
   }
+}
+
+// Guest login (anonymous) – returns the anonymous user object
+export async function loginAsGuest() {
+  try {
+    const credential = await signInAnonymously(auth);
+    const user = credential.user;
+    return { success: true, user };
+  } catch (err) {
+    console.error("Erro no login anônimo:", err);
+    return { success: false, error: err.message };
+  }
+}
+
+// Helper to identify guest (anonymous) sessions
+export function isGuest(user) {
+  return user && user.isAnonymous;
 }
 
 /* ====================================================

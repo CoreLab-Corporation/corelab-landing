@@ -9,8 +9,8 @@
       rel="stylesheet"
     /> <!-- Importação de fontes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script> <!-- Biblioteca Chart.js para gráficos -->
-    <link rel="stylesheet" href="css/global.css" /> <!-- Estilos globais -->
-    <link rel="stylesheet" href="css/dashboard.css" /> <!-- Estilos específicos do Dashboard -->
+    <link rel="stylesheet" href="css/global.css?v=1.0.2" /> <!-- Estilos globais -->
+    <link rel="stylesheet" href="css/dashboard.css?v=1.0.2" /> <!-- Estilos específicos do Dashboard -->
   </head> <!-- Fim head -->
   <body> <!-- Início do corpo -->
     <div class="topbar"> <!-- Barra superior do dashboard -->
@@ -130,26 +130,14 @@
               <div class="chart-title">Volume de Treino</div> <!-- Título do gráfico -->
               <div class="chart-sub">Carga total por sessão (kg)</div> <!-- Subtítulo explicativo -->
               <div class="chart-wrap" id="volumeChartWrap"> <!-- Container onde o Canvas do Chart.js é injetado -->
-                <div class="empty-state"> <!-- Estado vazio (exibido se não houver dados) -->
-                  <div class="empty-icon">📊</div> <!-- Ícone de gráfico vazio -->
-                  <div class="empty-title">SEM DADOS</div> <!-- Título -->
-                  <div class="empty-sub">
-                    Registre treinos para ver o gráfico <!-- Instrução ao usuário -->
-                  </div> <!-- Fim empty-sub -->
-                </div> <!-- Fim empty-state -->
+                <canvas id="overviewVolChart"></canvas>
               </div> <!-- Fim chart-wrap -->
             </div> <!-- Fim chart-box -->
             <div class="chart-box"> <!-- Box do gráfico de Distribuição Muscular -->
               <div class="chart-title">Distribuição Muscular</div> <!-- Título -->
               <div class="chart-sub">Grupos musculares trabalhados</div> <!-- Subtítulo -->
               <div class="chart-wrap" id="muscleChartWrap"> <!-- Container do gráfico de rosca/pizza -->
-                <div class="empty-state"> <!-- Estado vazio -->
-                  <div class="empty-icon">💪</div> <!-- Ícone -->
-                  <div class="empty-title">SEM DADOS</div> <!-- Título -->
-                  <div class="empty-sub">
-                    Registre treinos para ver a distribuição <!-- Instrução -->
-                  </div> <!-- Fim empty-sub -->
-                </div> <!-- Fim empty-state -->
+                <canvas id="overviewMuscleChart"></canvas>
               </div> <!-- Fim chart-wrap -->
             </div> <!-- Fim chart-box -->
           </div> <!-- Fim chart-grid -->
@@ -389,68 +377,7 @@
               <span class="form-feedback" id="b-feedback"></span>
             </div>
           </div>
-          <div class="kpi-grid">
-            <div class="kpi g">
-              <div class="kpi-icon">⚖️</div>
-              <div class="kpi-val" id="bk-weight">—</div>
-              <div class="kpi-label">Peso atual (kg)</div>
-            </div>
-            <div class="kpi b">
-              <div class="kpi-icon">🔬</div>
-              <div class="kpi-val" id="bk-fat">—</div>
-              <div class="kpi-label">% Gordura atual</div>
-            </div>
-            <div class="kpi p">
-              <div class="kpi-icon">💪</div>
-              <div class="kpi-val" id="bk-lean">—</div>
-              <div class="kpi-label">Massa magra (kg)</div>
-            </div>
-            <div class="kpi o">
-              <div class="kpi-icon">📏</div>
-              <div class="kpi-val" id="bk-waist">—</div>
-              <div class="kpi-label">Cintura (cm)</div>
-            </div>
-          </div>
-          <div class="chart-grid">
-            <div class="chart-box">
-              <div class="chart-title">Evolução do Peso</div>
-              <div class="chart-sub">kg ao longo do tempo</div>
-              <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-              <div class="chart-title">Composição Corporal</div>
-              <div class="chart-sub">Última medição</div>
-              <div class="chart-wrap"><canvas id="bodyCompChart"></canvas></div>
-            </div>
-          </div>
-          <div class="body-grid">
-            <div class="body-metric">
-              <div class="bm-label">Cintura</div>
-              <div class="bm-val">
-                <span id="bm-waist">—</span><span class="bm-unit"> cm</span>
-              </div>
-            </div>
-            <div class="body-metric">
-              <div class="bm-label">Peito</div>
-              <div class="bm-val">
-                <span id="bm-chest">—</span><span class="bm-unit"> cm</span>
-              </div>
-            </div>
-                /> <!-- Entrada numérica -->
-              </div> <!-- Fim form-group -->
-            </div> <!-- Fim form-grid -->
-            <div
-              style="
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                margin-top: 16px;
-              "
-            > <!-- Container de botões -->
-              <button class="btn-save" id="b-save">SALVAR MEDIDAS</button> <!-- Botão salvar -->
-              <span class="form-feedback" id="b-feedback"></span> <!-- Feedback -->
-            </div> <!-- Fim container -->
-          </div> <!-- Fim form-card -->
+
           <div class="kpi-grid"> <!-- Grade de indicadores de corpo -->
             <div class="kpi g"> <!-- KPI: Peso -->
               <div class="kpi-icon">⚖️</div> <!-- Ícone -->
@@ -772,6 +699,8 @@
                 <input
                   class="form-input"
                   id="sl-wake"
+                  type="time"
+                  value="07:00"
                 /> <!-- Time -->
               </div> <!-- Fim form-group -->
             </div> <!-- Fim form-grid -->
@@ -1004,7 +933,7 @@
 
     <script type="module">
  // Lógica do Dashboard
-      import { onAuthChange, logout } from "./js/auth.js"; // Importa monitor de login
+      import { onAuthChange, logout, getCurrentUser } from "./js/auth.js"; // Importa monitor de login
       import { // Importa funções de banco de dados
         saveWorkoutEntry,
         subscribeWorkouts,
@@ -1091,6 +1020,55 @@
         }
         uid = user.uid;
 
+        // Verifica se é modo demonstração (guest)
+        if (user.isAnonymous) {
+          document.body.classList.add("demo-active");
+          if (!document.getElementById("demoExitBanner")) {
+            const banner = document.createElement("div");
+            banner.id = "demoExitBanner";
+            banner.className = "demo-exit-banner";
+            banner.innerHTML = `
+              <span>🧪 MODO DEMONSTRAÇÃO ATIVO — interaja à vontade, tudo é salvo localmente!</span>
+              <button class="demo-exit-btn" id="demoExitBtn">✕ Sair da Demo</button>
+            `;
+            document.body.prepend(banner);
+            document.getElementById("demoExitBtn").onclick = async () => {
+              await logout();
+            };
+          }
+          // Adiciona badge no topbar
+          const tbTitle = document.querySelector(".topbar-title");
+          if (tbTitle && !tbTitle.querySelector(".demo-badge")) {
+            const badge = document.createElement("span");
+            badge.className = "demo-badge";
+            badge.textContent = "🧪 DEMO";
+            badge.style.marginLeft = "8px";
+            tbTitle.appendChild(badge);
+          }
+          // Customiza botão de logout na topbar
+          const logoutBtn = document.getElementById("dashLogoutBtn");
+          if (logoutBtn) {
+            logoutBtn.innerHTML = "🧪 Sair da Demo";
+            logoutBtn.classList.add("demo-logout-btn");
+            logoutBtn.onclick = async () => {
+              await logout();
+            };
+          }
+        } else {
+          document.body.classList.remove("demo-active");
+          const banner = document.getElementById("demoExitBanner");
+          if (banner) banner.remove();
+          // Configura evento de logout comum
+          const logoutBtn = document.getElementById("dashLogoutBtn");
+          if (logoutBtn) {
+            logoutBtn.innerHTML = "🚪 Sair";
+            logoutBtn.classList.remove("demo-logout-btn");
+            logoutBtn.onclick = async () => {
+              await logout();
+            };
+          }
+        }
+
         // Inscrições em tempo real
         unsubs.push(subscribeProfile(uid, renderProfileUI));
         unsubs.push(subscribeWorkouts(uid, (w) => {
@@ -1098,6 +1076,7 @@
           renderWorkoutsCharts(w);
           renderWorkoutsTable(w);
           renderOverviewKPIs(w);
+          renderOverviewCharts(w);
         }));
         unsubs.push(subscribeBodyMeasurements(uid, renderBodyUI));
         unsubs.push(subscribeCardioRecords(uid, renderCardioUI));
@@ -1115,7 +1094,16 @@
         const xpPct = ((xp % 1000) / 10).toFixed(0);
 
         document.getElementById("profileAv").textContent = initials;
-        document.getElementById("profileName").textContent = name;
+        
+        const nameEl = document.getElementById("profileName");
+        if (nameEl) {
+          nameEl.innerHTML = name;
+          const user = getCurrentUser();
+          if (user && user.isAnonymous) {
+            nameEl.innerHTML = `${name} <span class="demo-badge" style="margin-left: 4px;">DEMO</span>`;
+          }
+        }
+
         document.getElementById("profileLevel").textContent = `NÍVEL ${level} — ${p.level || "INICIANTE"}`;
         document.getElementById("xpLabel").textContent = `${xp} XP`;
         document.getElementById("xpFill").style.width = xpPct + "%";
@@ -1126,11 +1114,24 @@
         if(document.getElementById("p-goal")) document.getElementById("p-goal").value = p.goal || "Hipertrofia";
         if(document.getElementById("p-days")) document.getElementById("p-days").value = p.daysPerWeek || "4 dias";
 
-        // KPIs do perfil
-        document.getElementById("pk-workouts").textContent = p.totalWorkouts || 0;
-        document.getElementById("pk-streak").textContent = p.streak || 0;
-        document.getElementById("pk-xp").textContent = xp;
-        document.getElementById("pk-level").textContent = level;
+        // KPIs do perfil com tratamento seguro contra nulos
+        const pkWorkouts = document.getElementById("pk-workouts");
+        if (pkWorkouts) pkWorkouts.textContent = p.totalWorkouts || 0;
+
+        const pkGoals = document.getElementById("pk-goals");
+        if (pkGoals) pkGoals.textContent = p.goalsCompleted || 0;
+
+        const pkStreak = document.getElementById("pk-streak");
+        if (pkStreak) pkStreak.textContent = p.streak || 0;
+
+        const pkXp = document.getElementById("pk-xp");
+        if (pkXp) pkXp.textContent = xp;
+
+        const pkLevel = document.getElementById("pk-level");
+        if (pkLevel) pkLevel.textContent = level;
+
+        const kpiXp = document.getElementById("kpi-xp");
+        if (kpiXp) kpiXp.textContent = xp.toLocaleString("pt-BR");
       }
 
       // Renderização de KPIs Gerais
@@ -1146,29 +1147,158 @@
         document.getElementById("kpi-volume").textContent = volume >= 1000 ? `${(volume/1000).toFixed(1)}t` : `${volume}kg`;
       }
 
-      // Renderização de KPIs de Treino
-      function renderWorkoutsKPIs(workouts) {
-        document.getElementById("wk-total").textContent = workouts.length;
-        // Adicionar lógica de volume médio se necessário
-      }
-
-      // Renderização de Gráficos de Treino
-      function renderWorkoutsCharts(workouts) {
+      // Renderização de Gráficos Gerais
+      function renderOverviewCharts(workouts) {
         const recent = workouts.slice(0, 10).reverse();
-        mkChart("workoutVolumeChart", {
+        const labels = recent.map(w => formatDate(w.completedAt));
+
+        // Volume de Treino (overviewVolChart)
+        mkChart("overviewVolChart", {
           type: "line",
           data: {
-            labels: recent.map(w => formatDate(w.completedAt)),
+            labels: labels,
             datasets: [{
               label: "Volume (kg)",
               data: recent.map(w => w.volume),
               borderColor: GRN,
               tension: 0.4,
               fill: true,
-              backgroundColor: "rgba(0,255,135,0.1)"
+              backgroundColor: "rgba(0,255,135,0.06)",
+              borderWidth: 2
             }]
           },
           options: baseOpts()
+        });
+
+        // Distribuição Muscular (overviewMuscleChart)
+        const muscleCounts = { Peito: 0, Tríceps: 0, Costas: 0, Bíceps: 0, Pernas: 0, Ombros: 0, Abdômen: 0 };
+        workouts.forEach(w => {
+          const name = w.name.toLowerCase();
+          if (name.includes("peito")) { muscleCounts.Peito += 3; muscleCounts.Tríceps += 2; }
+          if (name.includes("costas")) { muscleCounts.Costas += 3; muscleCounts.Bíceps += 2; }
+          if (name.includes("perna")) { muscleCounts.Pernas += 4; }
+          if (name.includes("ombro")) { muscleCounts.Ombros += 3; muscleCounts.Abdômen += 2; }
+        });
+        if (workouts.length === 0) {
+          muscleCounts.Peito = 1; muscleCounts.Costas = 1; muscleCounts.Pernas = 1;
+        }
+
+        mkChart("overviewMuscleChart", {
+          type: "doughnut",
+          data: {
+            labels: Object.keys(muscleCounts),
+            datasets: [{
+              data: Object.values(muscleCounts),
+              backgroundColor: [GRN, PRP, ORG, BLU, RED, "#FFD166", "#06D6A0"],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "right",
+                labels: { color: TXT, font: { size: 9 }, boxWidth: 10 }
+              }
+            }
+          }
+        });
+      }
+
+      // Renderização de KPIs de Treino
+      function renderWorkoutsKPIs(workouts) {
+        const totalWorkouts = workouts.length;
+        const avgDuration = totalWorkouts ? Math.round(workouts.reduce((s, w) => s + (Number(w.duration) || 0), 0) / totalWorkouts) : 0;
+        const totalCalories = workouts.reduce((s, w) => s + (Number(w.calories) || 0), 0);
+        const totalVolume = workouts.reduce((s, w) => s + (Number(w.volume) || 0), 0);
+
+        const totalEl = document.getElementById("wk-total");
+        if (totalEl) totalEl.textContent = totalWorkouts;
+
+        const avgDurEl = document.getElementById("wk-avgDur");
+        if (avgDurEl) avgDurEl.textContent = avgDuration + " min";
+
+        const totalCalEl = document.getElementById("wk-totalCal");
+        if (totalCalEl) totalCalEl.textContent = totalCalories.toLocaleString("pt-BR") + " kcal";
+
+        const totalVolEl = document.getElementById("wk-totalVol");
+        if (totalVolEl) totalVolEl.textContent = totalVolume >= 1000 ? (totalVolume/1000).toFixed(1) + "t" : totalVolume + " kg";
+      }
+
+      // Renderização de Gráficos de Treino
+      function renderWorkoutsCharts(workouts) {
+        const recent = workouts.slice(0, 10).reverse();
+        const labels = recent.map(w => formatDate(w.completedAt));
+
+        // Volume por Sessão (wVolChart)
+        mkChart("wVolChart", {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Volume (kg)",
+              data: recent.map(w => w.volume),
+              borderColor: GRN,
+              tension: 0.4,
+              fill: true,
+              backgroundColor: "rgba(0,255,135,0.06)",
+              borderWidth: 2
+            }]
+          },
+          options: baseOpts()
+        });
+
+        // Calorias por Sessão (wCalChart)
+        mkChart("wCalChart", {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Calorias (kcal)",
+              data: recent.map(w => w.calories),
+              backgroundColor: ORG,
+              borderRadius: 4
+            }]
+          },
+          options: baseOpts()
+        });
+
+        // Grupos Musculares (wMuscleChart)
+        const muscleCounts = { Peito: 0, Tríceps: 0, Costas: 0, Bíceps: 0, Pernas: 0, Ombros: 0, Abdômen: 0 };
+        workouts.forEach(w => {
+          const name = w.name.toLowerCase();
+          if (name.includes("peito")) { muscleCounts.Peito += 3; muscleCounts.Tríceps += 2; }
+          if (name.includes("costas")) { muscleCounts.Costas += 3; muscleCounts.Bíceps += 2; }
+          if (name.includes("perna")) { muscleCounts.Pernas += 4; }
+          if (name.includes("ombro")) { muscleCounts.Ombros += 3; muscleCounts.Abdômen += 2; }
+        });
+        if (workouts.length === 0) {
+          muscleCounts.Peito = 1; muscleCounts.Costas = 1; muscleCounts.Pernas = 1;
+        }
+
+        mkChart("wMuscleChart", {
+          type: "doughnut",
+          data: {
+            labels: Object.keys(muscleCounts),
+            datasets: [{
+              data: Object.values(muscleCounts),
+              backgroundColor: [GRN, PRP, ORG, BLU, RED, "#FFD166", "#06D6A0"],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "right",
+                labels: { color: TXT, font: { size: 9 }, boxWidth: 10 }
+              }
+            }
+          }
         });
       }
 
@@ -1190,30 +1320,241 @@
       function renderBodyUI(entries) {
         if(!entries.length) return;
         const last = entries[entries.length - 1];
-        document.getElementById("bk-weight").textContent = last.weight + " kg";
-        document.getElementById("bk-fat").textContent = last.fatPct + " %";
-        // Adicionar gráfico de peso
+        
+        const weight = last.weight || 0;
+        const fatPct = last.fatPct || 0;
+        const leanMass = (weight * (1 - fatPct / 100)).toFixed(1);
+        const waist = last.waist || 0;
+
+        document.getElementById("bk-weight").textContent = weight + " kg";
+        document.getElementById("bk-fat").textContent = fatPct + " %";
+        document.getElementById("bk-lean").textContent = leanMass + " kg";
+        document.getElementById("bk-waist").textContent = waist + " cm";
+
+        document.getElementById("bm-waist").textContent = waist || "—";
+        document.getElementById("bm-chest").textContent = last.chest || "—";
+        document.getElementById("bm-biceps").textContent = last.biceps || "—";
+        document.getElementById("bm-thigh").textContent = last.thigh || "—";
+
+        // Gráficos de Corpo
+        const sorted = entries.slice(0, 10);
+        const labels = sorted.map(e => formatDate(e.recordedAt));
+        
+        // Evolução do Peso (weightChart)
+        mkChart("weightChart", {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Peso (kg)",
+              data: sorted.map(e => e.weight),
+              borderColor: BLU,
+              tension: 0.3,
+              fill: true,
+              backgroundColor: "rgba(78,205,196,0.06)",
+              borderWidth: 2
+            }]
+          },
+          options: baseOpts()
+        });
+
+        // Composição Corporal (bodyCompChart)
+        const fatMass = (weight * fatPct / 100).toFixed(1);
+        mkChart("bodyCompChart", {
+          type: "doughnut",
+          data: {
+            labels: ["Massa Magra (kg)", "Massa Gorda (kg)"],
+            datasets: [{
+              data: [leanMass, fatMass],
+              backgroundColor: [GRN, RED],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "bottom",
+                labels: { color: TXT, font: { size: 10 }, boxWidth: 12 }
+              }
+            }
+          }
+        });
       }
 
       // Renderização de Cardio
       function renderCardioUI(entries) {
         const totalDist = entries.reduce((s, e) => s + (Number(e.distance) || 0), 0);
-        document.getElementById("ck-distance").textContent = totalDist.toFixed(1);
-        // Adicionar mais KPIs de cardio
+        const totalDuration = entries.reduce((s, e) => s + (Number(e.duration) || 0), 0);
+        const totalCalories = entries.reduce((s, e) => s + (Number(e.calories) || 0), 0);
+        const avgHr = entries.length ? Math.round(entries.reduce((s, e) => s + (Number(e.avgHr) || 0), 0) / entries.length) : 0;
+
+        document.getElementById("ck-distance").textContent = totalDist.toFixed(1) + " km";
+        document.getElementById("ck-duration").textContent = totalDuration + " min";
+        document.getElementById("ck-calories").textContent = totalCalories.toLocaleString("pt-BR") + " kcal";
+        document.getElementById("ck-avghr").textContent = avgHr ? avgHr + " bpm" : "—";
+
+        // Gráficos de Cardio
+        const sorted = entries.slice(0, 10).reverse();
+        const labels = sorted.map(e => formatDate(e.recordedAt));
+
+        // FC Média (hrChart)
+        mkChart("hrChart", {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "FC Média (bpm)",
+                data: sorted.map(e => e.avgHr),
+                borderColor: RED,
+                tension: 0.3,
+                borderWidth: 2
+              },
+              {
+                label: "FC Máxima (bpm)",
+                data: sorted.map(e => e.maxHr),
+                borderColor: ORG,
+                borderDash: [5, 5],
+                tension: 0.3,
+                borderWidth: 1.5
+              }
+            ]
+          },
+          options: baseOpts(true)
+        });
+
+        // Tipos de Cardio (cardioTypeChart)
+        const typeCounts = {};
+        entries.forEach(e => {
+          if(e.type) typeCounts[e.type] = (typeCounts[e.type] || 0) + 1;
+        });
+        if (!entries.length) typeCounts["Corrida"] = 1;
+
+        mkChart("cardioTypeChart", {
+          type: "bar",
+          data: {
+            labels: Object.keys(typeCounts),
+            datasets: [{
+              label: "Sessões",
+              data: Object.values(typeCounts),
+              backgroundColor: BLU,
+              borderRadius: 4
+            }]
+          },
+          options: baseOpts()
+        });
       }
 
       // Renderização de Sono
       function renderSleepUI(entries) {
         if(!entries.length) return;
-        const avg = (entries.reduce((s, e) => s + (Number(e.hours) || 0), 0) / entries.length).toFixed(1);
-        document.getElementById("sk-avg").textContent = avg;
+        const totalNights = entries.length;
+        const avgHours = (entries.reduce((s, e) => s + (Number(e.hours) || 0), 0) / totalNights).toFixed(1);
+        const avgQual = (entries.reduce((s, e) => s + (Number(e.quality) || 0), 0) / totalNights).toFixed(1);
+        const bestNight = Math.max(...entries.map(e => Number(e.hours) || 0)).toFixed(1);
+
+        document.getElementById("sk-avg").textContent = avgHours + " h";
+        document.getElementById("sk-quality").textContent = avgQual + " / 10";
+        document.getElementById("sk-total").textContent = totalNights;
+        document.getElementById("sk-best").textContent = bestNight + " h";
+
+        // Gráficos de Sono
+        const sorted = entries.slice(0, 10).reverse();
+        const labels = sorted.map(e => formatDate(e.recordedAt));
+
+        // Horas de Sono (sleepChart)
+        mkChart("sleepChart", {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Horas",
+              data: sorted.map(e => e.hours),
+              borderColor: BLU,
+              tension: 0.3,
+              fill: true,
+              backgroundColor: "rgba(78,205,196,0.06)",
+              borderWidth: 2
+            }]
+          },
+          options: baseOpts()
+        });
+
+        // Qualidade do Sono (sleepQualChart)
+        mkChart("sleepQualChart", {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Qualidade (1-10)",
+              data: sorted.map(e => e.quality),
+              backgroundColor: PRP,
+              borderRadius: 4
+            }]
+          },
+          options: baseOpts()
+        });
       }
 
       // Renderização de Nutrição
       function renderNutritionUI(entries) {
         if(!entries.length) return;
         const last = entries[entries.length - 1];
-        document.getElementById("nk-cal").textContent = last.calories;
+        
+        const avgProtein = Math.round(entries.reduce((s, e) => s + (Number(e.protein) || 0), 0) / entries.length);
+        const avgCarbs = Math.round(entries.reduce((s, e) => s + (Number(e.carbs) || 0), 0) / entries.length);
+        const avgWater = Math.round(entries.reduce((s, e) => s + (Number(e.water) || 0), 0) / entries.length);
+
+        document.getElementById("nk-cal").textContent = last.calories + " kcal";
+        document.getElementById("nk-protein").textContent = avgProtein + " g";
+        document.getElementById("nk-carbs").textContent = avgCarbs + " g";
+        document.getElementById("nk-water").textContent = avgWater + " ml";
+
+        // Gráficos de Nutrição
+        const sorted = entries.slice(0, 10).reverse();
+        const labels = sorted.map(e => formatDate(e.recordedAt));
+
+        // Ingestão Calórica (calChart)
+        mkChart("calChart", {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Calorias (kcal)",
+              data: sorted.map(e => e.calories),
+              backgroundColor: ORG,
+              borderRadius: 4
+            }]
+          },
+          options: baseOpts()
+        });
+
+        // Macros (macroChart)
+        mkChart("macroChart", {
+          type: "doughnut",
+          data: {
+            labels: ["Proteínas (g)", "Carboidratos (g)", "Gorduras (g)"],
+            datasets: [{
+              data: [last.protein || 0, last.carbs || 0, last.fats || 0],
+              backgroundColor: [BLU, ORG, PRP],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "right",
+                labels: { color: TXT, font: { size: 9 }, boxWidth: 10 }
+              }
+            }
+          }
+        });
       }
 
       // Renderização de Metas
@@ -1241,30 +1582,299 @@
         }).join("");
       }
 
-      // Handlers de Salvar Dados
+      // Handlers de Salvar Dados (Feedback Visual e Persistência)
+      function showFeedback(elementId, message, type = "ok") {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        el.textContent = message;
+        el.className = `form-feedback show ${type}`;
+        setTimeout(() => {
+          el.classList.remove("show");
+        }, 3000);
+      }
+
+      // Handler do Perfil
       document.getElementById("p-save").onclick = async () => {
-        const data = {
-          name: document.getElementById("p-name").value,
-          level: document.getElementById("p-level").value,
-          goal: document.getElementById("p-goal").value,
-          daysPerWeek: document.getElementById("p-days").value
-        };
         const btn = document.getElementById("p-save");
-        btn.disabled = true;
-        await updateUserProfile(uid, data);
-        btn.disabled = false;
-        alert("Perfil atualizado!");
+        try {
+          const nameVal = document.getElementById("p-name").value.trim();
+          if (!nameVal) {
+            showFeedback("p-feedback", "Por favor, insira seu nome.", "err");
+            return;
+          }
+          const data = {
+            name: nameVal,
+            level: document.getElementById("p-level").value,
+            goal: document.getElementById("p-goal").value,
+            daysPerWeek: document.getElementById("p-days").value
+          };
+          btn.disabled = true;
+          await updateUserProfile(uid, data);
+          showFeedback("p-feedback", "Perfil atualizado com sucesso! ✨", "ok");
+        } catch (e) {
+          console.error(e);
+          showFeedback("p-feedback", "Erro ao salvar perfil.", "err");
+        } finally {
+          btn.disabled = false;
+        }
       };
 
+      // Handler de Treinos
       document.getElementById("w-save").onclick = async () => {
-        const data = {
-          name: document.getElementById("w-name").value,
-          duration: document.getElementById("w-duration").value,
-          volume: document.getElementById("w-volume").value,
-          calories: document.getElementById("w-calories").value
-        };
-        await saveWorkoutEntry(uid, data);
-        alert("Treino salvo!");
+        const btn = document.getElementById("w-save");
+        try {
+          const nameVal = document.getElementById("w-name").value.trim();
+          const durationVal = document.getElementById("w-duration").value;
+          const volumeVal = document.getElementById("w-volume").value;
+          const caloriesVal = document.getElementById("w-calories").value;
+          const muscleVal = document.getElementById("w-muscle").value;
+          const notesVal = document.getElementById("w-notes").value.trim();
+
+          if (!nameVal || !durationVal) {
+            showFeedback("w-feedback", "Nome e Duração são obrigatórios! ⚠️", "err");
+            return;
+          }
+
+          const data = {
+            name: nameVal,
+            duration: Number(durationVal),
+            volume: Number(volumeVal) || 0,
+            calories: Number(caloriesVal) || 0,
+            muscle: muscleVal,
+            notes: notesVal
+          };
+
+          btn.disabled = true;
+          await saveWorkoutEntry(uid, data);
+          
+          // Limpa campos
+          document.getElementById("w-name").value = "";
+          document.getElementById("w-duration").value = "";
+          document.getElementById("w-volume").value = "";
+          document.getElementById("w-calories").value = "";
+          document.getElementById("w-notes").value = "";
+
+          showFeedback("w-feedback", "Treino registrado com sucesso! 🏋️", "ok");
+        } catch (e) {
+          console.error(e);
+          showFeedback("w-feedback", "Erro ao registrar treino.", "err");
+        } finally {
+          btn.disabled = false;
+        }
+      };
+
+      // Handler de Medidas Corporais
+      document.getElementById("b-save").onclick = async () => {
+        const btn = document.getElementById("b-save");
+        try {
+          const weightVal = document.getElementById("b-weight").value;
+          const fatVal = document.getElementById("b-fat").value;
+          const waistVal = document.getElementById("b-waist").value;
+          const chestVal = document.getElementById("b-chest").value;
+          const bicepsVal = document.getElementById("b-biceps").value;
+          const thighVal = document.getElementById("b-thigh").value;
+
+          if (!weightVal) {
+            showFeedback("b-feedback", "O peso é obrigatório! ⚖️", "err");
+            return;
+          }
+
+          const data = {
+            weight: Number(weightVal),
+            fatPct: Number(fatVal) || 0,
+            waist: Number(waistVal) || 0,
+            chest: Number(chestVal) || 0,
+            biceps: Number(bicepsVal) || 0,
+            thigh: Number(thighVal) || 0
+          };
+
+          btn.disabled = true;
+          await saveBodyMeasurement(uid, data);
+
+          // Limpa campos
+          document.getElementById("b-weight").value = "";
+          document.getElementById("b-fat").value = "";
+          document.getElementById("b-waist").value = "";
+          document.getElementById("b-chest").value = "";
+          document.getElementById("b-biceps").value = "";
+          document.getElementById("b-thigh").value = "";
+
+          showFeedback("b-feedback", "Medidas corporais salvas com sucesso! 📈", "ok");
+        } catch (e) {
+          console.error(e);
+          showFeedback("b-feedback", "Erro ao salvar medidas corporais.", "err");
+        } finally {
+          btn.disabled = false;
+        }
+      };
+
+      // Handler de Cardio
+      document.getElementById("c-save").onclick = async () => {
+        const btn = document.getElementById("c-save");
+        try {
+          const typeVal = document.getElementById("c-type").value;
+          const durationVal = document.getElementById("c-duration").value;
+          const caloriesVal = document.getElementById("c-calories").value;
+          const avghrVal = document.getElementById("c-avghr").value;
+          const maxhrVal = document.getElementById("c-maxhr").value;
+          const distanceVal = document.getElementById("c-distance").value;
+
+          if (!durationVal) {
+            showFeedback("c-feedback", "Duração é obrigatória! ⏱️", "err");
+            return;
+          }
+
+          const data = {
+            type: typeVal,
+            duration: Number(durationVal),
+            calories: Number(caloriesVal) || 0,
+            avgHr: Number(avghrVal) || 0,
+            maxHr: Number(maxhrVal) || 0,
+            distance: Number(distanceVal) || 0
+          };
+
+          btn.disabled = true;
+          await saveCardioEntry(uid, data);
+
+          // Limpa campos
+          document.getElementById("c-duration").value = "";
+          document.getElementById("c-calories").value = "";
+          document.getElementById("c-avghr").value = "";
+          document.getElementById("c-maxhr").value = "";
+          document.getElementById("c-distance").value = "";
+
+          showFeedback("c-feedback", "Sessão de cardio salva! ❤️", "ok");
+        } catch (e) {
+          console.error(e);
+          showFeedback("c-feedback", "Erro ao salvar cardio.", "err");
+        } finally {
+          btn.disabled = false;
+        }
+      };
+
+      // Handler de Sono
+      document.getElementById("sl-save").onclick = async () => {
+        const btn = document.getElementById("sl-save");
+        try {
+          const hoursVal = document.getElementById("sl-hours").value;
+          const qualityVal = document.getElementById("sl-quality").value;
+          const bedtimeVal = document.getElementById("sl-bedtime").value;
+          const wakeVal = document.getElementById("sl-wake").value;
+
+          if (!hoursVal) {
+            showFeedback("sl-feedback", "Horas dormidas são obrigatórias! 🌙", "err");
+            return;
+          }
+
+          const data = {
+            hours: Number(hoursVal),
+            quality: Number(qualityVal) || 5,
+            bedtime: bedtimeVal || "23:00",
+            wakeTime: wakeVal || "07:00"
+          };
+
+          btn.disabled = true;
+          await saveSleepEntry(uid, data);
+
+          // Limpa campos
+          document.getElementById("sl-hours").value = "";
+          document.getElementById("sl-quality").value = "";
+
+          showFeedback("sl-feedback", "Qualidade de sono registrada! ✨", "ok");
+        } catch (e) {
+          console.error(e);
+          showFeedback("sl-feedback", "Erro ao salvar registro de sono.", "err");
+        } finally {
+          btn.disabled = false;
+        }
+      };
+
+      // Handler de Nutrição
+      document.getElementById("n-save").onclick = async () => {
+        const btn = document.getElementById("n-save");
+        try {
+          const calVal = document.getElementById("n-cal").value;
+          const proteinVal = document.getElementById("n-protein").value;
+          const carbsVal = document.getElementById("n-carbs").value;
+          const fatsVal = document.getElementById("n-fats").value;
+          const waterVal = document.getElementById("n-water").value;
+
+          if (!calVal) {
+            showFeedback("n-feedback", "Calorias são obrigatórias! 🥗", "err");
+            return;
+          }
+
+          const data = {
+            calories: Number(calVal),
+            protein: Number(proteinVal) || 0,
+            carbs: Number(carbsVal) || 0,
+            fats: Number(fatsVal) || 0,
+            water: Number(waterVal) || 0
+          };
+
+          btn.disabled = true;
+          await saveNutritionEntry(uid, data);
+
+          // Limpa campos
+          document.getElementById("n-cal").value = "";
+          document.getElementById("n-protein").value = "";
+          document.getElementById("n-carbs").value = "";
+          document.getElementById("n-fats").value = "";
+          document.getElementById("n-water").value = "";
+
+          showFeedback("n-feedback", "Consumo nutricional registrado! 🍎", "ok");
+        } catch (e) {
+          console.error(e);
+          showFeedback("n-feedback", "Erro ao salvar nutrição.", "err");
+        } finally {
+          btn.disabled = false;
+        }
+      };
+
+      // Handler de Metas
+      document.getElementById("g-save").onclick = async () => {
+        const btn = document.getElementById("g-save");
+        try {
+          const iconVal = document.getElementById("g-icon").value;
+          const nameVal = document.getElementById("g-name").value.trim();
+          const currentVal = document.getElementById("g-current").value;
+          const targetVal = document.getElementById("g-target").value;
+          const unitVal = document.getElementById("g-unit").value.trim();
+          const deadlineVal = document.getElementById("g-deadline").value;
+
+          if (!nameVal || !targetVal) {
+            showFeedback("g-feedback", "Nome e Alvo são obrigatórios! 🎯", "err");
+            return;
+          }
+
+          const data = {
+            name: nameVal,
+            icon: iconVal,
+            current: Number(currentVal) || 0,
+            target: Number(targetVal),
+            unit: unitVal,
+            deadline: deadlineVal,
+            color: "var(--green)"
+          };
+
+          const newGoalId = "goal_" + Date.now();
+          btn.disabled = true;
+          await saveGoal(uid, newGoalId, data);
+
+          // Limpa campos
+          document.getElementById("g-name").value = "";
+          document.getElementById("g-current").value = "";
+          document.getElementById("g-target").value = "";
+          document.getElementById("g-unit").value = "";
+          document.getElementById("g-deadline").value = "";
+
+          showFeedback("g-feedback", "Nova meta adicionada! 🎯", "ok");
+        } catch (e) {
+          console.error(e);
+          showFeedback("g-feedback", "Erro ao criar meta.", "err");
+        } finally {
+          btn.disabled = false;
+        }
       };
 
       // Handler de Logout

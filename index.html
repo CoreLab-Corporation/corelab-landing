@@ -24,9 +24,9 @@
       rel="stylesheet"
     />
     <!-- Importação das famílias de fontes do projeto -->
-    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/global.css?v=1.0.2" />
     <!-- Estilos base e variáveis globais -->
-    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/index.css?v=1.0.2" />
     <!-- Estilos específicos da Landing Page -->
   </head>
   <!-- Fim do head -->
@@ -66,6 +66,11 @@
         </div>
         <!-- Fim lang-pill -->
         <button class="icon-btn" id="themeBtn">🌙</button>
+        <button class="icon-btn" id="demoBtn">
+          <span class="demo-icon">🧪</span>
+          <span class="demo-label">Demo</span>
+          <span class="demo-spinner"></span>
+        </button>
         <!-- Botão para alternar entre temas claro/escuro -->
         <button class="icon-btn" id="loginBtn">
           <!-- Botão de perfil/login -->
@@ -84,6 +89,7 @@
           </svg>
           <!-- Fim do SVG -->
           <div class="avatar-inner" id="avatarEl"></div>
+          <span id="demoBadge" class="demo-badge"></span>
           <!-- Área onde a foto do usuário ou iniciais aparecem após login -->
         </button>
         <!-- Fim loginBtn -->
@@ -999,7 +1005,7 @@
     </footer>
     <!-- Fim footer -->
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/main.js?v=1.0.2"></script>
     <!-- Script principal modularizado -->
   </body>
 </html>

@@ -145,3 +145,90 @@ textarea {
 .cursor-pointer {
   cursor: pointer; /* Altera cursor */
 }
+
+/* ==================================================== 
+   DEMO MODE GLOBAL STYLES
+==================================================== */
+.demo-exit-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 32px;
+  background: linear-gradient(135deg, rgba(155, 93, 229, 0.95), rgba(78, 205, 196, 0.95));
+  backdrop-filter: blur(10px);
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  transform: translateY(-100%);
+  animation: demoBarSlideIn 0.5s var(--ease) forwards;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.demo-exit-banner .demo-exit-btn {
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  padding: 2px 12px;
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.demo-exit-banner .demo-exit-btn:hover {
+  background: rgba(0,0,0,0.6);
+  border-color: #fff;
+  transform: scale(1.05);
+}
+@keyframes demoBarSlideIn {
+  to { transform: translateY(0); }
+}
+
+/* Push down sticky/fixed elements when demo banner is active */
+body.demo-active {
+  padding-top: 32px !important;
+}
+body.demo-active #nav {
+  top: 32px !important;
+}
+body.demo-active .topbar {
+  top: 32px !important;
+}
+body.demo-active .sidebar {
+  top: calc(64px + 32px) !important;
+  height: calc(100vh - 64px - 32px) !important;
+}
+body.demo-active .dash-wrap {
+  min-height: calc(100vh - 64px - 32px) !important;
+}
+
+/* Demo badge design */
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: #fff;
+  font-family: "Space Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 10px rgba(155, 93, 229, 0.4);
+  animation: pulseDemo 2s infinite ease-in-out;
+}
+@keyframes pulseDemo {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.96); }
+}
+

@@ -6,6 +6,8 @@ import {
   registerWithEmail, // Método para criar novos usuários
   loginWithEmail, // Método para login convencional
   loginWithGoogle, // Método para login social
+  loginAsGuest, // Método para login como convidado
+  isGuest, // Verifica se o usuário é convidado
   logout, // Método para encerrar sessão
   resetPassword, // Método para recuperação de senha
   onAuthChange, // Observador de estado de autenticação
@@ -532,16 +534,19 @@ function createUserMenu(user) {
     document.body.appendChild(menu); // Anexa ao final do body para evitar conflitos de z-index
   } // Fim do if menu
 
+  // Gera as iniciais do nome para o avatar
+  const initials = (user.name || user.email || "U")
+    .split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase();
+
   menu.innerHTML = `
-    <div class="user-menu-header">
-      <div class="user-menu-name">${user.name || "Usuário"}</div>
-      <div class="user-menu-email">${user.email}</div>
-    </div>
-    <a href="dashboard.html"  class="user-menu-item"><span class="user-menu-icon">📊</span>Meu Dashboard</a>
-    <a href="chatbot.html"    class="user-menu-item"><span class="user-menu-icon">🤖</span>Coach IA</a>
-    <a href="comunidade.html" class="user-menu-item"><span class="user-menu-icon">🏆</span>Comunidade</a>
-    <div class="user-menu-item" id="switchAccountBtn"><span class="user-menu-icon">🔄</span>Trocar conta</div>
-    <div class="user-menu-item danger" id="logoutBtn"><span class="user-menu-icon">🚪</span>Sair</div>`;
+    <div class="user-menu-avatar" id="userAvatar">${initials}<span class="user-menu-tooltip">${user.name || user.email}</span></div>
+    <div class="user-menu-divider"></div>
+    <a href="dashboard.html"  class="user-menu-item"><span class="user-menu-icon">📊</span><span class="user-menu-tooltip">Meu Dashboard</span></a>
+    <a href="chatbot.html"    class="user-menu-item"><span class="user-menu-icon">🤖</span><span class="user-menu-tooltip">Coach IA</span></a>
+    <a href="comunidade.html" class="user-menu-item"><span class="user-menu-icon">🏆</span><span class="user-menu-tooltip">Comunidade</span></a>
+    <div class="user-menu-divider"></div>
+    <div class="user-menu-item" id="switchAccountBtn"><span class="user-menu-icon">🔄</span><span class="user-menu-tooltip">Trocar conta</span></div>
+    <div class="user-menu-item danger" id="logoutBtn"><span class="user-menu-icon">🚪</span><span class="user-menu-tooltip">Sair</span></div>`;
 
 
   document.getElementById("logoutBtn").onclick = async () => {
@@ -583,6 +588,66 @@ document.addEventListener("click", (e) => {
   } // Fim do if clique fora
 }); // Fim do listener click outside
 
+/* ==================================================== // Início da seção do Botão Demo
+   DEMO BUTTON — Login como convidado para explorar o app
+==================================================== */ // Fim do cabeçalho da seção
+const demoBtn = document.getElementById("demoBtn"); // Referência ao botão Demo
+const demoBadge = document.getElementById("demoBadge"); // Referência ao badge 🧪
+
+demoBtn.onclick = async () => {
+  // Clique no botão Demo — inicia sessão anônima
+  demoBtn.classList.add("loading"); // Mostra spinner de carregamento
+  const result = await loginAsGuest(); // Tenta login anônimo no Firebase
+  demoBtn.classList.remove("loading"); // Remove spinner
+
+  if (result.success) {
+    // Sucesso: mostra animação de boas-vindas
+    closeLogin(); // Fecha modal de login se estiver aberto
+    await showSuccessOverlay(
+      "🧪",
+      "MODO DEMO ATIVADO!",
+      "Explore todas as funcionalidades com dados de demonstração.",
+      2200,
+    );
+  } else {
+    // Falha: mostra erro para o usuário
+    console.error("Erro no login demo:", result.error);
+    showAlert(result.error || "Erro ao iniciar demo. Tente novamente.");
+  } // Fim do if sucesso demo
+}; // Fim do evento demoBtn
+
+/** Cria/remove o banner fixo no topo para sair do modo demo */
+function showDemoExitBanner() {
+  // Verifica se já existe um banner
+  if (document.getElementById("demoExitBanner")) return;
+  const banner = document.createElement("div"); // Cria o banner
+  banner.id = "demoExitBanner"; // ID para referência
+  banner.className = "demo-exit-banner"; // Classe CSS
+  banner.innerHTML = `
+    <span>🧪 MODO DEMONSTRAÇÃO ATIVO — interaja à vontade, tudo é salvo localmente!</span>
+    <button class="demo-exit-btn" id="demoExitBtn">✕ Sair da Demo</button>
+  `; // Conteúdo do banner
+  document.body.prepend(banner); // Insere no início do body
+  document.body.classList.add("demo-active"); // Adiciona classe ao body
+
+  document.getElementById("demoExitBtn").onclick = async () => {
+    // Botão para sair do modo demo
+    await logout(); // Encerra sessão anônima
+  }; // Fim do evento sair demo
+} // Fim da função showDemoExitBanner
+
+function removeDemoExitBanner() {
+  // Remove o banner de demo do DOM
+  const banner = document.getElementById("demoExitBanner");
+  if (banner) {
+    banner.style.animation = "none"; // Para animação
+    banner.style.transform = "translateY(-100%)"; // Esconde com transição
+    banner.style.transition = "transform 0.3s ease";
+    setTimeout(() => banner.remove(), 300); // Remove após transição
+  }
+  document.body.classList.remove("demo-active"); // Remove classe do body
+} // Fim da função removeDemoExitBanner
+
 /* ==================================================== // Início da seção de Observador de Autenticação
    AUTH STATE OBSERVER // Reação às mudanças de login/logout no Firebase
 ==================================================== */ // Fim do cabeçalho da seção
@@ -590,23 +655,54 @@ onAuthChange(async (user) => {
   // Escuta mudanças globais de estado (logado/deslogado)
   if (user) {
     // Se um objeto user for retornado (usuário logado)
-    loginBtn.classList.add("logged"); // Muda visual do botão de login
-    document.getElementById("avatarEl").textContent = // Define o avatar visual
-      (user.displayName || user.email) // Usa nome ou email se nome faltar
-        // Converte string
-        .substring(0, 2) // Pega as duas primeiras letras
-        .toUpperCase(); // Deixa em caixa alta
+    const guest = isGuest(user); // Verifica se é sessão anônima (demo)
 
-    const profile = await getUserProfile(user.uid); // Busca dados adicionais no Firestore
-    createUserMenu({
-      // Inicializa o menu de usuário com dados frescos
-      name: profile?.name || user.displayName || "", // Nome do perfil ou auth
-      email: user.email, // Email fixo
-    }); // Fim da criação do menu
-    closeLogin(); // Garante que o modal de login seja fechado após sucesso
+    if (guest) {
+      // — MODO DEMO — Sessão anônima
+      loginBtn.classList.add("demo-mode"); // Visual roxo/azul no avatar
+      loginBtn.classList.remove("logged"); // Não usar estilo verde de logado
+      document.getElementById("avatarEl").textContent = "🧪"; // Ícone demo no avatar
+      demoBadge.textContent = "DEMO"; // Texto do badge
+      demoBadge.classList.add("visible"); // Mostra o badge
+      demoBtn.classList.add("d-none-demo"); // Esconde o botão demo (já está em demo)
+      showDemoExitBanner(); // Mostra banner de saída no topo
+
+      // Menu do usuário com opções limitadas para demo
+      createUserMenu({
+        name: "Demo User",
+        email: "Modo Demonstração",
+        isDemo: true,
+      }); // Fim da criação do menu demo
+      closeLogin(); // Fecha modal se aberto
+    } else {
+      // — MODO NORMAL — Usuário autenticado
+      loginBtn.classList.add("logged"); // Muda visual do botão de login
+      loginBtn.classList.remove("demo-mode"); // Remove estilo demo
+      demoBadge.classList.remove("visible"); // Esconde badge demo
+      demoBadge.textContent = ""; // Limpa texto do badge
+      demoBtn.classList.add("d-none-demo"); // Esconde botão demo (logado de verdade)
+      removeDemoExitBanner(); // Remove banner demo se existir
+
+      document.getElementById("avatarEl").textContent = // Define o avatar visual
+        (user.displayName || user.email || "U") // Usa nome ou email
+          .substring(0, 2) // Pega as duas primeiras letras
+          .toUpperCase(); // Deixa em caixa alta
+
+      const profile = await getUserProfile(user.uid); // Busca dados adicionais no Firestore
+      createUserMenu({
+        name: profile?.name || user.displayName || "", // Nome do perfil ou auth
+        email: user.email, // Email fixo
+      }); // Fim da criação do menu
+      closeLogin(); // Garante que o modal de login seja fechado após sucesso
+    } // Fim do if guest/normal
   } else {
     // Se o usuário deslogar (user === null)
     loginBtn.classList.remove("logged"); // Remove estilo de logado
+    loginBtn.classList.remove("demo-mode"); // Remove estilo demo
+    demoBadge.classList.remove("visible"); // Esconde badge
+    demoBadge.textContent = ""; // Limpa badge
+    demoBtn.classList.remove("d-none-demo"); // Mostra botão demo novamente
+    removeDemoExitBanner(); // Remove banner demo
     document.getElementById("avatarEl").textContent = ""; // Limpa o avatar
     const menu = document.getElementById("userMenu"); // Busca o menu no DOM
     if (menu) menu.remove(); // Remove o menu do DOM completamente

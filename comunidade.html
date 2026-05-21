@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <!-- Comentário: Declaração do tipo de documento -->
 <html lang="pt-BR" data-theme="dark">
   <!-- Comentário: Início do HTML com tema escuro -->
@@ -15,9 +15,9 @@
       rel="stylesheet"
     />
     <!-- Fontes -->
-    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/global.css?v=1.0.2" />
     <!-- Estilos globais -->
-    <link rel="stylesheet" href="css/comunidade.css" />
+    <link rel="stylesheet" href="css/comunidade.css?v=1.0.2" />
     <!-- Estilos específicos da comunidade -->
   </head>
   <body>
@@ -720,7 +720,7 @@
 
     <script type="module">
       // Comentário: Lógica da Comunidade
-      import { onAuthChange } from "./js/auth.js"; // Importa monitor de login
+      import { onAuthChange, logout } from "./js/auth.js"; // Importa monitor de login
       import {
         // Importa funções de banco de dados
         createPost as fbCreatePost,
@@ -756,6 +756,39 @@
           return;
         }
         currentUser = user;
+
+        // Se for demo (guest), mostra banner de saída da demo
+        if (user.isAnonymous) {
+          document.body.classList.add("demo-active");
+          if (!document.getElementById("demoExitBanner")) {
+            const banner = document.createElement("div");
+            banner.id = "demoExitBanner";
+            banner.className = "demo-exit-banner";
+            banner.innerHTML = `
+              <span>🧪 MODO DEMONSTRAÇÃO ATIVO — interaja à vontade, tudo é salvo localmente!</span>
+              <button class="demo-exit-btn" id="demoExitBtn">✕ Sair da Demo</button>
+            `;
+            document.body.prepend(banner);
+            document.getElementById("demoExitBtn").onclick = async () => {
+              await logout();
+            };
+          }
+          // Adiciona badge no topbar da Comunidade
+          const logoEl = document.querySelector(".topbar-logo");
+          if (logoEl && !document.getElementById("commDemoBadge")) {
+            const badge = document.createElement("span");
+            badge.id = "commDemoBadge";
+            badge.className = "demo-badge";
+            badge.textContent = "🧪 DEMO";
+            badge.style.marginLeft = "8px";
+            logoEl.parentNode.insertBefore(badge, logoEl.nextSibling);
+          }
+        } else {
+          document.body.classList.remove("demo-active");
+          const banner = document.getElementById("demoExitBanner");
+          if (banner) banner.remove();
+        }
+
         currentProfile = await getUserProfile(user.uid); // Busca perfil
         updateAvatar(); // Atualiza iniciais na tela
         updateLeaderboard(); // Atualiza linha do usuário no ranking

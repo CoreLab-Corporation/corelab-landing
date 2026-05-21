@@ -15,9 +15,9 @@
       rel="stylesheet"
     />
     <!-- Comentário: Fontes externas (Google Fonts) -->
-    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/global.css?v=1.0.2" />
     <!-- Comentário: Estilos globais -->
-    <link rel="stylesheet" href="css/chatbot.css" />
+    <link rel="stylesheet" href="css/chatbot.css?v=1.0.2" />
     <!-- Comentário: Estilos específicos do chatbot -->
   </head>
   <!-- Comentário: Fim do head -->
@@ -234,7 +234,7 @@
 
     <script type="module">
       // Comentário: Lógica do Chatbot
-      import { onAuthChange } from "./js/auth.js"; // Importa monitor de login
+      import { onAuthChange, logout } from "./js/auth.js"; // Importa monitor de login
       import {
         getUserProfile,
         getChatHistory,
@@ -253,6 +253,39 @@
           return;
         }
         currentUser = user;
+
+        // Se for demo (guest), mostra banner de saída da demo
+        if (user.isAnonymous) {
+          document.body.classList.add("demo-active");
+          if (!document.getElementById("demoExitBanner")) {
+            const banner = document.createElement("div");
+            banner.id = "demoExitBanner";
+            banner.className = "demo-exit-banner";
+            banner.innerHTML = `
+              <span>🧪 MODO DEMONSTRAÇÃO ATIVO — interaja à vontade, tudo é salvo localmente!</span>
+              <button class="demo-exit-btn" id="demoExitBtn">✕ Sair da Demo</button>
+            `;
+            document.body.prepend(banner);
+            document.getElementById("demoExitBtn").onclick = async () => {
+              await logout();
+            };
+          }
+          // Adiciona badge no topbar do chatbot
+          const aiBadge = document.querySelector(".ai-badge");
+          if (aiBadge && !document.getElementById("chatbotDemoBadge")) {
+            const badge = document.createElement("span");
+            badge.id = "chatbotDemoBadge";
+            badge.className = "demo-badge";
+            badge.textContent = "🧪 DEMO";
+            badge.style.marginLeft = "8px";
+            aiBadge.parentNode.insertBefore(badge, aiBadge.nextSibling);
+          }
+        } else {
+          document.body.classList.remove("demo-active");
+          const banner = document.getElementById("demoExitBanner");
+          if (banner) banner.remove();
+        }
+
         const profile = await getUserProfile(user.uid); // Busca perfil
         if (profile) {
           // Sincroniza campos da sidebar com o perfil real
