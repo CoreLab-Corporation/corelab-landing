@@ -1,0 +1,234 @@
+/* ==================================================== 
+   VARIABLES 
+   Definição de tokens de design (cores, espaçamentos, animações)
+==================================================== */
+:root {
+  /* Seletor da raiz do documento para variáveis globais */
+  --green: #00ff87; /* Verde neon principal (marca) */
+  --green2: #00cc6a; /* Verde escuro para estados de hover */
+  --red: #ff3b5c; /* Vermelho para alertas e erros */
+  --orange: #ff8c42; /* Laranja para avisos ou destaque secundário */
+  --blue: #4ecdc4; /* Azul turquesa para elementos informativos */
+  --purple: #9b5de5; /* Roxo para elementos de design premium */
+  --gold: #ffd700; /* Dourado para badges e planos VIP */
+  --bg: #080808; /* Cor de fundo principal (quase preto) */
+  --bg2: #0f0f0f; /* Cor de fundo secundária para contraste */
+  --bg3: #161616; /* Terceira camada de fundo para profundidade */
+  --surf: #1a1a1a; /* Cor de superfície para cards e modais */
+  --border: rgba(
+    255,
+    255,
+    255,
+    0.07
+  ); /* Cor de borda sutil e semi-transparente */
+  --text: #f0f0f0; /* Cor principal do texto (branco acinzedado) */
+  --text2: #888; /* Cor secundária para textos de suporte */
+  --text3: #444; /* Cor terciária para placeholders e desativados */
+  --nav: 72px; /* Altura padrão da barra de navegação */
+  --ease: cubic-bezier(
+    0.16,
+    1,
+    0.3,
+    1
+  ); /* Curva de animação suave (suave no final) */
+}
+
+[data-theme="light"] {
+  /* Variáveis sobrescritas para o modo claro */
+  --bg: #f5f5f0; /* Fundo principal claro */
+  --bg2: #ebebeb; /* Fundo secundário claro */
+  --bg3: #e0e0e0; /* Terceira camada clara */
+  --surf: #fff; /* Superfície branca pura */
+  --border: rgba(0, 0, 0, 0.08); /* Borda escura sutil para modo claro */
+  --text: #0a0a0a; /* Texto preto para leitura */
+  --text2: #555; /* Texto cinza escuro de suporte */
+  --text3: #aaa; /* Texto cinza claro para detalhes */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* Define o cálculo de largura incluindo padding e borda */
+  margin: 0; /* Remove margens padrão do navegador */
+  padding: 0; /* Remove preenchimentos padrão do navegador */
+}
+
+html {
+  scroll-behavior: smooth; /* Habilita rolagem suave em links internos */
+}
+
+body {
+  font-family: "DM Sans", sans-serif; /* Define a fonte principal do projeto */
+  background: var(--bg); /* Aplica a cor de fundo variável */
+  color: var(--text); /* Aplica a cor de texto variável */
+  overflow-x: hidden; /* Impede o surgimento de barra de rolagem horizontal indesejada */
+  transition:
+    background 0.4s,
+    color 0.4s; /* Transição suave entre estados */
+  min-height: 100vh; /* Garante que o corpo ocupe toda a altura da tela */
+}
+
+a {
+  text-decoration: none; /* Remove o sublinhado padrão */
+  color: inherit; /* Herda a cor do elemento pai */
+}
+
+button {
+  cursor: pointer; /* Altera o cursor para mãozinha */
+  border: none; /* Remove bordas padrão */
+  background: none; /* Remove fundo padrão */
+  font-family: inherit; /* Garante que use a mesma fonte do body */
+}
+
+input,
+select,
+textarea {
+  font-family:
+    "DM Sans", sans-serif; /* Força o uso da fonte correta nestes elementos */
+}
+
+::-webkit-scrollbar {
+  width: 4px; /* Largura fina da barra */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--green); /* Cor neon para destaque */
+  border-radius: 2px; /* Cantos arredondados */
+}
+
+/* ==================================================== 
+   GLOBAL UTILITIES 
+   Classes auxiliares reutilizáveis em todo o projeto
+==================================================== */
+.d-none {
+  display: none !important; /* Força a ocultação total */
+}
+
+.text-center {
+  text-align: center; /* Alinhamento central */
+}
+
+.flex-center {
+  display: flex; /* Ativa o modelo flex */
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+}
+
+.mt-12 {
+  margin-top: 12px; /* 12 pixels de margem */
+}
+
+.mt-16 {
+  margin-top: 16px; /* 16 pixels de margem */
+}
+
+.mb-0 {
+  margin-bottom: 0 !important; /* Força margem zero */
+}
+
+.mb-28 {
+  margin-bottom: 28px; /* 28 pixels de margem */
+}
+
+.text-green {
+  color: var(--green); /* Aplica variável verde */
+}
+
+.text-gold {
+  color: var(--gold); /* Aplica variável dourada */
+}
+
+.text-red {
+  color: var(--red); /* Aplica variável vermelha */
+}
+
+.cursor-pointer {
+  cursor: pointer; /* Altera cursor */
+}
+
+/* ==================================================== 
+   DEMO MODE GLOBAL STYLES
+==================================================== */
+.demo-exit-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 32px;
+  background: linear-gradient(135deg, rgba(155, 93, 229, 0.95), rgba(78, 205, 196, 0.95));
+  backdrop-filter: blur(10px);
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fff;
+  transform: translateY(-100%);
+  animation: demoBarSlideIn 0.5s var(--ease) forwards;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+.demo-exit-banner .demo-exit-btn {
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  padding: 2px 12px;
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.demo-exit-banner .demo-exit-btn:hover {
+  background: rgba(0,0,0,0.6);
+  border-color: #fff;
+  transform: scale(1.05);
+}
+@keyframes demoBarSlideIn {
+  to { transform: translateY(0); }
+}
+
+/* Push down sticky/fixed elements when demo banner is active */
+body.demo-active {
+  padding-top: 32px !important;
+}
+body.demo-active #nav {
+  top: 32px !important;
+}
+body.demo-active .topbar {
+  top: 32px !important;
+}
+body.demo-active .sidebar {
+  top: calc(64px + 32px) !important;
+  height: calc(100vh - 64px - 32px) !important;
+}
+body.demo-active .dash-wrap {
+  min-height: calc(100vh - 64px - 32px) !important;
+}
+
+/* Demo badge design */
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: #fff;
+  font-family: "Space Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 10px rgba(155, 93, 229, 0.4);
+  animation: pulseDemo 2s infinite ease-in-out;
+}
+@keyframes pulseDemo {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.96); }
+}
+

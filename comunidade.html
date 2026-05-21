@@ -1,0 +1,1158 @@
+<!doctype html>
+<!-- Comentário: Declaração do tipo de documento -->
+<html lang="pt-BR" data-theme="dark">
+  <!-- Comentário: Início do HTML com tema escuro -->
+  <head>
+    <!-- Comentário: Cabeçalho -->
+    <meta charset="UTF-8" />
+    <!-- Codificação -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!-- Responsividade -->
+    <title>CoreLab — Comunidade Elite</title>
+    <!-- Título -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Fontes -->
+    <link rel="stylesheet" href="css/global.css?v=1.0.2" />
+    <!-- Estilos globais -->
+    <link rel="stylesheet" href="css/comunidade.css?v=1.0.2" />
+    <!-- Estilos específicos da comunidade -->
+  </head>
+  <body>
+    <div class="topbar">
+      <!-- Comentário: Barra superior -->
+      <div class="topbar-logo">CORE<span>LAB</span></div>
+      <!-- Logo -->
+      <div class="topbar-space"></div>
+      <!-- Espaçador -->
+      <button class="topbar-btn green" id="createCommBtn">
+        <!-- Botão criar comunidade -->
+        + Nova Comunidade
+      </button>
+      <button class="theme-btn" id="themeBtn">🌙</button>
+      <!-- Alternador de tema -->
+      <a href="index.html" class="topbar-btn">← Voltar</a>
+      <!-- Link voltar -->
+    </div>
+
+    <div class="tabs">
+      <!-- Comentário: Navegação por abas -->
+      <div class="tab active" data-tab="feed">🏠 Feed</div>
+      <!-- Aba Feed -->
+      <div class="tab" data-tab="communities">🌐 Comunidades</div>
+      <!-- Aba Comunidades -->
+      <div class="tab" data-tab="challenges">🏆 Desafios</div>
+      <!-- Aba Desafios -->
+      <div class="tab" data-tab="leaderboard">📊 Ranking</div>
+      <!-- Aba Ranking -->
+    </div>
+
+    <div class="comm-wrap">
+      <!-- Comentário: Container do conteúdo das abas -->
+      <div class="feed">
+        <!-- Container do feed -->
+        <!-- FEED TAB -->
+        <!-- Comentário: Seção da aba Feed -->
+        <div class="tab-content active" id="tab-feed">
+          <!-- Conteúdo ativo do feed -->
+          <div class="create-post">
+            <!-- Caixa de criação de postagem -->
+            <div class="create-row">
+              <!-- Linha superior da criação -->
+              <div class="user-av av-you" id="myAvatar">?</div>
+              <!-- Avatar do usuário logado -->
+              <input
+                class="create-input"
+                type="text"
+                id="postInput"
+                placeholder="Compartilhe seu treino, conquista ou motivação..."
+              />
+              <!-- Campo de entrada -->
+            </div>
+            <div class="create-actions">
+              <!-- Botões de tipo de postagem -->
+              <button class="create-act" onclick="setPostType('🏋️ Treino')">
+                🏋️ Treino
+                <!-- Treino -->
+              </button>
+              <button class="create-act" onclick="setPostType('📸 Foto')">
+                📸 Foto
+                <!-- Foto -->
+              </button>
+              <button class="create-act" onclick="setPostType('🏆 Conquista')">
+                🏆 Conquista
+                <!-- Conquista -->
+              </button>
+              <button class="create-act" onclick="setPostType('📊 PR')">
+                📊 PR
+                <!-- Recorde Pessoal -->
+              </button>
+              <button
+                class="post-submit"
+                id="publishBtn"
+                onclick="doCreatePost()"
+              >
+                Publicar
+                <!-- Botão publicar -->
+              </button>
+            </div>
+          </div>
+          <div id="posts-container">
+            <!-- Grade de postagens -->
+            <div class="post">
+              <!-- Exemplo de postagem estática 1 -->
+              <div class="post-header">
+                <!-- Cabeçalho do post -->
+                <div class="post-av av-1">RJ</div>
+                <!-- Iniciais -->
+                <div class="post-meta">
+                  <!-- Meta dados do post -->
+                  <div class="post-name">
+                    Rafael Júnior <span class="post-badge">PRO</span>
+                    <!-- Nome e badge -->
+                  </div>
+                  <div class="post-time">há 12 minutos</div>
+                  <!-- Tempo -->
+                </div>
+              </div>
+              <div class="post-text">
+                <!-- Texto do post -->
+                🔥 <strong>NOVO RECORDE PESSOAL!</strong> Supino plano — 160kg x
+                3 repetições! 6 meses atrás nem conseguia 120kg. O processo
+                nunca mente. 💪
+              </div>
+              <div class="post-actions">
+                <!-- Ações (like/comentar) -->
+                <div class="post-action" onclick="toggleLikeStatic(this)">
+                  <!-- Curtir -->
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                    />
+                  </svg>
+                  <span>247</span>
+                </div>
+                <div class="post-action">
+                  <!-- Comentar -->
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                    /></svg
+                  ><span>32</span>
+                </div>
+              </div>
+            </div>
+            <div class="post">
+              <!-- Exemplo de postagem estática 2 -->
+              <div class="post-header">
+                <div class="post-av av-2">MC</div>
+                <div class="post-meta">
+                  <div class="post-name">
+                    Marina Costa <span class="post-badge">ELITE</span>
+                  </div>
+                  <div class="post-time">há 1 hora</div>
+                </div>
+              </div>
+              <div class="post-text">
+                Completei o <strong>Desafio 30 Dias HIIT</strong>! 🎯 -4.2kg em
+                30 dias e ainda ganhei músculo. A ciência funciona! 🙌
+              </div>
+              <div class="post-actions">
+                <div class="post-action liked" onclick="toggleLikeStatic(this)">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                    />
+                  </svg>
+                  <span>412</span>
+                </div>
+                <div class="post-action">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                    /></svg
+                  ><span>87</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMMUNITIES TAB -->
+        <!-- Comentário: Seção da aba Comunidades -->
+        <div class="tab-content" id="tab-communities">
+          <!-- Listagem de comunidades -->
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 20px;
+              flex-wrap: wrap;
+              gap: 10px;
+            "
+          >
+            <div class="comm-section-title" style="margin-bottom: 0">
+              🌐 Comunidades
+              <!-- Título -->
+            </div>
+            <button class="topbar-btn green" onclick="openCreateComm()">
+              + Criar nova
+              <!-- Botão abrir modal -->
+            </button>
+          </div>
+          <div id="myCommSection" style="margin-bottom: 28px">
+            <!-- Comunidades do usuário -->
+            <div
+              style="
+                font-family: &quot;Space Mono&quot;, monospace;
+                font-size: 9px;
+                letter-spacing: 0.3em;
+                text-transform: uppercase;
+                color: var(--text3);
+                margin-bottom: 12px;
+              "
+            >
+              Minhas Comunidades
+              <!-- Rótulo -->
+            </div>
+            <div id="myCommList">
+              <!-- Preenchido via JS -->
+              <div class="empty-comm">
+                <!-- Estado vazio -->
+                <div class="empty-comm-icon">🌐</div>
+                <div class="empty-comm-title">NENHUMA COMUNIDADE</div>
+                <div class="empty-comm-sub">
+                  Crie ou entre em uma comunidade para começar
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              style="
+                font-family: &quot;Space Mono&quot;, monospace;
+                font-size: 9px;
+                letter-spacing: 0.3em;
+                text-transform: uppercase;
+                color: var(--text3);
+                margin-bottom: 12px;
+              "
+            >
+              Descobrir Comunidades
+              <!-- Rótulo descobrir -->
+            </div>
+            <div id="allCommList">
+              <!-- Preenchido via JS -->
+              <div class="empty-comm">
+                <!-- Estado carregando -->
+                <div class="empty-comm-icon">🔍</div>
+                <div class="empty-comm-title">CARREGANDO...</div>
+                <div class="empty-comm-sub">
+                  Buscando comunidades disponíveis
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHALLENGES TAB -->
+        <!-- Comentário: Seção da aba Desafios -->
+        <div class="tab-content" id="tab-challenges">
+          <!-- Listagem de desafios ativos -->
+          <div class="challenge fire">
+            <!-- Desafio 1 -->
+            <div class="ch-header">
+              <!-- Cabeçalho do desafio -->
+              <div class="ch-icon icon-fire">🔥</div>
+              <!-- Ícone -->
+              <div class="ch-meta">
+                <!-- Informações -->
+                <div class="ch-name">Desafio 30 Dias HIIT</div>
+                <div class="ch-creator">Por @CoreLab_Official</div>
+              </div>
+              <div class="ch-prize">
+                <!-- Prêmio -->
+                <div class="ch-prize-val">🏅 PRO</div>
+                <div class="ch-prize-label">Badge exclusivo</div>
+              </div>
+            </div>
+            <div class="ch-desc">
+              <!-- Descrição -->
+              Complete 30 sessões de HIIT em 30 dias consecutivos. Mínimo de 20
+              minutos por sessão.
+            </div>
+            <div class="ch-stats">
+              <!-- Estatísticas -->
+              <div class="ch-stat">👥 2.847 participantes</div>
+              <div class="ch-stat">📅 18 dias restantes</div>
+              <div class="ch-stat">⭐ 4.9</div>
+            </div>
+            <div class="ch-prog-header">
+              <!-- Header do progresso -->
+              <span>Seu progresso</span><span>14/30 dias</span>
+            </div>
+            <div class="ch-prog-bar">
+              <!-- Barra de progresso -->
+              <div
+                class="ch-prog-fill"
+                style="
+                  width: 47%;
+                  background: linear-gradient(90deg, var(--red), var(--orange));
+                "
+              ></div>
+            </div>
+            <div class="ch-footer">
+              <!-- Rodapé com botão participar -->
+              <div class="ch-join joined" onclick="toggleJoin(this)">
+                ✓ Participando
+              </div>
+              <div class="ch-share">↗</div>
+            </div>
+          </div>
+          <div class="challenge crown">
+            <!-- Desafio 2 -->
+            <div class="ch-header">
+              <div class="ch-icon icon-crown">👑</div>
+              <div class="ch-meta">
+                <div class="ch-name">Battleground: Força Máxima</div>
+                <div class="ch-creator">Por @PowerHouse_BR</div>
+              </div>
+              <div class="ch-prize">
+                <div class="ch-prize-val" style="color: var(--gold)">R$500</div>
+                <div class="ch-prize-label">Créditos CoreLab</div>
+              </div>
+            </div>
+            <div class="ch-desc">
+              Quem aumentar mais o 1RM total em 8 semanas vence. Comprovação via
+              vídeo obrigatória.
+            </div>
+            <div class="ch-stats">
+              <div class="ch-stat">👥 428 participantes</div>
+              <div class="ch-stat">📅 34 dias restantes</div>
+              <div class="ch-stat">⭐ 4.7</div>
+            </div>
+            <div class="ch-prog-header">
+              <span>Seu progresso</span><span>+28kg acumulados</span>
+            </div>
+            <div class="ch-prog-bar">
+              <div
+                class="ch-prog-fill"
+                style="
+                  width: 35%;
+                  background: linear-gradient(
+                    90deg,
+                    var(--gold),
+                    var(--orange)
+                  );
+                "
+              ></div>
+            </div>
+            <div class="ch-footer">
+              <div class="ch-join joined" onclick="toggleJoin(this)">
+                ✓ Participando
+              </div>
+              <div class="ch-share">↗</div>
+            </div>
+          </div>
+          <div class="challenge bolt">
+            <!-- Desafio 3 -->
+            <div class="ch-header">
+              <div class="ch-icon icon-bolt">⚡</div>
+              <div class="ch-meta">
+                <div class="ch-name">Madrugada Warriors</div>
+                <div class="ch-creator">Por @EarlyBirdsFit</div>
+              </div>
+              <div class="ch-prize">
+                <div class="ch-prize-val">🎽 Kit</div>
+                <div class="ch-prize-label">Equipamento CoreLab</div>
+              </div>
+            </div>
+            <div class="ch-desc">
+              Treino antes das 7h da manhã durante 21 dias. Check-in com selfie
+              obrigatório.
+            </div>
+            <div class="ch-stats">
+              <div class="ch-stat">👥 1.204 participantes</div>
+              <div class="ch-stat">📅 Começa em 2 dias</div>
+              <div class="ch-stat">⭐ 4.8</div>
+            </div>
+            <div class="ch-footer">
+              <div class="ch-join" onclick="toggleJoin(this)">Participar</div>
+              <div class="ch-share">↗</div>
+            </div>
+          </div>
+          <div class="challenge star">
+            <!-- Desafio 4 -->
+            <div class="ch-header">
+              <div class="ch-icon icon-star">🧘</div>
+              <div class="ch-meta">
+                <div class="ch-name">Mindful Month</div>
+                <div class="ch-creator">Por @CoreLab_Wellness</div>
+              </div>
+              <div class="ch-prize">
+                <div class="ch-prize-val">📱 Plus</div>
+                <div class="ch-prize-label">3 meses grátis</div>
+              </div>
+            </div>
+            <div class="ch-desc">
+              30 dias de mindfulness: meditação diária de 10 min + diário de
+              bem-estar.
+            </div>
+            <div class="ch-stats">
+              <div class="ch-stat">👥 892 participantes</div>
+              <div class="ch-stat">📅 Contínuo</div>
+              <div class="ch-stat">⭐ 4.9</div>
+            </div>
+            <div class="ch-footer">
+              <div class="ch-join" onclick="toggleJoin(this)">Participar</div>
+              <div class="ch-share">↗</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEADERBOARD TAB -->
+        <!-- Comentário: Seção da aba Ranking -->
+        <div class="tab-content" id="tab-leaderboard">
+          <!-- Ranking competitivo -->
+          <div class="lb-box">
+            <!-- Box do ranking -->
+            <div class="lb-header">
+              <!-- Cabeçalho -->
+              <div class="lb-title">🏆 RANKING GERAL</div>
+              <!-- Título -->
+              <div class="lb-filter">MENSAL ▾</div>
+              <!-- Filtro -->
+            </div>
+            <div id="leaderboardList">
+              <!-- Itens do ranking -->
+              <div class="lb-item">
+                <!-- Rank 1 -->
+                <div class="lb-rank gold">1</div>
+                <span>🥇</span>
+                <div
+                  class="lb-av"
+                  style="
+                    background: linear-gradient(135deg, var(--gold), #cc9900);
+                  "
+                >
+                  RJ
+                </div>
+                <div class="lb-info">
+                  <div class="lb-name">Rafael Júnior</div>
+                  <div class="lb-detail">28 treinos • 21 dias consecutivos</div>
+                </div>
+                <div class="lb-score">9.840</div>
+              </div>
+              <div class="lb-item">
+                <!-- Rank 2 -->
+                <div class="lb-rank silver">2</div>
+                <span>🥈</span>
+                <div
+                  class="lb-av"
+                  style="background: linear-gradient(135deg, #c0c0c0, #888)"
+                >
+                  MC
+                </div>
+                <div class="lb-info">
+                  <div class="lb-name">Marina Costa</div>
+                  <div class="lb-detail">25 treinos • 18 dias consecutivos</div>
+                </div>
+                <div class="lb-score">8.920</div>
+              </div>
+              <div class="lb-item">
+                <!-- Rank 3 -->
+                <div class="lb-rank bronze">3</div>
+                <span>🥉</span>
+                <div
+                  class="lb-av"
+                  style="background: linear-gradient(135deg, #cd7f32, #8b5a1a)"
+                >
+                  TS
+                </div>
+                <div class="lb-info">
+                  <div class="lb-name">Thiago Santos</div>
+                  <div class="lb-detail">24 treinos • 15 dias consecutivos</div>
+                </div>
+                <div class="lb-score">8.340</div>
+              </div>
+              <div class="lb-item" id="myLbRow" style="display: none"></div>
+              <!-- Linha do usuário logado (exibida via JS) -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <!-- Comentário: Painel lateral direito -->
+      <div class="right-panel">
+        <!-- Sidebar lateral de widgets -->
+        <div class="panel-section">
+          <!-- Widget: Usuários online -->
+          <div class="panel-title">🟢 ONLINE AGORA</div>
+          <!-- Título -->
+          <div class="online-list">
+            <!-- Lista de usuários -->
+            <div class="online-user">
+              <!-- Usuário 1 -->
+              <div class="ou-av av-1">
+                RJ
+                <div class="ou-dot"></div>
+                <!-- Dot verde status -->
+              </div>
+              <div class="ou-info">
+                <div class="ou-name">Rafael Júnior</div>
+                <div class="ou-status">Treinando agora 🏋️</div>
+              </div>
+              <button class="ou-follow following" onclick="toggleFollow(this)">
+                Seguindo
+                <!-- Botão de follow -->
+              </button>
+            </div>
+            <div class="online-user">
+              <!-- Usuário 2 -->
+              <div class="ou-av av-2">
+                MC
+                <div class="ou-dot"></div>
+              </div>
+              <div class="ou-info">
+                <div class="ou-name">Marina Costa</div>
+                <div class="ou-status">Descanso ativo 🧘</div>
+              </div>
+              <button class="ou-follow following" onclick="toggleFollow(this)">
+                Seguindo
+              </button>
+            </div>
+            <div class="online-user">
+              <!-- Usuário 3 -->
+              <div class="ou-av av-3">
+                AL
+                <div class="ou-dot"></div>
+              </div>
+              <div class="ou-info">
+                <div class="ou-name">Ana Lima</div>
+                <div class="ou-status">Cardio HIIT 🔥</div>
+              </div>
+              <button class="ou-follow" onclick="toggleFollow(this)">
+                Seguir
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <!-- Widget: Conquistas -->
+          <div class="panel-title">🏅 SUAS CONQUISTAS</div>
+          <!-- Título -->
+          <div class="achievements">
+            <!-- Ícones de conquistas -->
+            <div class="ach">
+              <!-- Conquista 1 -->
+              <div class="ach-icon">🔥</div>
+              <div>
+                <div class="ach-name">Sequência 21d</div>
+                <div class="ach-date">Hoje</div>
+              </div>
+            </div>
+            <div class="ach">
+              <!-- Conquista 2 -->
+              <div class="ach-icon">💪</div>
+              <div>
+                <div class="ach-name">1° PR</div>
+                <div class="ach-date">Jan 26</div>
+              </div>
+            </div>
+            <div class="ach">
+              <!-- Conquista 3 -->
+              <div class="ach-icon">🏆</div>
+              <div>
+                <div class="ach-name">Top 10%</div>
+                <div class="ach-date">Fev 26</div>
+              </div>
+            </div>
+            <div class="ach locked">
+              <!-- Conquista bloqueada -->
+              <div class="ach-icon">👑</div>
+              <div>
+                <div class="ach-name">Elite</div>
+                <div class="ach-date">Bloqueado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <!-- Widget: Desafios atuais -->
+          <div class="panel-title">📌 SEUS DESAFIOS</div>
+          <!-- Título -->
+          <div class="my-ch-list">
+            <!-- Lista mini de desafios -->
+            <div class="my-ch">
+              <!-- Desafio 1 mini -->
+              <div class="my-ch-name">🔥 30 Dias HIIT</div>
+              <div class="my-ch-bar">
+                <div class="my-ch-fill" style="width: 47%"></div>
+              </div>
+              <div class="my-ch-bottom">
+                <span>14/30 dias</span
+                ><span style="color: var(--green)">47%</span>
+              </div>
+            </div>
+            <div class="my-ch">
+              <!-- Desafio 2 mini -->
+              <div class="my-ch-name">👑 Battleground Força</div>
+              <div class="my-ch-bar">
+                <div
+                  class="my-ch-fill"
+                  style="width: 35%; background: var(--gold)"
+                ></div>
+              </div>
+              <div class="my-ch-bottom">
+                <span>+28kg total</span
+                ><span style="color: var(--gold)">35%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL CRIAR COMUNIDADE -->
+    <!-- Comentário: Janela modal para criação de novas comunidades -->
+    <div class="modal-overlay" id="createCommOverlay">
+      <!-- Overlay de fundo escurecido -->
+      <div class="modal-box">
+        <!-- Caixa da modal -->
+        <button class="modal-close" onclick="closeCreateComm()">✕</button>
+        <!-- Botão fechar -->
+        <div class="modal-tag">Nova Comunidade</div>
+        <!-- Tag decorativa -->
+        <div class="modal-title">CRIAR<br />COMUNIDADE</div>
+        <!-- Título da modal -->
+        <div class="modal-alert" id="commAlert"></div>
+        <!-- Alerta de erro/sucesso -->
+        <div class="form-group">
+          <!-- Grupo do formulário: Ícone -->
+          <label class="form-label">Ícone da comunidade</label>
+          <select class="form-select" id="comm-icon">
+            <option value="🏋️">🏋️ Musculação</option>
+            <option value="🔥">🔥 HIIT</option>
+            <option value="🧘">🧘 🔥oga & Bem-estar</option>
+            <option value="🏃">🏃 Corrida</option>
+            <option value="🚴">🚴 Ciclismo</option>
+            <option value="🥊">🥊 Artes Marciais</option>
+            <option value="🏊">🏊 Natação</option>
+            <option value="⚽">⚽ Esportes</option>
+            <option value="🥗">🥗 Nutrição</option>
+            <option value="💪">💪 Força</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Nome -->
+          <label class="form-label">Nome da comunidade</label>
+          <input
+            class="form-input"
+            id="comm-name"
+            placeholder="Ex: Atletas de Limeira"
+          />
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Descrição -->
+          <label class="form-label">Descrição</label>
+          <textarea
+            class="form-textarea"
+            id="comm-desc"
+            placeholder="Descreva o objetivo da sua comunidade..."
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Categoria -->
+          <label class="form-label">Categoria</label>
+          <select class="form-select" id="comm-category">
+            <option>Musculação</option>
+            <option>Cardio</option>
+            <option>Nutrição</option>
+            <option>Bem-estar</option>
+            <option>Esportes</option>
+            <option>Iniciantes</option>
+            <option>Avançados</option>
+            <option>Regional</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <!-- Grupo do formulário: Privacidade -->
+          <label class="form-label">Privacidade</label>
+          <select class="form-select" id="comm-privacy">
+            <option value="public">🌐 Pública — qualquer um pode entrar</option>
+            <option value="private">🔒 Privada — somente por convite</option>
+          </select>
+        </div>
+        <button
+          class="btn-primary"
+          id="createCommSubmit"
+          onclick="submitCreateComm()"
+        >
+          CRIAR COMUNIDADE
+          <!-- Botão de submissão -->
+        </button>
+      </div>
+    </div>
+
+    <script type="module">
+      // Comentário: Lógica da Comunidade
+      import { onAuthChange, logout } from "./js/auth.js"; // Importa monitor de login
+      import {
+        // Importa funções de banco de dados
+        createPost as fbCreatePost,
+        subscribeToPosts,
+        toggleLikePost,
+        getUserProfile,
+        formatTimestamp,
+      } from "./js/db.js";
+      import { db } from "./js/firebase-config.js"; // Importa config do Firebase
+      import {
+        // Importa métodos do Firestore
+        collection,
+        addDoc,
+        doc,
+        updateDoc,
+        arrayUnion,
+        arrayRemove,
+        onSnapshot,
+        query,
+        orderBy,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      let currentUser = null, // Usuário logado
+        currentProfile = null, // Perfil do usuário
+        postType = "", // Tipo de postagem selecionado
+        unsubPosts = null; // Função para remover listener de posts
+
+      onAuthChange(async (user) => {
+        // Monitor de autenticação
+        if (!user) {
+          window.location.href = "index.html"; // Redireciona se offline
+          return;
+        }
+        currentUser = user;
+
+        // Se for demo (guest), mostra banner de saída da demo
+        if (user.isAnonymous) {
+          document.body.classList.add("demo-active");
+          if (!document.getElementById("demoExitBanner")) {
+            const banner = document.createElement("div");
+            banner.id = "demoExitBanner";
+            banner.className = "demo-exit-banner";
+            banner.innerHTML = `
+              <span>🧪 MODO DEMONSTRAÇÃO ATIVO — interaja à vontade, tudo é salvo localmente!</span>
+              <button class="demo-exit-btn" id="demoExitBtn">✕ Sair da Demo</button>
+            `;
+            document.body.prepend(banner);
+            document.getElementById("demoExitBtn").onclick = async () => {
+              await logout();
+            };
+          }
+          // Adiciona badge no topbar da Comunidade
+          const logoEl = document.querySelector(".topbar-logo");
+          if (logoEl && !document.getElementById("commDemoBadge")) {
+            const badge = document.createElement("span");
+            badge.id = "commDemoBadge";
+            badge.className = "demo-badge";
+            badge.textContent = "🧪 DEMO";
+            badge.style.marginLeft = "8px";
+            logoEl.parentNode.insertBefore(badge, logoEl.nextSibling);
+          }
+        } else {
+          document.body.classList.remove("demo-active");
+          const banner = document.getElementById("demoExitBanner");
+          if (banner) banner.remove();
+        }
+
+        currentProfile = await getUserProfile(user.uid); // Busca perfil
+        updateAvatar(); // Atualiza iniciais na tela
+        updateLeaderboard(); // Atualiza linha do usuário no ranking
+        startPostsListener(); // Inicia fluxo de posts real-time
+        loadCommunities(); // Inicia fluxo de comunidades real-time
+      });
+
+      function updateAvatar() {
+        // Sincroniza iniciais do usuário nos avatares "você"
+        if (!currentProfile) return;
+        const initials = (currentProfile.name || "U")
+          .substring(0, 2)
+          .toUpperCase();
+        document.querySelectorAll("#myAvatar, .av-you").forEach((el) => {
+          el.textContent = initials;
+        });
+      }
+
+      function updateLeaderboard() {
+        // Renderiza a posição do usuário no ranking
+        if (!currentProfile) return;
+        const row = document.getElementById("myLbRow");
+        const name = currentProfile.name || "Você";
+        const initials = name.substring(0, 2).toUpperCase();
+        const xp = currentProfile.xp || 0,
+          tw = currentProfile.totalWorkouts || 0,
+          str = currentProfile.streak || 0;
+        row.style.display = "flex";
+        row.className = "lb-item you";
+        row.innerHTML = `<div class="lb-rank" style="color:var(--green)">—</div><span>⭐</span>
+    <div class="lb-av" style="background:linear-gradient(135deg,var(--green),#00aa55)">${initials}</div>
+    <div class="lb-info"><div class="lb-name">${name} <span style="color:var(--green);font-size:11px">(Você)</span></div>
+    <div class="lb-detail">${tw} treinos • ${str} dias consecutivos</div></div>
+    <div class="lb-score" style="color:var(--green)">${xp.toLocaleString("pt-BR")}</div>`;
+      }
+
+      function startPostsListener() {
+        // Assina mudanças na coleção de posts
+        if (unsubPosts) unsubPosts();
+        unsubPosts = subscribeToPosts((posts) => {
+          if (posts.length > 0) renderRealPosts(posts);
+        }, 20);
+      }
+
+      function renderRealPosts(posts) {
+        // Insere posts do Firebase no topo da lista
+        const container = document.getElementById("posts-container");
+        const staticHTML = container.innerHTML;
+        container.innerHTML =
+          posts.map((p) => buildPostHTML(p)).join("") + staticHTML;
+      }
+
+      function buildPostHTML(post) {
+        // Gera o HTML para um card de postagem
+        const initials = post.userInitials || "U",
+          time = formatTimestamp(post.createdAt);
+        const likesCount = post.likesCount || 0;
+        const isLiked = currentUser && post.likes?.includes(currentUser.uid);
+        const isOwn = currentUser && post.userId === currentUser.uid;
+        return `<div class="post" data-post-id="${post.id}">
+    <div class="post-header">
+      <div class="post-av av-you">${initials}</div>
+      <div class="post-meta">
+        <div class="post-name">${escHtml(post.userName || "Usuário")}${isOwn ? '<span class="post-badge">VOCÊ</span>' : ""}</div>
+        <div class="post-time">${time}</div>
+      </div>
+    </div>
+    <div class="post-text">${escHtml(post.text)}</div>
+    <div class="post-actions">
+      <div class="post-action ${isLiked ? "liked" : ""}" onclick="window.handleLike(this,'${post.id}')">
+        <svg viewBox="0 0 24 24" fill="${isLiked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg><span>${likesCount}</span>
+      </div>
+      <div class="post-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>0</span></div>
+    </div>
+  </div>`;
+      }
+
+      function escHtml(t) {
+        // Escapa HTML para segurança
+        return String(t)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      window.handleLike = async (el, postId) => {
+        // Gerencia curtidas via API global
+        if (!currentUser) {
+          alert("Faça login para curtir!");
+          return;
+        }
+        const liked = await toggleLikePost(postId, currentUser.uid);
+        el.classList.toggle("liked", liked);
+        el.querySelector("svg").setAttribute(
+          "fill",
+          liked ? "currentColor" : "none",
+        );
+        const span = el.querySelector("span");
+        span.textContent = parseInt(span.textContent) + (liked ? 1 : -1);
+      };
+
+      window.setPostType = (type) => {
+        // Define o prefixo do post (Treino, Foto, etc)
+        postType = type;
+      };
+
+      window.doCreatePost = async () => {
+        // Cria nova postagem no Firestore
+        if (!currentUser) {
+          alert("Faça login para publicar!");
+          return;
+        }
+        const input = document.getElementById("postInput");
+        const raw = input.value.trim();
+        if (!raw) return;
+        const text = postType ? `${postType}: ${raw}` : raw;
+        const btn = document.getElementById("publishBtn");
+        btn.textContent = "⏳";
+        btn.disabled = true;
+        try {
+          await fbCreatePost(currentUser.uid, { text, type: "text" });
+          input.value = "";
+          postType = "";
+        } catch (e) {
+          alert("Erro ao publicar. Tente novamente.");
+        } finally {
+          btn.textContent = "Publicar";
+          btn.disabled = false;
+        }
+      };
+
+      async function loadCommunities() {
+        // Escuta mudanças na coleção de comunidades
+        const ref = collection(db, "communities");
+        onSnapshot(
+          ref,
+          (snap) => {
+            const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+            // Ordena no cliente (mais recentes primeiro) para evitar índice composto
+            all.sort((a, b) => {
+              const da = a.createdAt?.toDate
+                ? a.createdAt.toDate()
+                : new Date(a.createdAt || 0);
+              const db2 = b.createdAt?.toDate
+                ? b.createdAt.toDate()
+                : new Date(b.createdAt || 0);
+              return db2 - da;
+            });
+            renderCommunities(all);
+          },
+          (err) => console.error("loadCommunities erro:", err),
+        );
+      }
+
+      function renderCommunities(communities) {
+        // Separa e renderiza comunidades (minhas vs outras)
+        if (!currentUser) return;
+        const uid = currentUser.uid;
+        const mine = communities.filter(
+          (c) => c.adminId === uid || c.members?.includes(uid),
+        );
+        const others = communities.filter(
+          (c) => c.adminId !== uid && !c.members?.includes(uid),
+        );
+        const myList = document.getElementById("myCommList");
+        const allList = document.getElementById("allCommList");
+        myList.innerHTML =
+          mine.length === 0
+            ? `<div class="empty-comm"><div class="empty-comm-icon">🌐</div><div class="empty-comm-title">NENHUMA COMUNIDADE</div><div class="empty-comm-sub">Crie ou entre em uma comunidade para começar</div></div>`
+            : mine.map((c) => buildCommCard(c, uid)).join("");
+        allList.innerHTML =
+          others.length === 0
+            ? `<div class="empty-comm"><div class="empty-comm-icon">🔍</div><div class="empty-comm-title">NENHUMA ENCONTRADA</div><div class="empty-comm-sub">Seja o primeiro a criar uma comunidade!</div></div>`
+            : others.map((c) => buildCommCard(c, uid)).join("");
+      }
+
+      function buildCommCard(c, uid) {
+        // Gera HTML para o card de uma comunidade
+        const isAdmin = c.adminId === uid,
+          isMember = c.members?.includes(uid);
+        const count = (c.members?.length || 0) + 1;
+        let btnClass = "comm-join",
+          btnText = "Entrar";
+        if (isAdmin) {
+          btnClass += " admin";
+          btnText = "👑 Admin";
+        } else if (isMember) {
+          btnClass += " member";
+          btnText = "✓ Membro";
+        }
+        return `<div class="comm-card">
+    <div class="comm-card-header">
+      <div class="comm-icon">${c.icon || "🌐"}</div>
+      <div class="comm-info"><div class="comm-name">${escHtml(c.name)}</div><div class="comm-desc">${escHtml(c.description || "")}</div></div>
+      ${isAdmin ? '<span class="comm-badge admin">ADMIN</span>' : isMember ? '<span class="comm-badge member">MEMBRO</span>' : ""}
+    </div>
+    <div class="comm-stats">
+      <div class="comm-stat">👥 ${count} membro${count !== 1 ? "s" : ""}</div>
+      <div class="comm-stat">📂 ${escHtml(c.category || "Geral")}</div>
+      <div class="comm-stat">${c.privacy === "private" ? "🔒 Privada" : "🌐 Pública"}</div>
+    </div>
+    <div class="comm-footer">
+      <div class="${btnClass}" onclick="window.handleCommAction('${c.id}',${isAdmin},${isMember})">${btnText}</div>
+    </div>
+  </div>`;
+      }
+
+      window.handleCommAction = async (commId, isAdmin, isMember) => {
+        // Gerencia entrada/saída de comunidades
+        if (!currentUser) {
+          alert("Faça login!");
+          return;
+        }
+        if (isAdmin) {
+          alert("Você é o administrador desta comunidade.");
+          return;
+        }
+        const ref = doc(db, "communities", commId);
+        if (isMember) {
+          if (!confirm("Sair desta comunidade?")) return;
+          await updateDoc(ref, { members: arrayRemove(currentUser.uid) });
+        } else {
+          await updateDoc(ref, { members: arrayUnion(currentUser.uid) });
+          alert("Você entrou na comunidade! 🎉");
+        }
+      };
+
+      window.openCreateComm = () => {
+        // Abre modal de criação
+        document.getElementById("createCommOverlay").classList.add("open");
+        document.body.style.overflow = "hidden";
+      };
+      window.closeCreateComm = () => {
+        // Fecha modal de criação
+        document.getElementById("createCommOverlay").classList.remove("open");
+        document.body.style.overflow = "";
+        const a = document.getElementById("commAlert");
+        a.className = "modal-alert";
+        a.textContent = "";
+      };
+      document
+        .getElementById("createCommOverlay")
+        .addEventListener("click", (e) => {
+          // Fecha modal ao clicar fora
+          if (e.target === document.getElementById("createCommOverlay"))
+            window.closeCreateComm();
+        });
+
+      document.getElementById("createCommBtn").onclick = () => {
+        // Atalho para abrir modal na aba certa
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((c) => c.classList.remove("active"));
+        document
+          .querySelector('[data-tab="communities"]')
+          .classList.add("active");
+        document.getElementById("tab-communities").classList.add("active");
+        window.openCreateComm();
+      };
+
+      window.submitCreateComm = async () => {
+        // Envia novos dados de comunidade para o Firebase
+        if (!currentUser) {
+          alert("Faça login!");
+          return;
+        }
+        const name = document.getElementById("comm-name").value.trim();
+        const desc = document.getElementById("comm-desc").value.trim();
+        const icon = document.getElementById("comm-icon").value;
+        const category = document.getElementById("comm-category").value;
+        const privacy = document.getElementById("comm-privacy").value;
+        const alertEl = document.getElementById("commAlert");
+        if (!name) {
+          alertEl.textContent = "Nome da comunidade é obrigatório.";
+          alertEl.className = "modal-alert err";
+          return;
+        }
+        const btn = document.getElementById("createCommSubmit");
+        btn.disabled = true;
+        btn.textContent = "Criando...";
+        try {
+          await addDoc(collection(db, "communities"), {
+            name,
+            description: desc,
+            icon,
+            category,
+            privacy,
+            adminId: currentUser.uid,
+            adminName: currentProfile?.name || "Admin",
+            members: [],
+            createdAt: serverTimestamp(),
+          });
+          alertEl.textContent = "✅ Comunidade criada com sucesso!";
+          alertEl.className = "modal-alert ok";
+          document.getElementById("comm-name").value = "";
+          document.getElementById("comm-desc").value = "";
+          setTimeout(() => window.closeCreateComm(), 1800);
+        } catch (err) {
+          console.error("Erro ao criar comunidade:", err);
+          alertEl.textContent = "Erro ao criar comunidade: " + err.message;
+          alertEl.className = "modal-alert err";
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "CRIAR COMUNIDADE";
+        }
+      };
+
+      document.querySelectorAll(".tab").forEach((tab) => {
+        // Switch de abas
+        tab.onclick = () => {
+          document
+            .querySelectorAll(".tab")
+            .forEach((t) => t.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((c) => c.classList.remove("active"));
+          tab.classList.add("active");
+          document
+            .getElementById("tab-" + tab.dataset.tab)
+            .classList.add("active");
+        };
+      });
+
+      let dark = true; // Lógica de tema claro/escuro
+      document.getElementById("themeBtn").onclick = () => {
+        dark = !dark;
+        document.documentElement.setAttribute(
+          "data-theme",
+          dark ? "dark" : "light",
+        );
+        document.getElementById("themeBtn").textContent = dark ? "🌙" : "☀️";
+      };
+
+      window.toggleLikeStatic = (el) => {
+        // Handler para curtidas estáticas (exemplo)
+        el.classList.toggle("liked");
+        const svg = el.querySelector("svg"),
+          span = el.querySelector("span"),
+          cur = parseInt(span.textContent) || 0;
+        svg.setAttribute(
+          "fill",
+          el.classList.contains("liked") ? "currentColor" : "none",
+        );
+        span.textContent = el.classList.contains("liked") ? cur + 1 : cur - 1;
+      };
+      window.toggleFollow = (btn) => {
+        // Handler para seguir usuários
+        const f = btn.classList.toggle("following");
+        btn.textContent = f ? "Seguindo" : "Seguir";
+      };
+      window.toggleJoin = (btn) => {
+        // Handler para participar de desafios
+        const j = btn.classList.contains("joined");
+        btn.classList.toggle("joined", !j);
+        btn.textContent = j ? "Participar" : "✓ Participando";
+      };
+    </script>
+    <!-- Fim do script -->
+  </body>
+  <!-- Fim body -->
+</html>
+<!-- Fim html -->

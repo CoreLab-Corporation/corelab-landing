@@ -1,0 +1,542 @@
+﻿.topbar {
+  /* Barra superior do chat */
+  flex-shrink: 0; /* Não deixa a barra encolher */
+  height: 64px; /* Altura fixa */
+  background: rgba(8, 8, 8, 0.95); /* Fundo escuro semi-transparente */
+  backdrop-filter: blur(20px); /* Desfoque de vidro */
+  border-bottom: 1px solid var(--border); /* Linha divisória */
+  padding: 0 24px; /* Espaçamento lateral */
+  display: flex; /* Alinhamento horizontal */
+  align-items: center; /* Centro vertical */
+  gap: 14px; /* Espaço entre itens */
+} /* Fim de .topbar */
+[data-theme="light"] .topbar {
+  /* Ajuste para tema claro */
+  background: rgba(240, 240, 236, 0.95); /* Fundo claro */
+} /* Fim topbar clara */
+.topbar-logo {
+  /* Logo da marca */
+  font-family: "Bebas Neue", sans-serif; /* Fonte de impacto */
+  font-size: 22px; /* Tamanho */
+  letter-spacing: 0.1em; /* Espaçado */
+} /* Fim de .topbar-logo */
+.topbar-logo span {
+  /* Parte colorida do logo */
+  color: var(--green); /* Verde neon */
+} /* Fim span logo */
+.ai-badge {
+  /* Etiqueta indicando sistema de IA */
+  display: flex; /* Alinha ponto e texto */
+  align-items: center; /* Centro vertical */
+  gap: 8px; /* Espaçamento interno */
+  padding: 5px 14px; /* Tamanho compacto */
+  background: rgba(0, 255, 135, 0.08); /* Verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.2); /* Borda verde */
+  border-radius: 20px; /* Redondo */
+  font-family: "Space Mono", monospace; /* Fonte técnica */
+  font-size: 10px; /* Texto mini */
+  letter-spacing: 0.15em; /* Espaçado */
+  color: var(--green); /* Texto verde */
+} /* Fim de .ai-badge */
+.ai-dot {
+  /* Ponto pulsante no badge de IA */
+  width: 6px; /* Pequeno */
+  height: 6px; /* Pequeno */
+  border-radius: 50%; /* Círculo */
+  background: var(--green); /* Cor neon */
+  animation: pulse 2s ease infinite; /* Animação de vida */
+} /* Fim de .ai-dot */
+@keyframes pulse {
+  /* Definição da pulsação */
+  0%, /* Início */
+  100% {
+    /* Fim */
+    opacity: 1; /* Visível */
+  } /* Fim do estado 1 */
+  50% {
+    /* Meio */
+    opacity: 0.4; /* Quase some */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes pulse */
+.topbar-space {
+  /* Espaçador flexível */
+  flex: 1; /* Empurra itens para as pontas */
+} /* Fim de .topbar-space */
+.topbar-btn {
+  /* Botão de ação genérico na topbar */
+  display: flex; /* Alinhamento interno */
+  align-items: center; /* Centro vertical */
+  gap: 8px; /* Espaçamento */
+  padding: 8px 16px; /* Tamanho confortável */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 30px; /* Formato pílula */
+  font-size: 13px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  cursor: pointer; /* Mãozinha */
+  text-decoration: none; /* Sem sublinhado */
+  transition: all 0.25s; /* Transição suave */
+} /* Fim de .topbar-btn */
+.topbar-btn:hover {
+  /* Efeito de hover no botão */
+  border-color: var(--green); /* Borda brilha */
+  color: var(--green); /* Texto fica verde */
+} /* Fim de .topbar-btn:hover */
+.topbar-btn.danger {
+  /* Botão de logout/perigo */
+  color: var(--red); /* Vermelho */
+  border-color: rgba(255, 59, 92, 0.3); /* Borda vermelha suave */
+  font-size: 12px; /* Um pouco menor */
+} /* Fim do botão danger */
+.topbar-btn.danger:hover {
+  /* Hover no botão de perigo */
+  background: rgba(255, 59, 92, 0.08); /* Fundo avermelhado */
+  border-color: var(--red); /* Borda vermelha forte */
+} /* Fim do hover danger */
+.theme-btn {
+  /* Botão de troca de tema */
+  width: 36px; /* Redondo */
+  height: 36px; /* Redondo */
+  border-radius: 50%; /* Círculo */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  display: flex; /* Centraliza ícone */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  cursor: pointer; /* Mãozinha */
+  font-size: 15px; /* Tamanho do ícone */
+  transition: all 0.25s; /* Transição */
+} /* Fim de .theme-btn */
+.theme-btn:hover {
+  /* Hover no tema */
+  border-color: var(--green); /* Borda verde */
+} /* Fim do hover tema */
+.chat-wrap {
+  /* Container principal do chat e sidebar */
+  flex: 1; /* Ocupa todo o espaço vertical restante */
+  display: grid; /* Layout em grade */
+  grid-template-columns: 260px 1fr; /* Sidebar fixa e área de mensagens flexível */
+  overflow: hidden; /* Evita rolagem do container pai */
+} /* Fim de .chat-wrap */
+.chat-sidebar {
+  /* Barra lateral do chat (sugestões e perfil) */
+  background: var(--bg2); /* Fundo secundário */
+  border-right: 1px solid var(--border); /* Divisória lateral */
+  display: flex; /* Alinha itens em coluna */
+  flex-direction: column; /* Itens empilhados */
+  overflow: hidden; /* Esconde o que vazar */
+} /* Fim de .chat-sidebar */
+.sidebar-head {
+  /* Cabeçalho da sidebar */
+  padding: 20px; /* Espaçamento interno */
+  border-bottom: 1px solid var(--border); /* Divisória inferior */
+  flex-shrink: 0; /* Não encolhe */
+} /* Fim de .sidebar-head */
+.sidebar-head-title {
+  /* Título da sidebar */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 22px; /* Médio */
+  letter-spacing: 0.05em; /* Espaçado */
+  margin-bottom: 4px; /* Espaço para o subtítulo */
+} /* Fim de .sidebar-head-title */
+.sidebar-head-sub {
+  /* Subtítulo da sidebar */
+  font-size: 12px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+} /* Fim de .sidebar-head-sub */
+.suggestions {
+  /* Área de sugestões de perguntas */
+  flex: 1; /* Ocupa o espaço central da sidebar */
+  overflow-y: auto; /* Permite rolagem se houver muitas sugestões */
+  padding: 12px; /* Espaçamento interno */
+} /* Fim de .suggestions */
+.suggestions-label {
+  /* Rótulo do bloco de sugestões */
+  font-family: "Space Mono", monospace; /* Técnica */
+  font-size: 9px; /* Texto mini */
+  letter-spacing: 0.3em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text3); /* Discreto */
+  padding: 8px 8px 4px; /* Espaçamento interno */
+  margin-bottom: 4px; /* Espaço inferior */
+} /* Fim de .suggestions-label */
+.suggestion {
+  /* Card individual de sugestão */
+  padding: 10px 12px; /* Espaçamento interno */
+  border-radius: 10px; /* Cantos arredondados */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  font-size: 13px; /* Texto legível */
+  color: var(--text2); /* Cor suave */
+  cursor: pointer; /* Mãozinha */
+  margin-bottom: 6px; /* Espaço entre sugestões */
+  transition: all 0.2s; /* Transição rápida */
+  line-height: 1.4; /* Espaçamento de linha */
+  user-select: none; /* Evita seleção acidental de texto */
+} /* Fim de .suggestion */
+.suggestion:hover {
+  /* Hover na sugestão */
+  border-color: rgba(0, 255, 135, 0.3); /* Borda brilha levemente */
+  color: var(--text); /* Texto fica claro */
+  background: rgba(0, 255, 135, 0.04); /* Fundo ganha tom verde */
+  transform: translateX(2px); /* Desliza levemente para a direita */
+} /* Fim do hover na sugestão */
+.profile-section {
+  /* Seção de contexto do perfil na sidebar */
+  padding: 16px; /* Espaçamento */
+  border-top: 1px solid var(--border); /* Divisória superior */
+  flex-shrink: 0; /* Não encolhe */
+} /* Fim de .profile-section */
+.profile-label {
+  /* Rótulo da seção de perfil */
+  font-family: "Space Mono", monospace; /* Técnica */
+  font-size: 9px; /* Texto mini */
+  letter-spacing: 0.3em; /* Espaçado */
+  text-transform: uppercase; /* Maiúsculas */
+  color: var(--text3); /* Discreto */
+  margin-bottom: 10px; /* Espaço inferior */
+} /* Fim de .profile-label */
+.profile-field {
+  /* Campo de contexto individual (ex: Objetivo) */
+  margin-bottom: 8px; /* Espaço entre campos */
+} /* Fim de .profile-field */
+.profile-field label {
+  /* Rótulo do campo de contexto */
+  font-size: 11px; /* Texto pequeno */
+  color: var(--text2); /* Cor suave */
+  display: block; /* Ocupa a linha toda */
+  margin-bottom: 3px; /* Espaço para o seletor */
+} /* Fim do label do campo */
+.profile-field select {
+  /* Seletor de contexto */
+  width: 100%; /* Ocupa toda a largura */
+  padding: 7px 10px; /* Espaçamento interno */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-radius: 8px; /* Cantos suaves */
+  color: var(--text); /* Texto claro */
+  font-family: "DM Sans", sans-serif; /* Fonte principal */
+  font-size: 13px; /* Texto legível */
+  outline: none; /* Sem brilho */
+  cursor: pointer; /* Mãozinha */
+  transition: border-color 0.2s; /* Transição suave */
+} /* Fim do select de perfil */
+.profile-field select:focus {
+  /* Foco no seletor */
+  border-color: var(--green); /* Borda verde neon */
+} /* Fim do foco no select */
+.chat-main {
+  /* Área principal do chat (mensagens + input) */
+  display: flex; /* Organização flexível */
+  flex-direction: column; /* Itens em coluna */
+  overflow: hidden; /* Sem rolagem no container pai */
+} /* Fim de .chat-main */
+.messages {
+  /* Área de rolagem das mensagens */
+  flex: 1; /* Ocupa todo o espaço vertical disponível */
+  overflow-y: auto; /* Habilita rolagem vertical */
+  padding: 24px; /* Espaçamento interno generoso */
+  display: flex; /* Alinha as mensagens */
+  flex-direction: column; /* Uma abaixo da outra */
+} /* Fim de .messages */
+.messages-empty {
+  /* Estado exibido quando não há mensagens */
+  flex: 1; /* Ocupa tudo */
+  display: flex; /* Centralização flexível */
+  flex-direction: column; /* Itens em coluna */
+  align-items: center; /* Centro horizontal */
+  justify-content: center; /* Centro vertical */
+  text-align: center; /* Texto centralizado */
+  gap: 16px; /* Espaço entre os elementos */
+  padding: 40px 20px; /* Espaçamento */
+} /* Fim do estado vazio */
+.empty-icon {
+  /* Ícone do estado vazio (emoji robô) */
+  font-size: 64px; /* Tamanho grande */
+  filter: grayscale(0.3); /* Levemente desbotado */
+  animation: float 3s ease-in-out infinite; /* Animação de flutuação */
+} /* Fim de .empty-icon */
+@keyframes float {
+  /* Definição da flutuação do ícone */
+  0%, /* Início */
+  100% {
+    /* Fim */
+    transform: translateY(0); /* Posição original */
+  } /* Fim do estado 1 */
+  50% {
+    /* Meio */
+    transform: translateY(-10px); /* Sobe 10px */
+  } /* Fim do estado 2 */
+} /* Fim de @keyframes float */
+.empty-title {
+  /* Título do estado vazio */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 32px; /* Grande */
+  letter-spacing: 0.05em; /* Espaçado */
+} /* Fim de .empty-title */
+.empty-sub {
+  /* Texto explicativo do estado vazio */
+  font-size: 14px; /* Texto legível */
+  color: var(--text2); /* Cor suave */
+  max-width: 320px; /* Limita largura */
+  line-height: 1.6; /* Espaçamento de linha */
+} /* Fim de .empty-sub */
+.empty-chips {
+  /* Botões rápidos no estado vazio */
+  display: flex; /* Alinhamento horizontal */
+  flex-wrap: wrap; /* Quebra linha se necessário */
+  gap: 8px; /* Espaço entre botões */
+  justify-content: center; /* Centralizados */
+  margin-top: 8px; /* Distância do texto */
+} /* Fim de .empty-chips */
+.empty-chip {
+  /* Botão rápido individual (ex: Como começar?) */
+  padding: 8px 16px; /* Tamanho confortável */
+  background: rgba(0, 255, 135, 0.07); /* Verde transparente */
+  border: 1px solid rgba(0, 255, 135, 0.15); /* Borda verde */
+  border-radius: 20px; /* Redondo */
+  font-size: 13px; /* Texto legível */
+  color: var(--green); /* Texto verde */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.2s; /* Transição rápida */
+} /* Fim de .empty-chip */
+.empty-chip:hover {
+  /* Hover no botão rápido */
+  background: rgba(0, 255, 135, 0.15); /* Verde mais intenso */
+  transform: translateY(-2px); /* Sobe levemente */
+} /* Fim do hover no chip */
+.msg {
+  /* Container de uma mensagem (IA ou Usuário) */
+  display: flex; /* Alinha avatar e balão */
+  gap: 12px; /* Espaço entre eles */
+  margin-bottom: 20px; /* Espaço para a próxima mensagem */
+  animation: msgIn 0.3s ease; /* Animação de entrada suave */
+} /* Fim de .msg */
+
+@keyframes msgIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.msg.user {
+  /* Mensagem enviada pelo usuário */
+  flex-direction: row-reverse; /* Inverte ordem (avatar na direita) */
+} /* Fim de .msg.user */
+.msg-av {
+  /* Avatar da mensagem */
+  width: 36px; /* Pequeno */
+  height: 36px; /* Pequeno */
+  border-radius: 50%; /* Círculo */
+  flex-shrink: 0; /* Não encolhe */
+  display: flex; /* Centraliza conteúdo */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  font-size: 16px; /* Tamanho do ícone/letra */
+} /* Fim de .msg-av */
+.msg-av.ai {
+  /* Avatar do robô de IA */
+  background: linear-gradient(135deg, var(--green), #00aa55); /* Verde neon */
+  font-family: "Bebas Neue", sans-serif; /* Impacto */
+  font-size: 14px; /* Compacto */
+  color: #000; /* Preto */
+} /* Fim de .msg-av.ai */
+.msg-av.user {
+  /* Avatar do usuário */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+} /* Fim de .msg-av.user */
+.msg-bubble {
+  /* Balão da mensagem */
+  max-width: 72%; /* Limita largura */
+  padding: 14px 18px; /* Espaçamento interno */
+  border-radius: 18px; /* Cantos arredondados */
+  font-size: 15px; /* Texto legível */
+  line-height: 1.65; /* Espaçamento de linha */
+  font-weight: 300; /* Leve */
+} /* Fim de .msg-bubble */
+.msg-bubble.ai {
+  /* Balão da mensagem da IA */
+  background: var(--bg3); /* Fundo terciário */
+  border: 1px solid var(--border); /* Borda padrão */
+  border-bottom-left-radius: 6px; /* Canto pontudo para indicar fala */
+} /* Fim bubble ai */
+.msg-bubble.user {
+  /* Balão da mensagem do usuário */
+  background: var(--green); /* Verde neon */
+  color: #000; /* Texto preto para contraste */
+  font-weight: 400; /* Normal */
+  border-bottom-right-radius: 6px; /* Canto pontudo na direita */
+} /* Fim bubble user */
+.msg-bubble strong {
+  /* Destaque em negrito na mensagem */
+  font-weight: 600; /* Semi-negrito */
+} /* Fim strong */
+.msg-bubble ul {
+  /* Listas dentro das mensagens */
+  margin: 8px 0 8px 16px; /* Recuo lateral */
+} /* Fim ul */
+.msg-bubble li {
+  /* Itens de lista */
+  margin-bottom: 4px; /* Espaço entre itens */
+} /* Fim li */
+.msg-bubble code {
+  /* Blocos de código ou termos técnicos */
+  background: rgba(0, 255, 135, 0.1); /* Fundo verde transparente */
+  padding: 2px 6px; /* Compacto */
+  border-radius: 4px; /* Cantos suaves */
+  font-family: monospace; /* Fonte de código */
+  font-size: 13px; /* Texto menor */
+} /* Fim code */
+.msg-time {
+  /* Horário da mensagem */
+  font-family: "Space Mono", monospace; /* Técnica */
+  font-size: 10px; /* Texto mini */
+  color: var(--text3); /* Discreto */
+  margin-top: 6px; /* Distância do balão */
+  padding: 0 4px; /* Alinhamento */
+} /* Fim de .msg-time */
+.msg.user .msg-time {
+  /* Horário da mensagem do usuário */
+  text-align: right; /* Alinhado à direita */
+} /* Fim time user */
+.typing {
+  /* Indicador de "IA escrevendo..." */
+  display: flex; /* Alinha os pontos */
+  gap: 5px; /* Espaço entre pontos */
+  padding: 14px 18px; /* Mesma altura do balão */
+  background: var(--bg3); /* Mesmo fundo do balão IA */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 18px; /* Redondo */
+  border-bottom-left-radius: 6px; /* Pontudo */
+  width: fit-content; /* Tamanho justo ao conteúdo */
+} /* Fim de .typing */
+.typing span {
+  /* Cada ponto da animação de escrita */
+  width: 8px; /* Círculo pequeno */
+  height: 8px; /* Círculo pequeno */
+  border-radius: 50%; /* Redondo */
+  background: var(--text3); /* Cor neutra */
+  animation: typing 1.4s ease infinite; /* Animação de pulo */
+} /* Fim do ponto typing */
+.typing span:nth-child(2) {
+  /* Segundo ponto */
+  animation-delay: 0.2s; /* Atraso para efeito de onda */
+} /* Fim span 2 */
+.typing span:nth-child(3) {
+  /* Terceiro ponto */
+  animation-delay: 0.4s; /* Atraso maior */
+} /* Fim span 3 */
+@keyframes typing {
+  /* Definição da animação de escrita */
+  0%, /* Início */
+  60%, /* Estabilização */
+  100% {
+    /* Fim */
+    transform: translateY(0); /* Posição normal */
+  } /* Fim do estado de repouso */
+  30% {
+    /* Meio da animação */
+    transform: translateY(-8px); /* Pula para cima */
+    background: var(--green); /* Fica verde enquanto pula */
+  } /* Fim do estado de pulo */
+} /* Fim de @keyframes typing */
+.chat-input-area {
+  /* Área inferior de digitação */
+  flex-shrink: 0; /* Não encolhe */
+  padding: 16px 24px; /* Espaçamento interno */
+  border-top: 1px solid var(--border); /* Divisória superior */
+  background: var(--bg2); /* Fundo secundário */
+} /* Fim de .chat-input-area */
+.input-row {
+  /* Linha que contém campo de texto e botão */
+  display: flex; /* Lado a lado */
+  gap: 10px; /* Espaçamento */
+  align-items: flex-end; /* Alinha por baixo (para crescer o texto) */
+} /* Fim de .input-row */
+.input-wrap {
+  /* Container estilizado do campo de texto */
+  flex: 1; /* Ocupa largura máxima */
+  background: var(--surf); /* Superfície */
+  border: 1px solid var(--border); /* Borda */
+  border-radius: 16px; /* Cantos arredondados */
+  display: flex; /* Flexível */
+  align-items: flex-end; /* Alinha por baixo */
+  gap: 8px; /* Espaço interno */
+  padding: 12px 16px; /* Espaçamento de digitação */
+  transition: border-color 0.2s; /* Transição de foco */
+} /* Fim de .input-wrap */
+.input-wrap:focus-within {
+  /* Quando clica para digitar */
+  border-color: var(--green); /* Borda brilha verde */
+} /* Fim foco wrap */
+.chat-textarea {
+  /* Campo de texto real (múltiplas linhas) */
+  flex: 1; /* Ocupa tudo */
+  background: transparent; /* Sem fundo próprio */
+  border: none; /* Sem borda própria */
+  outline: none; /* Sem brilho de foco */
+  color: var(--text); /* Texto claro */
+  font-family: "DM Sans", sans-serif; /* Fonte principal */
+  font-size: 15px; /* Texto legível */
+  line-height: 1.5; /* Espaçamento de linha */
+  resize: none; /* Desabilita redimensionamento manual */
+  min-height: 24px; /* Altura mínima de uma linha */
+  max-height: 120px; /* Altura máxima antes de scroll */
+} /* Fim de .chat-textarea */
+.chat-textarea::placeholder {
+  /* Texto de instrução no campo */
+  color: var(--text3); /* Cor discreta */
+} /* Fim placeholder textarea */
+.send-btn {
+  /* Botão de enviar mensagem */
+  width: 44px; /* Tamanho confortável */
+  height: 44px; /* Tamanho confortável */
+  border-radius: 12px; /* Cantos arredondados */
+  background: var(--green); /* Fundo verde neon */
+  display: flex; /* Centraliza ícone */
+  align-items: center; /* Centro vertical */
+  justify-content: center; /* Centro horizontal */
+  cursor: pointer; /* Mãozinha */
+  transition: all 0.25s; /* Transição suave */
+  font-size: 20px; /* Ícone grande */
+  flex-shrink: 0; /* Não esmaga */
+  color: #000; /* Ícone preto */
+  font-weight: 700; /* Negrito no ícone (se texto) */
+} /* Fim de .send-btn */
+.send-btn:hover {
+  /* Hover no botão enviar */
+  background: var(--green2); /* Verde mais escuro */
+  transform: scale(1.05); /* Aumenta levemente */
+} /* Fim do hover enviar */
+.send-btn:disabled {
+  /* Botão de envio desabilitado (vazio ou enviando) */
+  background: var(--border); /* Fundo cinza */
+  cursor: not-allowed; /* Proibido */
+  transform: none; /* Sem aumento */
+  color: var(--text3); /* Ícone some */
+} /* Fim do botão desabilitado */
+.input-note {
+  /* Pequena observação abaixo do campo (ex: A IA pode errar) */
+  font-size: 11px; /* Texto mini */
+  color: var(--text3); /* Discreto */
+  text-align: center; /* Centralizado */
+  margin-top: 8px; /* Distância do input */
+  font-family: "Space Mono", monospace; /* Técnica */
+  letter-spacing: 0.05em; /* Espaçado */
+} /* Fim de .input-note */
+@media (max-width: 700px) {
+  /* Tablet e Mobile */
+  .chat-wrap {
+    /* Grade do chat no mobile */
+    grid-template-columns: 1fr; /* Remove a sidebar da grade principal */
+  } /* Fim wrap mobile */
+  .chat-sidebar {
+    /* Esconde a barra lateral no mobile para dar espaço */
+    display: none; /* Remove da visão */
+  } /* Fim sidebar mobile */
+} /* Fim media 700px */

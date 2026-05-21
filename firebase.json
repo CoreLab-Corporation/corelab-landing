@@ -1,0 +1,22 @@
+{
+  "firestore": {
+    "database": "default",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "firestore.rules",
+      "firestore.indexes.json",
+      ".firebaserc",
+      "**/.*",
+      "**/node_modules/**",
+      "CHECKLIST.md",
+      "LICENSE",
+      "scratch/**"
+    ]
+  }
+}
